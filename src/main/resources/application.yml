@@ -1,0 +1,43 @@
+uw:
+  dm:
+    conn-pool:
+      root:
+        driver: com.mysql.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/task?characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true
+        username: root
+        password: root
+        test-sql: select 1
+        min-conn: 1
+        max-conn: 10
+        conn-idle-timeout: 600
+        conn-busy-timeout: 600
+        conn-max-age: 1800
+      list:
+        test:
+          url: jdbc:mysql://localhost:3306/task?characterEncoding=utf-8&useSSL=false&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true
+          username: root
+          password: root
+          min-conn: 1
+          max-conn: 10
+          conn-idle-timeout: 600
+          conn-busy-timeout: 600
+          conn-max-age: 1800
+    conn-route:
+      root:
+        all: 
+        write: 
+        read: 
+      list:
+        test_:
+          all: test
+          write: test
+          read: test
+    table-sharding:
+      task_runner_log:
+        sharding-type: date
+        sharding-rule: day
+        auto-gen: true
+    sql-stats: 
+      enable: true
+      data-keep-days: 100
+      
