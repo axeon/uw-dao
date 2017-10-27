@@ -1,0 +1,11 @@
+stages:
+  - build
+
+# 编译
+build:
+  stage: build
+  only:
+    - develop
+    - master
+  script:
+    - mvn clean install -Dmaven.test.skip=true
