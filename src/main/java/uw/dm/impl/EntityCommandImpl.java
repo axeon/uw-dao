@@ -603,25 +603,28 @@ public class EntityCommandImpl {
 				TableMeta tm = entityCls.getAnnotation(TableMeta.class);
 				emi.setTableName(tm.tableName());
 			}
-			Field[] fields = entityCls.getDeclaredFields();
-			for (Field field : fields) {
-				field.setAccessible(true);
-
-				FieldMetaInfo fieldInfo = new FieldMetaInfo();
-				if (field.isAnnotationPresent(ColumnMeta.class)) {
-					ColumnMeta meta = field.getAnnotation(ColumnMeta.class);
-					fieldInfo.setPropertyName(field.getName());
-					fieldInfo.setColumnName(meta.columnName());
-					fieldInfo.setPrimaryKey(meta.primaryKey());
-					fieldInfo.setField(field);
-					fieldInfo.setAutoIncrement(meta.autoIncrement());
-					if (fieldInfo.isPrimaryKey()) {
-						emi.addPklist(fieldInfo);
-					}
-					emi.addColumnMap(meta.columnName(), fieldInfo);
-				}
-			}
-			entityMetaCache.put(entityCls.getName(), emi);
+			Class<?> clazz = entityCls;
+			while(clazz != Object.class){
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    FieldMetaInfo fieldInfo = new FieldMetaInfo();
+                    if (field.isAnnotationPresent(ColumnMeta.class)) {
+                        ColumnMeta meta = field.getAnnotation(ColumnMeta.class);
+                        fieldInfo.setPropertyName(field.getName());
+                        fieldInfo.setColumnName(meta.columnName());
+                        fieldInfo.setPrimaryKey(meta.primaryKey());
+                        fieldInfo.setField(field);
+                        fieldInfo.setAutoIncrement(meta.autoIncrement());
+                        if (fieldInfo.isPrimaryKey()) {
+                            emi.addPklist(fieldInfo);
+                        }
+                        emi.addColumnMap(meta.columnName(), fieldInfo);
+                    }
+                }
+                clazz = clazz.getSuperclass();
+            }
+            entityMetaCache.put(entityCls.getName(), emi);
 		}
 
 		return emi;
