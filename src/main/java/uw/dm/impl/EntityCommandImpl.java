@@ -28,7 +28,6 @@ import uw.dm.vo.TableMetaInfo;
 
 /**
  * 实体类命令实现.
- * 
  * @author axeon
  */
 public class EntityCommandImpl {
@@ -43,27 +42,23 @@ public class EntityCommandImpl {
 	 */
 	private static HashMap<String, TableMetaInfo> entityMetaCache = new HashMap<String, TableMetaInfo>();
 
+    /**
+     * 实体类支持的最大继承层级
+     */
+	private static final int MAX_ENTITY_CLASS_EXTEND_LEVEL = 10;
 	/**
 	 * 保存一个实体.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名字
-	 * @param entity
-	 *            实体类
-	 * @param tableName
-	 *            表名
-	 * @param <T>
-	 *            实体类类型
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名字
+	 * @param entity 实体类
+	 * @param tableName 表名
+	 * @param <T> 实体类类型
 	 * @return 实体类
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
 	@SuppressWarnings("resource")
-	public static <T extends DataEntity> T save(DAOFactoryImpl dao, String connName, T entity, String tableName)
-			throws TransactionException {
-		long start = System.currentTimeMillis();
+	public static <T extends DataEntity> T save(DAOFactoryImpl dao, String connName, T entity, String tableName) throws TransactionException {
+			long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(entity.getClass());
@@ -117,7 +112,7 @@ public class EntityCommandImpl {
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:save() @conn:" + connName, e);
+			throw new TransactionException("TransactionException in DAOCommandImpl.java:save()", e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -138,28 +133,18 @@ public class EntityCommandImpl {
 		dao.addSqlExecuteStats(connName, sb.toString(), entity.GET_UPDATED_INFO(), effect, dbTime, allTime, exception);
 		return entity;
 	}
-
 	/**
 	 * 加载一个实体.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名
-	 * @param cls
-	 *            要映射的对象类型
-	 * @param tableName
-	 *            表名
-	 * @param id
-	 *            主键
-	 * @param <T>
-	 *            要映射的对象类型
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名
+	 * @param cls 要映射的对象类型
+	 * @param tableName 表名
+	 * @param id 主键
+	 * @param <T> 要映射的对象类型
 	 * @return 实体类
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
-	public static <T> T load(DAOFactoryImpl dao, String connName, Class<T> cls, String tableName, Serializable id)
-			throws TransactionException {
+	public static <T> T load(DAOFactoryImpl dao, String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		int rowNum = 0;
@@ -216,7 +201,7 @@ public class EntityCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in EntityCommandImpl.load() @conn:" + connName, e);
+			throw new TransactionException("TransactionException in EntityCommandImpl.load()", e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -240,25 +225,16 @@ public class EntityCommandImpl {
 
 	/**
 	 * 加载一个实体.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名
-	 * @param cls
-	 *            要映射的对象类型
-	 * @param selectsql
-	 *            查询的SQL语句
-	 * @param paramList
-	 *            参数的Object数组
-	 * @param <T>
-	 *            要映射的对象类型
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名
+	 * @param cls 要映射的对象类型
+	 * @param selectsql 查询的SQL语句
+	 * @param paramList 参数的Object数组
+	 * @param <T> 要映射的对象类型
 	 * @return 实体类
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
-	public static <T> T listSingle(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql,
-			Object[] paramList) throws TransactionException {
+	public static <T> T listSingle(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		int rowNum = 0;
@@ -308,8 +284,7 @@ public class EntityCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in EntityCommandImpl.listSingle() @conn:" + connName,
-					e);
+			throw new TransactionException("TransactionException in EntityCommandImpl.listSingle()", e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -330,24 +305,16 @@ public class EntityCommandImpl {
 		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), rowNum, dbTime, allTime, exception);
 		return entity;
 	}
-
 	/**
 	 * 保存一个实体.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名
-	 * @param entity
-	 *            实体类
-	 * @param tableName
-	 *            表名
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名
+	 * @param entity 实体类
+	 * @param tableName 表名
 	 * @return 实体类
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
-	public static int update(DAOFactoryImpl dao, String connName, DataEntity entity, String tableName)
-			throws TransactionException {
+	public static int update(DAOFactoryImpl dao, String connName, DataEntity entity, String tableName) throws TransactionException {
 		// 有时候从数据库中load数据，并无实质更新，此时直接返回-1.
 		if (entity.GET_UPDATED_COLUMN() == null) {
 			return -1;
@@ -408,7 +375,7 @@ public class EntityCommandImpl {
 
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:update() @conn:" + connName, e);
+			throw new TransactionException("TransactionException in DAOCommandImpl.java:update()", e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {
@@ -432,21 +399,14 @@ public class EntityCommandImpl {
 
 	/**
 	 * 删除一个实体.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名
-	 * @param entity
-	 *            实体类
-	 * @param tableName
-	 *            表名
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名
+	 * @param entity 实体类
+	 * @param tableName 表名
 	 * @return int
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
-	public static int delete(DAOFactoryImpl dao, String connName, DataEntity entity, String tableName)
-			throws TransactionException {
+	public static int delete(DAOFactoryImpl dao, String connName, DataEntity entity, String tableName) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -490,7 +450,8 @@ public class EntityCommandImpl {
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:delete() @conn:" + connName, e);
+
+			throw new TransactionException("TransactionException in DAOCommandImpl.java:delete()", e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {
@@ -514,31 +475,19 @@ public class EntityCommandImpl {
 
 	/**
 	 * 获得列表.
-	 * 
-	 * @param dao
-	 *            DAOFactoryImpl对象
-	 * @param connName
-	 *            连接名
-	 * @param cls
-	 *            要映射的对象类型
-	 * @param selectsql
-	 *            查询SQL语句
-	 * @param paramList
-	 *            参数的Object数组
-	 * @param startIndex
-	 *            开始位置
-	 * @param resultNum
-	 *            结果集大小
-	 * @param autoCount
-	 *            是否统计全部数据（用于分页算法），默认为false。
-	 * @param <T>
-	 *            要映射的对象类型
+	 * @param dao DAOFactoryImpl对象
+	 * @param connName 连接名
+	 * @param cls 要映射的对象类型
+	 * @param selectsql 查询SQL语句
+	 * @param paramList 参数的Object数组
+	 * @param startIndex 开始位置
+	 * @param resultNum 结果集大小
+	 * @param autoCount 是否统计全部数据（用于分页算法），默认为false。
+	 * @param <T> 要映射的对象类型
 	 * @return 列表
-	 * @throws TransactionException
-	 *             事务异常
+	 * @throws TransactionException 事务异常
 	 */
-	public static <T> DataList<T> list(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql,
-			Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
+	public static <T> DataList<T> list(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -608,7 +557,8 @@ public class EntityCommandImpl {
 
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in EntityCommandImpl.list() @conn:" + connName, e);
+
+			throw new TransactionException("TransactionException in EntityCommandImpl.list()", e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -626,16 +576,13 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), list.size(), dbTime, allTime,
-				exception);
+		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), list.size(), dbTime, allTime, exception);
 		return new DataList<T>(list, startIndex, resultNum, allsize);
 	}
 
 	/**
 	 * 获取表名.
-	 * 
-	 * @param cls
-	 *            类型
+	 * @param cls 类型
 	 * @return 表名
 	 */
 	static String getTableName(Class<?> cls) {
@@ -649,9 +596,7 @@ public class EntityCommandImpl {
 
 	/**
 	 * 加载读取pojo的注解信息.
-	 * 
-	 * @param entityCls
-	 *            实体类类型
+	 * @param entityCls 实体类类型
 	 * @return TableMetaInfo对象
 	 */
 	static TableMetaInfo loadEntityMetaInfo(Class<?> entityCls) {
@@ -664,27 +609,27 @@ public class EntityCommandImpl {
 				emi.setTableName(tm.tableName());
 			}
 			Class<?> clazz = entityCls;
-			while (clazz != Object.class) {
-				Field[] fields = clazz.getDeclaredFields();
-				for (Field field : fields) {
-					field.setAccessible(true);
-					FieldMetaInfo fieldInfo = new FieldMetaInfo();
-					if (field.isAnnotationPresent(ColumnMeta.class)) {
-						ColumnMeta meta = field.getAnnotation(ColumnMeta.class);
-						fieldInfo.setPropertyName(field.getName());
-						fieldInfo.setColumnName(meta.columnName());
-						fieldInfo.setPrimaryKey(meta.primaryKey());
-						fieldInfo.setField(field);
-						fieldInfo.setAutoIncrement(meta.autoIncrement());
-						if (fieldInfo.isPrimaryKey()) {
-							emi.addPklist(fieldInfo);
-						}
-						emi.addColumnMap(meta.columnName(), fieldInfo);
-					}
-				}
-				clazz = clazz.getSuperclass();
-			}
-			entityMetaCache.put(entityCls.getName(), emi);
+			for(int i = 0; clazz != Object.class && i < MAX_ENTITY_CLASS_EXTEND_LEVEL;
+                clazz = clazz.getSuperclass(),i++) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    if (field.isAnnotationPresent(ColumnMeta.class)) {
+                        ColumnMeta meta = field.getAnnotation(ColumnMeta.class);
+                        FieldMetaInfo fieldInfo = new FieldMetaInfo();
+                        fieldInfo.setPropertyName(field.getName());
+                        fieldInfo.setColumnName(meta.columnName());
+                        fieldInfo.setPrimaryKey(meta.primaryKey());
+                        fieldInfo.setField(field);
+                        fieldInfo.setAutoIncrement(meta.autoIncrement());
+                        if (fieldInfo.isPrimaryKey()) {
+                            emi.addPklist(fieldInfo);
+                        }
+                        emi.addColumnMap(meta.columnName(), fieldInfo);
+                    }
+                }
+            }
+            entityMetaCache.put(entityCls.getName(), emi);
 		}
 
 		return emi;
