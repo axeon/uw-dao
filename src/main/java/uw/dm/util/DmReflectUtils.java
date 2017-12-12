@@ -9,6 +9,7 @@ import uw.dm.vo.FieldMetaInfo;
 
 /**
  * DM反射工具类.
+ * 
  * @author zhangjin
  */
 public class DmReflectUtils {
@@ -21,6 +22,7 @@ public class DmReflectUtils {
 
 	/**
 	 * 在preparedStatement中动态set数值.
+	 * 
 	 * @param pstmt
 	 *            PreparedStatement
 	 * @param entity
@@ -29,9 +31,11 @@ public class DmReflectUtils {
 	 *            列信息
 	 * @param sequence
 	 *            int 次序
-	 * @throws Exception 异常
+	 * @throws Exception
+	 *             异常
 	 */
-	public static final void DAOLiteSaveReflect(PreparedStatement pstmt, Object entity, FieldMetaInfo fmi, int sequence) throws Exception {
+	public static final void DAOLiteSaveReflect(PreparedStatement pstmt, Object entity, FieldMetaInfo fmi, int sequence)
+			throws Exception {
 		Field fd = fmi.getField();
 		Class<?> cls = fd.getType();
 		if (cls == int.class) {
@@ -59,12 +63,18 @@ public class DmReflectUtils {
 
 	/**
 	 * 通用的反射更新方法.
-	 * @param pstmt PreparedStatement对象
-	 * @param sequence 序列
-	 * @param value 数值
-	 * @throws Exception 异常
+	 * 
+	 * @param pstmt
+	 *            PreparedStatement对象
+	 * @param sequence
+	 *            序列
+	 * @param value
+	 *            数值
+	 * @throws Exception
+	 *             异常
 	 */
-	public static final void CommandUpdateReflect(PreparedStatement pstmt, int sequence, Object value) throws Exception {
+	public static final void CommandUpdateReflect(PreparedStatement pstmt, int sequence, Object value)
+			throws Exception {
 		if (value instanceof java.util.Date) {
 			pstmt.setTimestamp(sequence, DmValueUtils.dateToTimestamp((java.util.Date) value));
 		} else {
@@ -74,10 +84,15 @@ public class DmReflectUtils {
 
 	/**
 	 * 动态载入.
-	 * @param rs 结果集
-	 * @param entity 实体类
-	 * @param fmi FieldMetaInfo对象
-	 * @throws Exception 实体类
+	 * 
+	 * @param rs
+	 *            结果集
+	 * @param entity
+	 *            实体类
+	 * @param fmi
+	 *            FieldMetaInfo对象
+	 * @throws Exception
+	 *             实体类
 	 */
 	public static final void DAOLiteLoadReflect(ResultSet rs, Object entity, FieldMetaInfo fmi) throws Exception {
 		Field fd = fmi.getField();

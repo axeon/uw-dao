@@ -25,6 +25,7 @@ import uw.dm.util.TableShardingUtils;
 
 /**
  * 按日期分表的工具.
+ * 
  * @author axeon
  */
 @EnableScheduling
@@ -98,7 +99,9 @@ public class TableShardingTask {
 
 	/**
 	 * 检查表是否存在.
-	 * @param tableName 表名
+	 * 
+	 * @param tableName
+	 *            表名
 	 * @return boolean
 	 */
 	private boolean checkTableExist(String tableName) {
@@ -112,7 +115,9 @@ public class TableShardingTask {
 
 	/**
 	 * 载入当前连接列表.
-	 * @param connName 连接名
+	 * 
+	 * @param connName
+	 *            连接名
 	 * @return 连接列列表
 	 */
 	private List<String> loadTableList(String connName) {
@@ -122,7 +127,7 @@ public class TableShardingTask {
 		try {
 			conn = dao.getConnection(connName);
 			DatabaseMetaData metaData = conn.getMetaData();
-			rs = metaData.getTables(null, null, null, new String[] {"TABLE"});
+			rs = metaData.getTables(null, null, null, new String[] { "TABLE" });
 			while (rs.next()) {
 				list.add(rs.getString("TABLE_NAME"));
 			}
@@ -143,7 +148,9 @@ public class TableShardingTask {
 
 	/**
 	 * 获得建表sql.
-	 * @param tableName 表名
+	 * 
+	 * @param tableName
+	 *            表名
 	 * @return 建表sql
 	 */
 	private String getCreateScript(String tableName) {
@@ -161,8 +168,11 @@ public class TableShardingTask {
 
 	/**
 	 * 建表.
-	 * @param tableName 表名
-	 * @param createScript 创建脚本
+	 * 
+	 * @param tableName
+	 *            表名
+	 * @param createScript
+	 *            创建脚本
 	 * @return int
 	 */
 	private int exeCreateTable(String tableName, String createScript) {

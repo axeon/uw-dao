@@ -19,6 +19,7 @@ import uw.dm.vo.SqlExecuteStats;
 
 /**
  * 性能日志写入任务.
+ * 
  * @author axeon
  */
 @EnableScheduling
@@ -46,13 +47,18 @@ public class StatsLogWriteTask {
 
 	/**
 	 * 执行数据库插入.
-	 * @param list SqlExecuteStats集合
+	 * 
+	 * @param list
+	 *            SqlExecuteStats集合
 	 */
 	private void writeStatsList(List<SqlExecuteStats> list) {
-		String tableName = TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE, list.get(0).getActionDate());
+		String tableName = TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE,
+				list.get(0).getActionDate());
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		String pdsql = "INSERT INTO " + tableName + "(id,conn_name,sql_info,sql_param,row_num,db_time,all_time,exception,exe_date) " + "values " + "(?,?,?,?,?,?,?,?,?) ";
+		String pdsql = "INSERT INTO " + tableName
+				+ "(id,conn_name,sql_info,sql_param,row_num,db_time,all_time,exception,exe_date) " + "values "
+				+ "(?,?,?,?,?,?,?,?,?) ";
 		int pos = 0;
 		try {
 			conn = dao.getConnection(tableName, "write");
@@ -61,7 +67,8 @@ public class StatsLogWriteTask {
 			for (pos = 0; pos < list.size(); pos++) {
 				SqlExecuteStats ss = list.get(pos);
 				// 发现已经跨时间分片了，此时要退出
-				if (pos > 0 && !tableName.equals(TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE, ss.getActionDate()))) {
+				if (pos > 0 && !tableName.equals(
+						TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE, ss.getActionDate()))) {
 					break;
 				}
 				pstmt.setLong(1, SequenceManager.nextId(StatsLogService.STATS_BASE_TABLE));

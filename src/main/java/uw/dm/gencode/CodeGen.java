@@ -19,34 +19,34 @@ import uw.dm.util.DmStringUtils;
 
 /**
  * 代码生成入口.
+ * 
  * @author axeon
  */
 public class CodeGen {
 
-    /**
-     * 日志.
-     */
-    private static final Logger logger = LoggerFactory.getLogger(CodeGen.class);
+	/**
+	 * 日志.
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(CodeGen.class);
 
-    /**
-     * 文件编码.
-     */
-    public static String SYSTEM_ENCODING = "UTF-8";
+	/**
+	 * 文件编码.
+	 */
+	public static String SYSTEM_ENCODING = "UTF-8";
 
-    /**
-     * 源代码的路径.
-     */
-    public static String SOURCECODE_PATH = "d:/";
+	/**
+	 * 源代码的路径.
+	 */
+	public static String SOURCECODE_PATH = "d:/";
 
 	/**
 	 * 包名
 	 */
 	public static String PACKAGE_NAME = "";
-    /**
-     * 数据库方言 MYSQL or ORCLE
-     */
+	/**
+	 * 数据库方言 MYSQL or ORCLE
+	 */
 	public static String DATABSE_DIALECT = "MYSQL";
-
 
 	/**
 	 * 连接池名称，不设置为默认连接
@@ -56,11 +56,10 @@ public class CodeGen {
 	 * 指定要生成的表的信息，多个表名用","分割
 	 */
 	public static String TABLE_LIST = "";
-    /**
-     * 数据库连接模式 -> ORACLE需要设置,默认取数据库连接名称
-     */
+	/**
+	 * 数据库连接模式 -> ORACLE需要设置,默认取数据库连接名称
+	 */
 	public static String CONN_SCHEMA = "";
-
 
 	/**
 	 * TableMetaInterface对象
@@ -69,30 +68,35 @@ public class CodeGen {
 
 	/**
 	 * logger.error.
-	 * @param msg 信息
+	 * 
+	 * @param msg
+	 *            信息
 	 */
-    private static void onError(String msg) {
-        logger.error("msg");
-        System.exit(-1);
-    }
+	private static void onError(String msg) {
+		logger.error("msg");
+		System.exit(-1);
+	}
+
 	/**
 	 * 开始代码生成.
-	 * @throws Exception 异常
+	 * 
+	 * @throws Exception
+	 *             异常
 	 */
 	public static void genCode() throws Exception {
-	    // 参数CHECK
-        if(DATABSE_DIALECT == null || DATABSE_DIALECT.equals("")){
-            onError("请设置数据库方言: MYSQL or ORCLE");
-        }
-        DATABSE_DIALECT = DATABSE_DIALECT.toUpperCase();
-        if(CONN_NAME == null){
-            onError("连接池名不能为null");
-        }
-	    if(DATABSE_DIALECT.equals("MYSQL")){
-            tableMetaInterface = new MySQLDataMetaImpl(CONN_NAME);
-        }else if(DATABSE_DIALECT.equals("ORACLE")){
-            tableMetaInterface = new OracleDataMetaImpl(CONN_NAME,CONN_SCHEMA);
-        }
+		// 参数CHECK
+		if (DATABSE_DIALECT == null || DATABSE_DIALECT.equals("")) {
+			onError("请设置数据库方言: MYSQL or ORCLE");
+		}
+		DATABSE_DIALECT = DATABSE_DIALECT.toUpperCase();
+		if (CONN_NAME == null) {
+			onError("连接池名不能为null");
+		}
+		if (DATABSE_DIALECT.equals("MYSQL")) {
+			tableMetaInterface = new MySQLDataMetaImpl(CONN_NAME);
+		} else if (DATABSE_DIALECT.equals("ORACLE")) {
+			tableMetaInterface = new OracleDataMetaImpl(CONN_NAME, CONN_SCHEMA);
+		}
 		logger.info("开始代码生成...");
 		logger.info("CONN_NAME={}", CONN_NAME);
 		logger.info("SOURCECODE_PATH={}", SOURCECODE_PATH);
@@ -101,29 +105,33 @@ public class CodeGen {
 		init();
 		process();
 		logger.info("代码生成完成...");
-        System.exit(-1);
+		System.exit(-1);
 	}
 
-    /**
-     * Configuration对象.
-     */
-    private static Configuration cfg;
+	/**
+	 * Configuration对象.
+	 */
+	private static Configuration cfg;
 
-    /**
-     * 初始化模板配置.
-     * @throws Exception 异常
-     */
-    private static void init() throws Exception {
-        // 初始化FreeMarker配置
-        // 创建一个Configuration实例
-        cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
-        // 设置FreeMarker的模版文件位置
-        cfg.setClassForTemplateLoading(CodeGen.class, "/uw/dm/gencode/"); // 类路径
-    }
+	/**
+	 * 初始化模板配置.
+	 * 
+	 * @throws Exception
+	 *             异常
+	 */
+	private static void init() throws Exception {
+		// 初始化FreeMarker配置
+		// 创建一个Configuration实例
+		cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
+		// 设置FreeMarker的模版文件位置
+		cfg.setClassForTemplateLoading(CodeGen.class, "/uw/dm/gencode/"); // 类路径
+	}
 
 	/**
 	 * 预处理信息.
-	 * @throws Exception 异常
+	 * 
+	 * @throws Exception
+	 *             异常
 	 */
 	private static void process() throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -149,35 +157,40 @@ public class CodeGen {
 			List<MetaColumnInfo> columnlist = tableMetaInterface.getColumnList(tmeta.getTableName(), pklist);
 			map.put("columnList", columnlist);
 
-            String fileName = DmStringUtils.toUpperFirst(tmeta.getEntityName()) + ".java";
-            String savePath = SOURCECODE_PATH + "/" + PACKAGE_NAME.replaceAll("\\.", "/") + "/";
-            Template template = cfg.getTemplate("entity.ftl");
-            buildTemplate(template, map, savePath, fileName);
-        }
-    }
+			String fileName = DmStringUtils.toUpperFirst(tmeta.getEntityName()) + ".java";
+			String savePath = SOURCECODE_PATH + "/" + PACKAGE_NAME.replaceAll("\\.", "/") + "/";
+			Template template = cfg.getTemplate("entity.ftl");
+			buildTemplate(template, map, savePath, fileName);
+		}
+	}
 
-    /**
-     * 生成代码.
-     * @param template Template对象
-     * @param root Map对象
-     * @param savePath 保存路径
-     * @param fileName 文件名字
-     */
-    @SuppressWarnings("rawtypes")
-    private static void buildTemplate(Template template, Map root, String savePath, String fileName) {
-        String realFileName = savePath + fileName;
-        String realSavePath = savePath;
-        File newsDir = new File(realSavePath);
-        if (!newsDir.exists()) {
-            newsDir.mkdirs();
-        }
-        try {
-            Writer out = new OutputStreamWriter(new FileOutputStream(realFileName), SYSTEM_ENCODING);
-            template.process(root, out);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	/**
+	 * 生成代码.
+	 * 
+	 * @param template
+	 *            Template对象
+	 * @param root
+	 *            Map对象
+	 * @param savePath
+	 *            保存路径
+	 * @param fileName
+	 *            文件名字
+	 */
+	@SuppressWarnings("rawtypes")
+	private static void buildTemplate(Template template, Map root, String savePath, String fileName) {
+		String realFileName = savePath + fileName;
+		String realSavePath = savePath;
+		File newsDir = new File(realSavePath);
+		if (!newsDir.exists()) {
+			newsDir.mkdirs();
+		}
+		try {
+			Writer out = new OutputStreamWriter(new FileOutputStream(realFileName), SYSTEM_ENCODING);
+			template.process(root, out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
 
 }

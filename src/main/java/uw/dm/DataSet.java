@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 存储并转化ResultSet对象数据.
+ * 
  * @author zhangjin
  */
 public class DataSet implements Serializable, Cloneable {
@@ -79,6 +80,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 构造器.
+	 * 
 	 * @param rs
 	 *            结果集
 	 * @param startIndex
@@ -86,8 +88,9 @@ public class DataSet implements Serializable, Cloneable {
 	 * @param resultNum
 	 *            结果集大小
 	 * @param sizeAll
-	 * 			 整个表数据量大小
-	 * @throws SQLException SQL异常
+	 *            整个表数据量大小
+	 * @throws SQLException
+	 *             SQL异常
 	 */
 	public DataSet(ResultSet rs, int startIndex, int resultNum, int sizeAll) throws SQLException {
 		// 设置参数
@@ -172,6 +175,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获得列名列表.
+	 * 
 	 * @return 列名列表
 	 */
 	public String[] getColumnNames() {
@@ -180,6 +184,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 到下一条记录，检查是否还有下一行数据.
+	 * 
 	 * @return boolean
 	 */
 	public boolean next() {
@@ -189,6 +194,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 到上一条记录，检查是否还有上一行数据.
+	 * 
 	 * @return boolean
 	 */
 	public boolean previous() {
@@ -207,6 +213,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回结果集数组.
+	 * 
 	 * @return 结果集数组
 	 */
 	public ArrayList<Object[]> results() {
@@ -215,7 +222,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 定位到指定的位置.
-	 * @param index 位置
+	 * 
+	 * @param index
+	 *            位置
 	 */
 	public void absolute(int index) {
 		this.currentIndex = index - 1;
@@ -223,6 +232,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获取当前List大小.
+	 * 
 	 * @return 当前List大小
 	 */
 	public int size() {
@@ -231,8 +241,10 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获取该表/视图所有的数据大小.
+	 * 
 	 * @return 该表/视图所有的数据大小
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
 	public int sizeAll() throws TransactionException {
 		return this.sizeAll;
@@ -240,6 +252,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 按照总记录数和每页条数计算出页数.
+	 * 
 	 * @return 页数
 	 */
 	public int pageCount() {
@@ -248,6 +261,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 当前页.
+	 * 
 	 * @return 页数
 	 */
 	public int page() {
@@ -256,6 +270,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 在整个数据集中的开始索引位置.
+	 * 
 	 * @return 开始位置
 	 */
 	public int startIndex() {
@@ -264,6 +279,7 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回结果集大小.
+	 * 
 	 * @return 结果集大小
 	 */
 	public int resultNum() {
@@ -272,7 +288,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获得数组中指定位置的数据.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return 数组中指定位置的数据
 	 */
 	public Object get(String colname) {
@@ -281,7 +299,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为int.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return int
 	 */
 	public int getInt(String colname) {
@@ -295,7 +315,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为long.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return long
 	 */
 	public long getLong(String colname) {
@@ -309,7 +331,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为double.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return double
 	 */
 	public double getDouble(String colname) {
@@ -323,7 +347,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为float.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return float
 	 */
 	public float getFloat(String colname) {
@@ -337,7 +363,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为String.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return String
 	 */
 	public String getString(String colname) {
@@ -351,7 +379,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为Date.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return Date
 	 */
 	public java.util.Date getDate(String colname) {
@@ -360,7 +390,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获得数组中指定位置的数据.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return 数组中指定位置的数据
 	 */
 	public Object get(int colIndex) {
@@ -369,7 +401,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为int.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return int
 	 */
 	public int getInt(int colIndex) {
@@ -378,7 +412,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为long.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return long
 	 */
 	public long getLong(int colIndex) {
@@ -387,7 +423,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为double.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return double
 	 */
 	public double getDouble(int colIndex) {
@@ -396,7 +434,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为float.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return float
 	 */
 	public float getFloat(int colIndex) {
@@ -405,7 +445,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为String.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return String
 	 */
 	public String getString(int colIndex) {
@@ -418,7 +460,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 返回值为Date.
-	 * @param colIndex 列位置
+	 * 
+	 * @param colIndex
+	 *            列位置
 	 * @return Date
 	 */
 	public java.util.Date getDate(int colIndex) {
@@ -427,7 +471,9 @@ public class DataSet implements Serializable, Cloneable {
 
 	/**
 	 * 获得列名位置.
-	 * @param colname 列名
+	 * 
+	 * @param colname
+	 *            列名
 	 * @return 列名位置
 	 */
 	public int getColumnPos(String colname) {

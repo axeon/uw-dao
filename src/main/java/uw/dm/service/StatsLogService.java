@@ -13,6 +13,7 @@ import uw.dm.vo.SqlExecuteStats;
 
 /**
  * 性能计数器,将性能数据输出到mysql中.
+ * 
  * @author axeon
  */
 public class StatsLogService {
@@ -63,6 +64,7 @@ public class StatsLogService {
 
 	/**
 	 * 是否已启动.
+	 * 
 	 * @return boolean
 	 */
 	public static boolean isStarted() {
@@ -71,6 +73,7 @@ public class StatsLogService {
 
 	/**
 	 * 记录性能参数.
+	 * 
 	 * @param ses
 	 *            用于统计sql执行的性能数据
 	 */
@@ -87,22 +90,24 @@ public class StatsLogService {
 
 	/**
 	 * 记录性能参数.
+	 * 
 	 * @param connName
-	 * 				连接名
+	 *            连接名
 	 * @param sql
-	 * 				执行的具体sql
+	 *            执行的具体sql
 	 * @param param
-	 * 				附加的参数
+	 *            附加的参数
 	 * @param rowNum
-	 *				返回/影响的行数
+	 *            返回/影响的行数
 	 * @param dbTime
-	 *				数据库层操作数据库消耗的时间
+	 *            数据库层操作数据库消耗的时间
 	 * @param allTime
-	 *				数据库层消耗的时间
+	 *            数据库层消耗的时间
 	 * @param exception
-	 * 				异常类
+	 *            异常类
 	 */
-	public static void logStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime, String exception) {
+	public static void logStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime,
+			String exception) {
 		if (isStarted.get()) {
 			locker.lock();
 			try {
@@ -115,6 +120,7 @@ public class StatsLogService {
 
 	/**
 	 * 获得pageLog列表，并重新构造列表.
+	 * 
 	 * @return 列表
 	 */
 	static ArrayList<SqlExecuteStats> getStatsList() {
@@ -133,7 +139,12 @@ public class StatsLogService {
 	 * 检查是否应该新建表.
 	 */
 	private static void checkForCreatesStatsTable() {
-		String sql = "create table if not exists " + STATS_BASE_TABLE + " (\n" + "id bigint(20) NOT NULL AUTO_INCREMENT,\n" + "conn_name varchar(100) DEFAULT NULL,\n" + "sql_info varchar(1000) DEFAULT NULL,\n" + "sql_param varchar(1000) DEFAULT NULL,\n" + "row_num int(11) DEFAULT NULL,\n" + "db_time int(11) DEFAULT NULL,\n" + "all_time int(11) DEFAULT NULL,\n" + "exception varchar(500) DEFAULT NULL,\n" + "exe_date datetime DEFAULT CURRENT_TIMESTAMP,\n" + "PRIMARY KEY (id)\n" + ")";
+		String sql = "create table if not exists " + STATS_BASE_TABLE + " (\n"
+				+ "id bigint(20) NOT NULL AUTO_INCREMENT,\n" + "conn_name varchar(100) DEFAULT NULL,\n"
+				+ "sql_info varchar(1000) DEFAULT NULL,\n" + "sql_param varchar(1000) DEFAULT NULL,\n"
+				+ "row_num int(11) DEFAULT NULL,\n" + "db_time int(11) DEFAULT NULL,\n"
+				+ "all_time int(11) DEFAULT NULL,\n" + "exception varchar(500) DEFAULT NULL,\n"
+				+ "exe_date datetime DEFAULT CURRENT_TIMESTAMP,\n" + "PRIMARY KEY (id)\n" + ")";
 		try {
 			dao.executeCommand(dao.getConnectionName(STATS_BASE_TABLE, "all"), sql);
 			logger.info("init table: {}", STATS_BASE_TABLE);

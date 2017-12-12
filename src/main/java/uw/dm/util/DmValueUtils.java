@@ -7,7 +7,9 @@ public class DmValueUtils {
 
 	/**
 	 * 从日期类型转换为java.sql.Timestamp.
-	 * @param date 日期时间
+	 * 
+	 * @param date
+	 *            日期时间
 	 * @return Timestamp对象
 	 */
 	public static final java.sql.Timestamp dateToTimestamp(java.util.Date date) {
@@ -20,7 +22,9 @@ public class DmValueUtils {
 
 	/**
 	 * 获得真正的列名。 在sql里面可能会使用一些函数并使用as进行区分.
-	 * @param columnName  列名
+	 * 
+	 * @param columnName
+	 *            列名
 	 * @return 列名
 	 */
 	public static final String getTrueColumnName(String columnName) {
@@ -34,7 +38,9 @@ public class DmValueUtils {
 
 	/**
 	 * 把null转换为空字符.
-	 * @param str 字符串
+	 * 
+	 * @param str
+	 *            字符串
 	 * @return String
 	 */
 	public static final String nullToStr(String str) {

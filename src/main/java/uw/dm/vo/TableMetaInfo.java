@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * 实体信息.
+ * 
  * @author axeon
  */
 public class TableMetaInfo {
@@ -65,7 +66,9 @@ public class TableMetaInfo {
 
 	/**
 	 * 根据columnName获取FieldMetaInfo.
-	 * @param columnName 列名
+	 * 
+	 * @param columnName
+	 *            列名
 	 * @return FieldMetaInfo集合
 	 */
 	public FieldMetaInfo getFieldMetaInfo(String columnName) {
@@ -74,8 +77,11 @@ public class TableMetaInfo {
 
 	/**
 	 * 向ColumnMap中加入FieldInfo信息.
-	 * @param columnName 列名
-	 * @param fi FieldMetaInfo对象
+	 * 
+	 * @param columnName
+	 *            列名
+	 * @param fi
+	 *            FieldMetaInfo对象
 	 */
 	public void addColumnMap(String columnName, FieldMetaInfo fi) {
 		this.columnMap.put(columnName, fi);

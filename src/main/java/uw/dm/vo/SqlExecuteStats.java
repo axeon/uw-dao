@@ -52,15 +52,24 @@ public class SqlExecuteStats {
 
 	/**
 	 * SqlExecuteStats对象.
-	 * @param connName 连接名
-	 * @param sql SQL语句
-	 * @param param 参数
-	 * @param rowNum 返回/影响的行数
-	 * @param dbTime 数据库操作消耗的时间
-	 * @param allTime 数据库层消耗的时间
-	 * @param exception 异常
+	 * 
+	 * @param connName
+	 *            连接名
+	 * @param sql
+	 *            SQL语句
+	 * @param param
+	 *            参数
+	 * @param rowNum
+	 *            返回/影响的行数
+	 * @param dbTime
+	 *            数据库操作消耗的时间
+	 * @param allTime
+	 *            数据库层消耗的时间
+	 * @param exception
+	 *            异常
 	 */
-	public SqlExecuteStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime, String exception) {
+	public SqlExecuteStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime,
+			String exception) {
 		this.connName = connName;
 		this.sql = sql;
 		this.param = param;
@@ -73,6 +82,7 @@ public class SqlExecuteStats {
 
 	/**
 	 * 转化成字符串形式.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

@@ -2,6 +2,7 @@ package uw.dm.gencode;
 
 /**
  * 表的列信息.
+ * 
  * @author axeon
  */
 public class MetaColumnInfo {
@@ -103,10 +104,12 @@ public class MetaColumnInfo {
 
 	/**
 	 * 转化成字符串形式.
+	 * 
 	 * @return String
 	 */
 	public String toString() {
-		return "MetaColumnInfo:" + columnName + "," + dataType + "," + typeName + "," + columnSize + "," + remarks + "," + isNullable + "," + isAutoIncrement;
+		return "MetaColumnInfo:" + columnName + "," + dataType + "," + typeName + "," + columnSize + "," + remarks + ","
+				+ isNullable + "," + isAutoIncrement;
 	}
 
 	/**

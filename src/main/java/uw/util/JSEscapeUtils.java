@@ -8,7 +8,6 @@ package uw.util;
  */
 public class JSEscapeUtils {
 
-
 	public static String escape(String src) {
 		int i;
 		char j;

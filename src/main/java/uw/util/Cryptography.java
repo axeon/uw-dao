@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 public class Cryptography {
 
 	private static final Logger logger = LoggerFactory.getLogger(Cryptography.class);
-	
-
 
 	/**
 	 * 解密
@@ -114,7 +112,7 @@ public class Cryptography {
 		}
 		return dkey;
 	}
-	
+
 	/**
 	 * MD5加密
 	 * 

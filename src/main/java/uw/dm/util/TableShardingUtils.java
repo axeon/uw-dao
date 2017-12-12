@@ -10,6 +10,7 @@ import uw.dm.conf.DMConfigManager;
 
 /**
  * 按日期分表的工具.
+ * 
  * @author axeon
  */
 public class TableShardingUtils {
@@ -34,8 +35,11 @@ public class TableShardingUtils {
 
 	/**
 	 * 根据给定的日期给出表名.
-	 * @param tableName  表名
-	 * @param date 日期
+	 * 
+	 * @param tableName
+	 *            表名
+	 * @param date
+	 *            日期
 	 * @return 表名
 	 */
 	public static String getTableNameByDate(String tableName, LocalDate date) {
@@ -57,8 +61,11 @@ public class TableShardingUtils {
 
 	/**
 	 * 根据给定的日期给出表名.
-	 * @param tableName  表名
-	 * @param date 日期
+	 * 
+	 * @param tableName
+	 *            表名
+	 * @param date
+	 *            日期
 	 * @return 表名
 	 */
 	public static String getTableNameByDate(String tableName, Date date) {

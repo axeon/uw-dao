@@ -2,13 +2,16 @@ package uw.dm.util;
 
 /**
  * dm的字符串工具类.
+ * 
  * @author axeon
  */
 public class DmStringUtils {
 
 	/**
 	 * 把_分割的字符串改为驼峰样式.
-	 * @param text  字符串
+	 * 
+	 * @param text
+	 *            字符串
 	 * @return String
 	 */
 	public static String toClearCase(String text) {
@@ -32,7 +35,9 @@ public class DmStringUtils {
 
 	/**
 	 * 首字母大写.
-	 * @param text 字符串
+	 * 
+	 * @param text
+	 *            字符串
 	 * @return String
 	 */
 	public static String toUpperFirst(String text) {
@@ -45,7 +50,9 @@ public class DmStringUtils {
 
 	/**
 	 * 首字母大写.
-	 * @param text 字符串
+	 * 
+	 * @param text
+	 *            字符串
 	 * @return String
 	 */
 	public static String toLowerFirst(String text) {

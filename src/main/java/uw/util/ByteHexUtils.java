@@ -10,6 +10,7 @@ public class ByteHexUtils {
 
 	/**
 	 * 十进制转十六进制
+	 * 
 	 * @param b
 	 * @return
 	 */
@@ -22,8 +23,10 @@ public class ByteHexUtils {
 		}
 		return new String(newChar);
 	}
+
 	/**
 	 * 十六进制字符串转十进制
+	 * 
 	 * @param hexString
 	 * @return
 	 */

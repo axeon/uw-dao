@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import uw.dm.BatchupdateManager;
 import uw.dm.TransactionException;
-import uw.dm.connectionpool.ConnectionPool;
 
 /**
  * BatchupdateManager实现类.
+ * 
  * @author axeon
  */
 public class BatchupdateManagerImpl implements BatchupdateManager {
@@ -24,7 +24,7 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 	/**
 	 * 日志.
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
+	private static final Logger logger = LoggerFactory.getLogger(BatchupdateManagerImpl.class);
 
 	/**
 	 * pstmt集合.
@@ -59,10 +59,14 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 获取pstmt.
-	 * @param conn Connection对象
-	 * @param sql SQL语句
+	 * 
+	 * @param conn
+	 *            Connection对象
+	 * @param sql
+	 *            SQL语句
 	 * @return PreparedStatement对象
-	 * @throws SQLException SQL异常
+	 * @throws SQLException
+	 *             SQL异常
 	 */
 	public PreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
 		// pstmt对象
@@ -101,7 +105,9 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 当调用次方法的时候，自动设置开始transaction.
-	 * @throws TransactionException 事务异常
+	 * 
+	 * @throws TransactionException
+	 *             事务异常
 	 */
 	public void startBatchUpdate() throws TransactionException {
 		this.isBatch = true;
@@ -113,7 +119,9 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 设置批量更新的数量.
-	 * @param batchSize 数量
+	 * 
+	 * @param batchSize
+	 *            数量
 	 */
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
@@ -121,6 +129,7 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 获得批量更新的数量.
+	 * 
 	 * @return boolean
 	 */
 	public int getBatchSize() {
@@ -129,7 +138,9 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 获得是否在批量模式下.
-	 * @throws TransactionException 事务异常
+	 * 
+	 * @throws TransactionException
+	 *             事务异常
 	 * @return boolean
 	 */
 	public boolean getBatchStatus() {
@@ -138,7 +149,9 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 检查哪些pstmt需要更新.
-	 * @throws Exception 异常
+	 * 
+	 * @throws Exception
+	 *             异常
 	 */
 	private void checkToBatchUpdate() throws Exception {
 		PreparedStatement pstmt = null;
@@ -168,8 +181,10 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 完成需要清空map，并关闭全部pstmt.
+	 * 
 	 * @return 结果List
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
 	public List<List<Integer>> submit() throws TransactionException {
 		PreparedStatement pstmt = null;
@@ -216,6 +231,7 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 
 	/**
 	 * 获得Batch的sql列表.
+	 * 
 	 * @return sql列表
 	 */
 	public List<String> getBatchList() {

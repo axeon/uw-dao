@@ -51,7 +51,11 @@ public class StackTraceTools {
 					stacktrace = "";
 					logger.debug("正在处理异常" + exception);
 				} else {
-					if (dataLine.indexOf("at oracle.") == -1 && dataLine.indexOf("at com.caucho.") == -1 && dataLine.indexOf("at com.mysql.") == -1 && dataLine.indexOf("at sun.reflect.") == -1 && dataLine.indexOf("at com.mysql.") == -1 && dataLine.indexOf("at java.util.") == -1 && dataLine.indexOf("at java.net.") == -1 && dataLine.indexOf("at uw.dm.") == -1 && dataLine.indexOf("at java.lang.Thread") == -1) {
+					if (dataLine.indexOf("at oracle.") == -1 && dataLine.indexOf("at com.caucho.") == -1
+							&& dataLine.indexOf("at com.mysql.") == -1 && dataLine.indexOf("at sun.reflect.") == -1
+							&& dataLine.indexOf("at com.mysql.") == -1 && dataLine.indexOf("at java.util.") == -1
+							&& dataLine.indexOf("at java.net.") == -1 && dataLine.indexOf("at uw.dm.") == -1
+							&& dataLine.indexOf("at java.lang.Thread") == -1) {
 						stacktrace += dataLine + "|";
 					}
 				}

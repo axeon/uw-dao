@@ -15,6 +15,7 @@ import uw.dm.TransactionException;
 
 /**
  * 数据清理任务.
+ * 
  * @author axeon
  */
 @EnableScheduling
@@ -32,13 +33,15 @@ public class StatsCleanDataTask {
 
 	/**
 	 * 获得当前的表Set.
+	 * 
 	 * @return HashSet对象
 	 */
 	private HashSet<String> getCurrentTableSet() {
 		HashSet<String> set = new HashSet<String>();
 		List<String> list = null;
 		try {
-			list = dao.queryForSingleList(dao.getConnectionName(StatsLogService.STATS_BASE_TABLE, "all"), String.class, "show tables");
+			list = dao.queryForSingleList(dao.getConnectionName(StatsLogService.STATS_BASE_TABLE, "all"), String.class,
+					"show tables");
 			if (list != null) {
 				for (String s : list) {
 					if (s.startsWith(StatsLogService.STATS_BASE_TABLE + "_")) {

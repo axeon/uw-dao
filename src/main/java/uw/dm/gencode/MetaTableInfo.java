@@ -2,6 +2,7 @@ package uw.dm.gencode;
 
 /**
  * 数据库表的信息.
+ * 
  * @author axeon
  */
 public class MetaTableInfo {
@@ -28,6 +29,7 @@ public class MetaTableInfo {
 
 	/**
 	 * 转化成字符串形式.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

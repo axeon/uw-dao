@@ -13,12 +13,14 @@ import java.lang.annotation.Target;
 public @interface TableMeta {
 	/**
 	 * 表名.
+	 * 
 	 * @return 表名
 	 */
 	public String tableName() default "";
 
 	/**
 	 * 表类型.
+	 * 
 	 * @return 表类型
 	 */
 	public String tableType() default "";

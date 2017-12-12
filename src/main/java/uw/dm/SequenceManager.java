@@ -16,6 +16,7 @@ import uw.dm.connectionpool.ConnectionManager;
 
 /**
  * sequence管理器。 如果不是使用sequence管理器，在集群环境中将有一些麻烦。 系统会自动判定启用那种方式的id生成方式.
+ * 
  * @author zhangjin
  */
 public class SequenceManager {
@@ -44,7 +45,9 @@ public class SequenceManager {
 
 	/**
 	 * 返回指定的表的sequenceId数值.
-	 * @param tablename  表名
+	 * 
+	 * @param tablename
+	 *            表名
 	 * @return 下一个值
 	 */
 	public static long nextId(String tablename) {
@@ -53,7 +56,9 @@ public class SequenceManager {
 
 	/**
 	 * 申请一个Id号码范围.
-	 * @param tablename  表名
+	 * 
+	 * @param tablename
+	 *            表名
 	 * @param range
 	 *            申请多少个号码
 	 * @return 起始号码
@@ -64,7 +69,9 @@ public class SequenceManager {
 
 	/**
 	 * 返回下一个可以取到的id值,功能上类似于数据库的自动递增字段.
-	 * @param value 递增累加值
+	 * 
+	 * @param value
+	 *            递增累加值
 	 */
 	private synchronized long nextUniqueID(int value) {
 		if (currentId.get() + value > maxId) {
@@ -75,8 +82,11 @@ public class SequenceManager {
 
 	/**
 	 * 返回指定的表的sequenceId数值.
-	 * @param tablename  表名
-	 * @param value 递增累加值
+	 * 
+	 * @param tablename
+	 *            表名
+	 * @param value
+	 *            递增累加值
 	 * @return 下一个值
 	 */
 	private static long nextSysSequence(String tablename, int value) {
@@ -94,7 +104,9 @@ public class SequenceManager {
 
 	/**
 	 * 初始化SequenceManager.
-	 * @param tablename 表名
+	 * 
+	 * @param tablename
+	 *            表名
 	 * @return SequenceManager对象
 	 */
 	private synchronized static SequenceManager initSequenceManager(String tablename) {
@@ -128,7 +140,9 @@ public class SequenceManager {
 
 	/**
 	 * 建立一个Sequence实例.
-	 * @param sequenceName table名称
+	 * 
+	 * @param sequenceName
+	 *            table名称
 	 */
 	public SequenceManager(String sequenceName) {
 		this.sequenceName = sequenceName;
@@ -137,7 +151,9 @@ public class SequenceManager {
 
 	/**
 	 * 通过多次尝试获得下一组sequenceId.
-	 * @param value 递增累加值
+	 * 
+	 * @param value
+	 *            递增累加值
 	 */
 	private void getNextBlock(int value) {
 
@@ -145,7 +161,8 @@ public class SequenceManager {
 			if (getNextBlockImpl(value)) {
 				break;
 			}
-			logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...", this.sequenceName, i);
+			logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...",
+					this.sequenceName, i);
 			// 如果不成功，再次调用改方法。
 			try {
 				Thread.sleep(1000);
@@ -163,7 +180,9 @@ public class SequenceManager {
 	 * <li>Update db row with new id where id=old_id.
 	 * <li>如果update失败，会重复执行，直至成功。
 	 * </ol>
-	 * @param value 递增累加值
+	 * 
+	 * @param value
+	 *            递增累加值
 	 * @return boolean
 	 */
 	private boolean getNextBlockImpl(int value) {

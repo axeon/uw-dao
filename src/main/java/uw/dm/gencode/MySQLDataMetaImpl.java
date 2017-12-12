@@ -18,6 +18,7 @@ import uw.dm.util.DmStringUtils;
 
 /**
  * 数据库信息的工具类.
+ * 
  * @author axeon
  */
 public class MySQLDataMetaImpl implements TableMetaInterface {
@@ -33,25 +34,30 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 
 	/**
 	 * 构造函数.
-	 * @param CONN_NAME 连接名
+	 * 
+	 * @param CONN_NAME
+	 *            连接名
 	 */
-    public MySQLDataMetaImpl(String CONN_NAME) {
-        this.CONN_NAME = CONN_NAME;
-    }
+	public MySQLDataMetaImpl(String CONN_NAME) {
+		this.CONN_NAME = CONN_NAME;
+	}
 
 	/**
 	 * 获取连接名.
+	 * 
 	 * @return 连接名
 	 */
 	@Override
-    public String getConnName() {
-        return CONN_NAME;
-    }
+	public String getConnName() {
+		return CONN_NAME;
+	}
 
-    /**
+	/**
 	 * 获得数据库链接.
+	 * 
 	 * @return Connection对象
-	 * @throws SQLException SQL异常
+	 * @throws SQLException
+	 *             SQL异常
 	 */
 	public Connection getConnection() throws SQLException {
 		if (CONN_NAME == null || CONN_NAME.equals("")) {
@@ -63,7 +69,9 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 
 	/**
 	 * 获取数据库中的表名称与视图名称.
-	 * @param tables 表集合
+	 * 
+	 * @param tables
+	 *            表集合
 	 * @return 表信息的列表
 	 */
 	public List<MetaTableInfo> getTablesAndViews(Set<String> tables) {
@@ -73,7 +81,7 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 		try {
 			conn = getConnection();
 			DatabaseMetaData metaData = conn.getMetaData();
-			rs = metaData.getTables(null, null, null, new String[] {"TABLE", "VIEW" });
+			rs = metaData.getTables(null, null, null, new String[] { "TABLE", "VIEW" });
 			while (rs.next()) {
 				MetaTableInfo meta = new MetaTableInfo();
 				meta.setTableName(rs.getString("TABLE_NAME").toLowerCase());
@@ -108,9 +116,12 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 
 	/**
 	 * 利用表名和数据库用户名查询出该表对应的字段类型.
-	 * @param tableName 表名
+	 * 
+	 * @param tableName
+	 *            表名
 	 * @return 表字段信息的列表
-	 * @throws Exception 异常
+	 * @throws Exception
+	 *             异常
 	 */
 	public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
 		Connection conn = null;
@@ -203,9 +214,12 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 
 	/**
 	 * 获得主键名.
-	 * @param tableName 表名
+	 * 
+	 * @param tableName
+	 *            表名
 	 * @return 主键列表
-	 * @throws Exception 异常
+	 * @throws Exception
+	 *             异常
 	 */
 	public List<MetaPrimaryKeyInfo> getPrimaryKey(String tableName) {
 		Connection conn = null;

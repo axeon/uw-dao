@@ -2,6 +2,7 @@ package uw.dm.gencode;
 
 /**
  * 表的主键信息.
+ * 
  * @author axeon
  *
  */
@@ -34,6 +35,7 @@ public class MetaPrimaryKeyInfo {
 
 	/**
 	 * 转化成字符串形式.
+	 * 
 	 * @return String
 	 */
 	public String toString() {

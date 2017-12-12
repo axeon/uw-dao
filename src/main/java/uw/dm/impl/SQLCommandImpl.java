@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import uw.dm.DataSet;
 import uw.dm.TransactionException;
 import uw.dm.conf.DMConfigManager;
-import uw.dm.connectionpool.ConnectionPool;
 import uw.dm.dialect.Dialect;
 import uw.dm.dialect.DialectManager;
 import uw.dm.util.DmReflectUtils;
@@ -27,25 +26,30 @@ public class SQLCommandImpl {
 	/**
 	 * 日志.
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
+	private static final Logger logger = LoggerFactory.getLogger(SQLCommandImpl.class);
 
 	/**
 	 * 获得单个数值.
-	 * @param dao DAOFactoryImpl对象
+	 * 
+	 * @param dao
+	 *            DAOFactoryImpl对象
 	 * @param connName
-	 * 				连接名，如设置为null，则根据sql语句或表名动态路由确定
+	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
-	 * 				查询的SQL
+	 *            查询的SQL
 	 * @param cls
-	 * 				要映射的对象类型
+	 *            要映射的对象类型
 	 * @param paramList
-	 * 				查询SQL的绑定参数
-	 * @param <T>	要映射的对象类型
+	 *            查询SQL的绑定参数
+	 * @param <T>
+	 *            要映射的对象类型
 	 * @return 单个数值
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T> T selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
+	public static final <T> T selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql,
+			Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -92,7 +96,8 @@ public class SQLCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in SQLCommandImpl.selectForSingleValue()", e);
+			throw new TransactionException(
+					"TransactionException in SQLCommandImpl.selectForSingleValue() @conn:" + connName, e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -110,28 +115,33 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), value == null ? 0 : 1, dbTime, allTime, exception);
+		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), value == null ? 0 : 1, dbTime, allTime,
+				exception);
 		return (T) value;
 	}
 
 	/**
 	 * 获得单列数据列表.
-	 * @param dao DAOFactoryImpl对象
+	 * 
+	 * @param dao
+	 *            DAOFactoryImpl对象
 	 * @param connName
-	 * 				连接名，如设置为null，则根据sql语句或表名动态路由确定
+	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
-	 * 				查询的SQL
+	 *            查询的SQL
 	 * @param cls
-	 * 				要映射的对象类型
+	 *            要映射的对象类型
 	 * @param <T>
-	 * 				要映射的对象类型
+	 *            要映射的对象类型
 	 * @param paramList
-	 * 				查询SQL的绑定参数
+	 *            查询SQL的绑定参数
 	 * @return 单列数据列表
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T> List<T> selectForSingleList(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
+	public static final <T> List<T> selectForSingleList(DAOFactoryImpl dao, String connName, Class<T> cls,
+			String selectsql, Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -198,7 +208,8 @@ public class SQLCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in SQLCommandImpl.selectForSingleList()", e);
+			throw new TransactionException(
+					"TransactionException in SQLCommandImpl.selectForSingleList() @conn:" + connName, e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -216,19 +227,22 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), list.size(), dbTime, allTime, exception);
+		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), list.size(), dbTime, allTime,
+				exception);
 		return (ArrayList<T>) list;
 	}
 
 	/**
 	 * 获得以DataSet为结果的数据集合.
-	 * @param dao DAOFactoryImpl对象
+	 * 
+	 * @param dao
+	 *            DAOFactoryImpl对象
 	 * @param connName
-	 * 				连接名，如设置为null，则根据sql语句或表名动态路由确定
+	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
-	 * 				查询的SQL
+	 *            查询的SQL
 	 * @param paramList
-	 * 				查询SQL的绑定参数
+	 *            查询SQL的绑定参数
 	 * @param startIndex
 	 *            开始位置，默认为0
 	 * @param resultNum
@@ -236,9 +250,11 @@ public class SQLCommandImpl {
 	 * @param autoCount
 	 *            是否统计全部数据（用于分页算法），默认为false。
 	 * @return 数据集合
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
-	public static final DataSet selectForDataSet(DAOFactoryImpl dao, String connName, String selectsql, Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
+	public static final DataSet selectForDataSet(DAOFactoryImpl dao, String connName, String selectsql,
+			Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -281,7 +297,8 @@ public class SQLCommandImpl {
 			ds = new DataSet(rs, startIndex, resultNum, allsize);
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in SQLCommandImpl.selectForDataSet()", e);
+			throw new TransactionException(
+					"TransactionException in SQLCommandImpl.selectForDataSet() @conn:" + connName, e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -306,17 +323,21 @@ public class SQLCommandImpl {
 
 	/**
 	 * 执行任意sql.
-	 * @param dao DAOFactoryImpl对象
+	 * 
+	 * @param dao
+	 *            DAOFactoryImpl对象
 	 * @param connName
-	 * 				连接名，如设置为null，则根据sql语句或表名动态路由确定
+	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param executesql
-	 * 				执行的SQL
+	 *            执行的SQL
 	 * @param paramList
-	 * 				执行SQL的绑定参数
+	 *            执行SQL的绑定参数
 	 * @return int
-	 * @throws TransactionException 事务异常
+	 * @throws TransactionException
+	 *             事务异常
 	 */
-	public static final int executeSQL(DAOFactoryImpl dao, String connName, String executesql, Object[] paramList) throws TransactionException {
+	public static final int executeSQL(DAOFactoryImpl dao, String connName, String executesql, Object[] paramList)
+			throws TransactionException {
 		long start = System.currentTimeMillis();
 		long dbTime = -1;
 		String exception = null;
@@ -339,14 +360,14 @@ public class SQLCommandImpl {
 			long dbStart = System.currentTimeMillis();
 			if (dao.getBatchUpdateController().getBatchStatus()) {
 				pstmt.addBatch();
-			}
-			else {
+			} else {
 				effect = pstmt.executeUpdate();
 			}
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in SQLCommandImpl.java:executeSQLCommand()", e);
+			throw new TransactionException(
+					"TransactionException in SQLCommandImpl.java:executeSQLCommand() @conn:" + connName, e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {
