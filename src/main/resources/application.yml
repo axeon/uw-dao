@@ -1,5 +1,5 @@
 uw:
-  dm:
+  dao:
     conn-pool:
       root:
         driver: com.mysql.jdbc.Driver

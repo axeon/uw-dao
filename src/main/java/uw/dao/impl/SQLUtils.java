@@ -1,6 +1,6 @@
 package uw.dao.impl;
 
-import uw.dao.conf.DMConfigManager;
+import uw.dao.conf.DAOConfigManager;
 
 /**
  * SQL工具类.
@@ -79,7 +79,7 @@ public class SQLUtils {
 			}
 			access = "write";
 		}
-		return DMConfigManager.getRouteMapping(table, access);
+		return DAOConfigManager.getRouteMapping(table, access);
 	}
 
 }

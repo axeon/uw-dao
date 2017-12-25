@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import uw.dao.util.DmStringUtils;
+import uw.dao.util.DaoStringUtils;
 
 /**
  * 代码生成入口.
@@ -124,7 +124,7 @@ public class CodeGen {
 		// 创建一个Configuration实例
 		cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
 		// 设置FreeMarker的模版文件位置
-		cfg.setClassForTemplateLoading(CodeGen.class, "/uw/dm/gencode/"); // 类路径
+		cfg.setClassForTemplateLoading(CodeGen.class, "/uw/dao/gencode/"); // 类路径
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class CodeGen {
 			List<MetaColumnInfo> columnlist = tableMetaInterface.getColumnList(tmeta.getTableName(), pklist);
 			map.put("columnList", columnlist);
 
-			String fileName = DmStringUtils.toUpperFirst(tmeta.getEntityName()) + ".java";
+			String fileName = DaoStringUtils.toUpperFirst(tmeta.getEntityName()) + ".java";
 			String savePath = SOURCECODE_PATH + "/" + PACKAGE_NAME.replaceAll("\\.", "/") + "/";
 			Template template = cfg.getTemplate("entity.ftl");
 			buildTemplate(template, map, savePath, fileName);

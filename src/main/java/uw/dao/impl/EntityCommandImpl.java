@@ -19,10 +19,10 @@ import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
-import uw.dao.conf.DMConfigManager;
+import uw.dao.conf.DAOConfigManager;
 import uw.dao.dialect.Dialect;
 import uw.dao.dialect.DialectManager;
-import uw.dao.util.DmReflectUtils;
+import uw.dao.util.DaoReflectUtils;
 import uw.dao.vo.FieldMetaInfo;
 import uw.dao.vo.TableMetaInfo;
 
@@ -70,7 +70,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DMConfigManager.getRouteMapping(tableName, "write");
+			connName = DAOConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		// 写入所有的列
@@ -105,7 +105,7 @@ public class EntityCommandImpl {
 				if (fmi == null) {
 					throw new TransactionException("FieldMetaInfo[" + col + "@" + entity.getClass() + "] not found! ");
 				}
-				DmReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
+				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
@@ -158,7 +158,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DMConfigManager.getRouteMapping(tableName, "write");
+			connName = DAOConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		List<FieldMetaInfo> pks = emi.getPklist();
@@ -176,7 +176,7 @@ public class EntityCommandImpl {
 			con = dao.getTransactionController().getConnection(connName);
 			pstmt = con.prepareStatement(sb.toString());
 			int i = 0;
-			DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, id);
+			DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, id);
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -195,7 +195,7 @@ public class EntityCommandImpl {
 				for (String col : cols) {
 					FieldMetaInfo fmi = emi.getFieldMetaInfo(col);
 					if (fmi != null) {
-						DmReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
+						DaoReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
 					}
 				}
 			}
@@ -257,7 +257,7 @@ public class EntityCommandImpl {
 
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 			long dbStart = System.currentTimeMillis();
@@ -278,7 +278,7 @@ public class EntityCommandImpl {
 				for (String col : cols) {
 					FieldMetaInfo fmi = emi.getFieldMetaInfo(col);
 					if (fmi != null) {
-						DmReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
+						DaoReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
 					}
 				}
 			}
@@ -331,7 +331,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DMConfigManager.getRouteMapping(tableName, "write");
+			connName = DAOConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		ArrayList<String> cols = new ArrayList<String>(entity.GET_UPDATED_COLUMN());
@@ -363,11 +363,11 @@ public class EntityCommandImpl {
 				if (fmi == null) {
 					throw new TransactionException("FieldMetaInfo[" + col + "@" + entity.getClass() + "] not found! ");
 				}
-				DmReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
+				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
 			// 开始where主键。
 			for (FieldMetaInfo fmi : pks) {
-				DmReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
+				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
@@ -419,7 +419,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DMConfigManager.getRouteMapping(tableName, "write");
+			connName = DAOConfigManager.getRouteMapping(tableName, "write");
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -443,7 +443,7 @@ public class EntityCommandImpl {
 			int seq = 0;
 			// 开始where主键。
 			for (FieldMetaInfo fmi : pks) {
-				DmReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
+				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
@@ -514,7 +514,7 @@ public class EntityCommandImpl {
 		try {
 			con = dao.getTransactionController().getConnection(connName);
 			if (resultNum > 0 && startIndex >= 0) {
-				Dialect dialect = DialectManager.getDialect(DMConfigManager.getConnPoolConfig(connName).getDbType());
+				Dialect dialect = DialectManager.getDialect(DAOConfigManager.getConnPoolConfig(connName).getDbType());
 				po = dialect.getPagedSQL(selectsql, startIndex, resultNum);
 				selectsql = po[0].toString();
 			}
@@ -524,7 +524,7 @@ public class EntityCommandImpl {
 
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 
@@ -549,7 +549,7 @@ public class EntityCommandImpl {
 				for (String col : cols) {
 					FieldMetaInfo fmi = emi.getFieldMetaInfo(col);
 					if (fmi != null) {
-						DmReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
+						DaoReflectUtils.DAOLiteLoadReflect(rs, entity, fmi);
 					}
 				}
 				list.add(entity);

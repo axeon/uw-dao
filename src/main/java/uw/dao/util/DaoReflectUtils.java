@@ -8,16 +8,16 @@ import java.util.Date;
 import uw.dao.vo.FieldMetaInfo;
 
 /**
- * DM反射工具类.
+ * Dao反射工具类.
  * 
  * @author zhangjin
  */
-public class DmReflectUtils {
+public class DaoReflectUtils {
 
 	/**
 	 * 构造函数.
 	 */
-	private DmReflectUtils() {
+	private DaoReflectUtils() {
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class DmReflectUtils {
 		} else if (cls == long.class) {
 			pstmt.setLong(sequence, fd.getLong(entity));
 		} else if (cls == java.util.Date.class) {
-			pstmt.setTimestamp(sequence, DmValueUtils.dateToTimestamp((java.util.Date) fd.get(entity)));
+			pstmt.setTimestamp(sequence, DaoValueUtils.dateToTimestamp((java.util.Date) fd.get(entity)));
 		} else if (cls == double.class) {
 			pstmt.setDouble(sequence, fd.getDouble(entity));
 		} else if (cls == float.class) {
@@ -76,7 +76,7 @@ public class DmReflectUtils {
 	public static final void CommandUpdateReflect(PreparedStatement pstmt, int sequence, Object value)
 			throws Exception {
 		if (value instanceof java.util.Date) {
-			pstmt.setTimestamp(sequence, DmValueUtils.dateToTimestamp((java.util.Date) value));
+			pstmt.setTimestamp(sequence, DaoValueUtils.dateToTimestamp((java.util.Date) value));
 		} else {
 			pstmt.setObject(sequence, value);
 		}
@@ -102,7 +102,7 @@ public class DmReflectUtils {
 		} else if (cls == long.class) {
 			fd.setLong(entity, rs.getLong(fmi.getColumnName()));
 		} else if (cls == String.class) {
-			fd.set(entity, DmValueUtils.nullToStr((String) rs.getString(fmi.getColumnName())));
+			fd.set(entity, DaoValueUtils.nullToStr((String) rs.getString(fmi.getColumnName())));
 		} else if (cls == Date.class) {
 			fd.set(entity, rs.getTimestamp(fmi.getColumnName()));
 		} else if (cls == double.class) {

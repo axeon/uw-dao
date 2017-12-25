@@ -1,9 +1,9 @@
 package uw.dao.util;
 
 /**
- * dm的数值工具类.
+ * dao的数值工具类.
  */
-public class DmValueUtils {
+public class DaoValueUtils {
 
 	/**
 	 * 从日期类型转换为java.sql.Timestamp.

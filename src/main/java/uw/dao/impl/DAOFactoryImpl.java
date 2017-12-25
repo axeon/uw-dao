@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uw.dao.BatchupdateManager;
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.DataEntity;
 import uw.dao.DataList;
 import uw.dao.DataSet;
@@ -22,7 +22,7 @@ import uw.dao.vo.SqlExecuteStats;
  * 
  * @author axeon
  */
-public class DAOFactoryImpl extends DAOFactory {
+public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 批量更新实例.

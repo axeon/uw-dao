@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
-import uw.dao.conf.DMConfigManager;
+import uw.dao.conf.DAOConfigManager;
 import uw.dao.dialect.Dialect;
 import uw.dao.dialect.DialectManager;
-import uw.dao.util.DmReflectUtils;
+import uw.dao.util.DaoReflectUtils;
 
 /**
  * 为了更为高效的执行数据库命令，是该类产生的根本原因。 具体使用请自行参照源代码.
@@ -65,7 +65,7 @@ public class SQLCommandImpl {
 			pstmt = con.prepareStatement(selectsql);
 			if (paramList != null && paramList.length > 0) {
 				for (int i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 			long dbStart = System.currentTimeMillis();
@@ -157,7 +157,7 @@ public class SQLCommandImpl {
 			int i = 0;
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 
@@ -275,7 +275,7 @@ public class SQLCommandImpl {
 		try {
 			con = dao.getTransactionController().getConnection(connName);
 			if (resultNum > 0 && startIndex >= 0) {
-				Dialect dialect = DialectManager.getDialect(DMConfigManager.getConnPoolConfig(connName).getDbType());
+				Dialect dialect = DialectManager.getDialect(DAOConfigManager.getConnPoolConfig(connName).getDbType());
 				po = dialect.getPagedSQL(selectsql, startIndex, resultNum);
 				selectsql = po[0].toString();
 			}
@@ -284,7 +284,7 @@ public class SQLCommandImpl {
 			int i = 0;
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 			if (resultNum > 0 && startIndex >= 0) {
@@ -354,7 +354,7 @@ public class SQLCommandImpl {
 			pstmt = dao.getBatchUpdateController().prepareStatement(con, executesql);
 			if (paramList != null && paramList.length > 0) {
 				for (int i = 0; i < paramList.length; i++) {
-					DmReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
+					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
 			long dbStart = System.currentTimeMillis();

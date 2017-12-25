@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
-import uw.dao.conf.DMConfig;
-import uw.dao.conf.DMConfigManager;
-import uw.dao.conf.DMConfig.TableShardingConfig;
+import uw.dao.conf.DAOConfig;
+import uw.dao.conf.DAOConfigManager;
+import uw.dao.conf.DAOConfig.TableShardingConfig;
 import uw.dao.util.TableShardingUtils;
 
 /**
@@ -38,7 +38,7 @@ public class TableShardingTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DAOFactory dao = DAOFactory.getInstance();
+	private DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 链接内表列表.
@@ -51,7 +51,7 @@ public class TableShardingTask {
 	@Scheduled(initialDelay = 3000, fixedRate = 3600000)
 	void autoCreateTable() {
 		LocalDateTime now = LocalDateTime.now();
-		DMConfig config = DMConfigManager.getConfig();
+		DAOConfig config = DAOConfigManager.getConfig();
 		if (config == null || config.getTableSharding() == null) {
 			return;
 		}

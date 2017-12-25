@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import uw.dao.conf.DMConfigManager;
-import uw.dao.conf.DMConfig.ConnPoolConfig;
+import uw.dao.conf.DAOConfigManager;
+import uw.dao.conf.DAOConfig.ConnPoolConfig;
 
 /**
  * 数据库连接管理器.
@@ -24,7 +24,7 @@ public class ConnectionManager {
 	 * 启动连接管理器.
 	 */
 	public static void start() {
-		List<String> connList = DMConfigManager.getConnPoolNameList();
+		List<String> connList = DAOConfigManager.getConnPoolNameList();
 		for (String conn : connList) {
 			initConnectionPool(conn);
 		}
@@ -137,7 +137,7 @@ public class ConnectionManager {
 	private static synchronized ConnectionPool initConnectionPool(String poolName) {
 		ConnectionPool connpool = getConnectionPool(poolName);
 		if (connpool == null) {
-			ConnPoolConfig config = DMConfigManager.getConnPoolConfig(poolName);
+			ConnPoolConfig config = DAOConfigManager.getConnPoolConfig(poolName);
 			if (config != null) {
 				connpool = new ConnectionPool(poolName);
 				poolMap.put(poolName, connpool);

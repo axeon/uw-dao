@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.SequenceManager;
-import uw.dao.util.DmValueUtils;
+import uw.dao.util.DaoValueUtils;
 import uw.dao.util.TableShardingUtils;
 import uw.dao.vo.SqlExecuteStats;
 
@@ -31,7 +31,7 @@ public class StatsLogWriteTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DAOFactory dao = DAOFactory.getInstance();
+	private DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 3秒写一次数据.
@@ -91,7 +91,7 @@ public class StatsLogWriteTask {
 					ss.setException(ss.getException().substring(0, 100));
 				}
 				pstmt.setString(8, ss.getException());
-				pstmt.setTimestamp(9, DmValueUtils.dateToTimestamp(ss.getActionDate()));
+				pstmt.setTimestamp(9, DaoValueUtils.dateToTimestamp(ss.getActionDate()));
 				pstmt.addBatch();
 				if ((pos + 1) % 100 == 0 && pos > 0) {
 					// 每隔100次自动提交

@@ -1,11 +1,11 @@
 package uw.dao.util;
 
 /**
- * dm的字符串工具类.
+ * dao的字符串工具类.
  * 
  * @author axeon
  */
-public class DmStringUtils {
+public class DaoStringUtils {
 
 	/**
 	 * 把_分割的字符串改为驼峰样式.

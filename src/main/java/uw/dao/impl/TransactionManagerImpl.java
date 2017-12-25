@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import uw.dao.TransactionException;
 import uw.dao.TransactionManager;
-import uw.dao.conf.DMConfigManager;
+import uw.dao.conf.DAOConfigManager;
 import uw.dao.connectionpool.ConnectionManager;
 
 /**
@@ -38,7 +38,7 @@ public class TransactionManagerImpl implements TransactionManager {
 	private HashMap<String, Connection> connmap = null;
 
 	/**
-	 * 指定的数据库联接，一旦使用，dm.config将无效.
+	 * 指定的数据库联接，一旦使用，dao.config将无效.
 	 */
 	private String specifyConnName = null;
 
@@ -156,7 +156,7 @@ public class TransactionManagerImpl implements TransactionManager {
 	 * @return 连接名
 	 */
 	public String getConnName(String table, String access) {
-		return DMConfigManager.getRouteMapping(table, access);
+		return DAOConfigManager.getRouteMapping(table, access);
 	}
 
 	/**

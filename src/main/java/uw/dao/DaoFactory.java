@@ -9,27 +9,27 @@ import uw.dao.impl.DAOFactoryImpl;
 import uw.dao.vo.SqlExecuteStats;
 
 /**
- * 整个DM模块的入口，所有数据库操作都从这个类开始.
+ * 整个Dao模块的入口，所有数据库操作都从这个类开始.
  * 
  * @author axeon
  */
-public abstract class DAOFactory {
+public abstract class DaoFactory {
 
 	/**
 	 * 获取一个MainFactory实例, 此实例是线程安全的.
 	 * 
 	 * @return DAOFactoryImpl对象
 	 */
-	public static DAOFactory getInstance() {
+	public static DaoFactory getInstance() {
 		return new DAOFactoryImpl();
 	}
 
 	/**
-	 * 获取一个DAOFactory实例。 指定connName，这时候将不会使用dm来决定数据库联接.
+	 * 获取一个DAOFactory实例。 指定connName，这时候将不会使用dao来决定数据库联接.
 	 * 
 	 * @return DAOFactoryImpl对象
 	 */
-	public static DAOFactory getInstance(String connName) {
+	public static DaoFactory getInstance(String connName) {
 		return new DAOFactoryImpl(connName);
 	}
 

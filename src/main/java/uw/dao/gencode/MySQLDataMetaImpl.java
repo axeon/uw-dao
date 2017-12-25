@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uw.dao.connectionpool.ConnectionManager;
-import uw.dao.util.DmStringUtils;
+import uw.dao.util.DaoStringUtils;
 
 /**
  * 数据库信息的工具类.
@@ -85,7 +85,7 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 			while (rs.next()) {
 				MetaTableInfo meta = new MetaTableInfo();
 				meta.setTableName(rs.getString("TABLE_NAME").toLowerCase());
-				meta.setEntityName(DmStringUtils.toClearCase(meta.getTableName()));
+				meta.setEntityName(DaoStringUtils.toClearCase(meta.getTableName()));
 				meta.setTableType(rs.getString("TABLE_TYPE").toLowerCase());
 				meta.setRemarks(rs.getString("REMARKS"));
 				if (meta.getRemarks() == null || "".equals(meta.getRemarks())) {
@@ -139,7 +139,7 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 			while (rs.next()) {
 				MetaColumnInfo meta = new MetaColumnInfo();
 				meta.setColumnName(rs.getString("COLUMN_NAME").toLowerCase()); // 列名
-				meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
+				meta.setPropertyName(DaoStringUtils.toClearCase(meta.getColumnName()));
 				meta.setDataType(rs.getInt("DATA_TYPE")); // 字段数据类型(对应java.sql.Types中的常量)
 				meta.setTypeName(rs.getString("TYPE_NAME").toLowerCase()); // 字段类型名称(例如：VACHAR2)
 				meta.setColumnSize(rs.getInt("COLUMN_SIZE")); // 列的大小
@@ -233,7 +233,7 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 				MetaPrimaryKeyInfo meta = new MetaPrimaryKeyInfo();
 				meta.setTableName(rs.getString("TABLE_NAME").toLowerCase());
 				meta.setColumnName(rs.getString("COLUMN_NAME").toLowerCase());
-				meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
+				meta.setPropertyName(DaoStringUtils.toClearCase(meta.getColumnName()));
 				meta.setKeySeq(rs.getInt("KEY_SEQ"));
 				meta.setPkName(rs.getString("PK_NAME").toLowerCase());
 				list.add(meta);

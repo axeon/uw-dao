@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uw.dao.conf.DMConfigManager;
+import uw.dao.conf.DAOConfigManager;
 import uw.dao.connectionpool.ConnectionManager;
 
 /**
@@ -190,7 +190,7 @@ public class SequenceManager {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
-			con = ConnectionManager.getConnection(DMConfigManager.getRouteMapping("sys_sequence", "all"));
+			con = ConnectionManager.getConnection(DAOConfigManager.getRouteMapping("sys_sequence", "all"));
 			// 从数据库中获取当前值。
 			loadSeq();
 			// 自动递增id到我们规定的递增累加值。
@@ -234,7 +234,7 @@ public class SequenceManager {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
-			con = ConnectionManager.getConnection(DMConfigManager.getRouteMapping("sys_sequence", "all"));
+			con = ConnectionManager.getConnection(DAOConfigManager.getRouteMapping("sys_sequence", "all"));
 			// 从数据库中获取当前值。
 			pstmt = con.prepareStatement(LOAD_ID);
 			pstmt.setString(1, sequenceName);
@@ -273,7 +273,7 @@ public class SequenceManager {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		try {
-			con = ConnectionManager.getConnection(DMConfigManager.getRouteMapping("sys_sequence", "all"));
+			con = ConnectionManager.getConnection(DAOConfigManager.getRouteMapping("sys_sequence", "all"));
 			// 从数据库中获取当前值。
 			pstmt = con.prepareStatement(INSERT_ID);
 			pstmt.setString(1, sequenceName);

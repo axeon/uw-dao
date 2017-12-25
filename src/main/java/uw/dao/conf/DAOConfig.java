@@ -6,12 +6,12 @@ import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * DM配置表.
+ * dao配置表.
  * 
  * @author axeon
  */
-@ConfigurationProperties(prefix = "uw.dm")
-public class DMConfig {
+@ConfigurationProperties(prefix = "uw.dao")
+public class DAOConfig {
 
 	/**
 	 * 连接池配置.
@@ -552,7 +552,7 @@ public class DMConfig {
 	}
 
 	/**
-	 * 统计sql执行信息，包括参数，返回信息，执行时间等,表名为dm_sql_stats开头，此表被自动配置为按日分表。.
+	 * 统计sql执行信息，包括参数，返回信息，执行时间等,表名为dao_sql_stats开头，此表被自动配置为按日分表。.
 	 *
 	 * @author axeon
 	 */

@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.vo.SqlExecuteStats;
 
@@ -25,12 +25,12 @@ public class StatsLogService {
 	/**
 	 * DAOFactory对象.
 	 */
-	private static DAOFactory dao = DAOFactory.getInstance();
+	private static DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 状态表名.
 	 */
-	public static final String STATS_BASE_TABLE = "dm_sql_stats";
+	public static final String STATS_BASE_TABLE = "dao_sql_stats";
 
 	/**
 	 * 是否已经启动.

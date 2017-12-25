@@ -5,8 +5,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-import uw.dao.conf.DMConfigManager;
-import uw.dao.conf.DMConfig.TableShardingConfig;
+import uw.dao.conf.DAOConfigManager;
+import uw.dao.conf.DAOConfig.TableShardingConfig;
 
 /**
  * 按日期分表的工具.
@@ -43,7 +43,7 @@ public class TableShardingUtils {
 	 * @return 表名
 	 */
 	public static String getTableNameByDate(String tableName, LocalDate date) {
-		TableShardingConfig config = DMConfigManager.getTableShardingConfig(tableName);
+		TableShardingConfig config = DAOConfigManager.getTableShardingConfig(tableName);
 		if (config != null && "date".equalsIgnoreCase(config.getShardingType())) {
 			switch (config.getShardingRule()) {
 			case "day":

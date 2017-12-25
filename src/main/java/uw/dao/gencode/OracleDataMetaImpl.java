@@ -14,12 +14,12 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
 import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.connectionpool.ConnectionWrapper;
-import uw.dao.util.DmStringUtils;
+import uw.dao.util.DaoStringUtils;
 
 /**
  * Oracle表生成信息处理.
@@ -47,7 +47,7 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	/**
 	 * DAOFactory对象.
 	 */
-	private final DAOFactory daoFactory = DAOFactory.getInstance();
+	private final DaoFactory daoFactory = DaoFactory.getInstance();
 
 	/**
 	 * 构造函数.
@@ -102,13 +102,13 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 						+ "	all_tables T,\n" + "	user_tab_comments c\n" + "WHERE\n" + "	T . OWNER = '" + SCHEMA
 						+ "'\n" + "AND c.table_name = T .table_name\n" + "AND c.table_name = upper('" + tableName
 						+ "')";
-				DAOFactory daoFactory = DAOFactory.getInstance();
+				DaoFactory daoFactory = DaoFactory.getInstance();
 				DataSet dataSet = daoFactory.queryForDataSet(CONN_NAME, sql);
 				while (dataSet.next()) {
 					MetaTableInfo meta = new MetaTableInfo();
 					meta.setTableName(tableName.toLowerCase());
 					dataSet.getString("TABLE_NAME");
-					meta.setEntityName(DmStringUtils.toClearCase(tableName));
+					meta.setEntityName(DaoStringUtils.toClearCase(tableName));
 					meta.setTableType(dataSet.getString("TABLE_TYPE").toLowerCase());
 					meta.setRemarks(dataSet.getString("REMARKS"));
 					if (meta.getRemarks() == null || "".equals(meta.getRemarks())) {
@@ -150,7 +150,7 @@ public class OracleDataMetaImpl implements TableMetaInterface {
         try {
             HashMap<String, String> remarkhs = new HashMap<String, String>();
             // 查询注释
-            DAOFactory daoFactory = DAOFactory.getInstance();
+            DaoFactory daoFactory = DaoFactory.getInstance();
             DataSet dataSet = daoFactory.queryForDataSet(CONN_NAME, "select  t.table_name,t.column_name,t.comments from USER_COL_COMMENTS t where t.TABLE_NAME=upper('" + tableName + "')");
             while (dataSet.next()) {
                 remarkhs.put(dataSet.getString("column_name"), dataSet.getString("comments"));
@@ -162,7 +162,7 @@ public class OracleDataMetaImpl implements TableMetaInterface {
             while (rs.next()) {
                 MetaColumnInfo meta = new MetaColumnInfo();
                 meta.setColumnName(rs.getString("COLUMN_NAME").toLowerCase()); // 列名
-                meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
+                meta.setPropertyName(DaoStringUtils.toClearCase(meta.getColumnName()));
                 meta.setDataType(rs.getInt("DATA_TYPE")); // 字段数据类型(对应java.sql.Types中的常量)
                 meta.setTypeName(rs.getString("TYPE_NAME").toLowerCase()); // 字段类型名称(例如：VACHAR2)
                 meta.setColumnSize(rs.getInt("COLUMN_SIZE")); // 列的大小
@@ -269,13 +269,13 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 					+ "')\n" + "	)\n" + "ORDER BY\n" + "	\"SYS\".\"ALL_CONS_COLUMNS\".\"OWNER\" ASC,\n"
 					+ "	\"SYS\".\"ALL_CONS_COLUMNS\".\"CONSTRAINT_NAME\" ASC,\n"
 					+ "	\"SYS\".\"ALL_CONS_COLUMNS\".\"POSITION\" ASC";
-			DAOFactory daoFactory = DAOFactory.getInstance();
+			DaoFactory daoFactory = DaoFactory.getInstance();
 			DataSet dataSet = daoFactory.queryForDataSet(CONN_NAME, sql);
 			while (dataSet.next()) {
 				MetaPrimaryKeyInfo meta = new MetaPrimaryKeyInfo();
 				meta.setTableName(dataSet.getString("TABLE_NAME").toLowerCase());
 				meta.setColumnName(dataSet.getString("COLUMN_NAME").toLowerCase());
-				meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
+				meta.setPropertyName(DaoStringUtils.toClearCase(meta.getColumnName()));
 				meta.setKeySeq(0); // 好像没有用到?
 				meta.setPkName(dataSet.getString("PK_NAME").toLowerCase());
 				list.add(meta);

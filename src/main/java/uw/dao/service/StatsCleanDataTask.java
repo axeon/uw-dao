@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import uw.dao.DAOFactory;
+import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 
 /**
@@ -29,7 +29,7 @@ public class StatsCleanDataTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DAOFactory dao = DAOFactory.getInstance();
+	private DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 获得当前的表Set.

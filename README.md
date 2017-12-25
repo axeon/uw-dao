@@ -1,7 +1,7 @@
 [TOC]
 
 # 简介
-uw-dm包是一个封装数据库操作的类库，比hibernate效率高，比mybatis更简单，并一致化管理数据库连接池。
+uw-dao包是一个封装数据库操作的类库，比hibernate效率高，比mybatis更简单，并一致化管理数据库连接池。
 
 # 主要特性
 1. 支持多数据库连接，支持mysql/oracle（其他的也支持），支持基于表名的访问规则配置，便于分库分表。
@@ -11,20 +11,20 @@ uw-dm包是一个封装数据库操作的类库，比hibernate效率高，比myb
 5. 运维特性支持，可以监控每一条sql的执行情况，各种报表都可以做，比如slow-query，bad-query等等。。
 6. 内部有一个CodeGen用于直接从数据库生成entity类，方便。
 
-# 如何在项目中引入um-dm库
+# 如何在项目中引入um-dao库
 
 ```
 <dependency>
 	<groupId>com.umtone</groupId>
-	<artifactId>uw-dm</artifactId>
-	<version>3.2.6</version>
+	<artifactId>uw-dao</artifactId>
+	<version>3.3.0</version>
 </dependency>
 ```
 
 # 配置文件
 ```yaml
 uw:
-  dm:
+  dao:
     # 连接池
     conn-pool:
       # 提供给dao模块使用的系统连接池，主要用于框架的系统服务
