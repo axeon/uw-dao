@@ -7,9 +7,9 @@ import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import uw.dm.DataEntity;
-import uw.dm.annotation.ColumnMeta;
-import uw.dm.annotation.TableMeta;
+import uw.dao.DataEntity;
+import uw.dao.annotation.ColumnMeta;
+import uw.dao.annotation.TableMeta;
 
 /**
  * ${tableMeta.entityName}实体类
