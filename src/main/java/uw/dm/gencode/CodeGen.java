@@ -44,7 +44,7 @@ public class CodeGen {
 	 */
 	public static String PACKAGE_NAME = "";
 	/**
-	 * 数据库方言 MYSQL or ORCLE
+	 * 数据库方言 MYSQL or ORACLE
 	 */
 	public static String DATABSE_DIALECT = "MYSQL";
 

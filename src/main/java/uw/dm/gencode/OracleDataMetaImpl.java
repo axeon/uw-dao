@@ -1,12 +1,12 @@
 package uw.dm.gencode;
 
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -139,99 +139,109 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	 * @throws Exception
 	 */
 	public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
-		Connection conn = null;
-		ResultSet rs = null;
-		List<MetaColumnInfo> list = new ArrayList<MetaColumnInfo>();
-		// 加载主键列表
-		HashSet<String> pset = new HashSet<String>();
-		for (MetaPrimaryKeyInfo pk : pklist) {
-			pset.add(pk.getColumnName());
-		}
-		try {
-			conn = getConnection();
-			// https://docs.oracle.com/database/121/JJDBC/oraperf.htm#JJDBC28785
-			// TABLE_REMARKS Reporting
-			conn = ((ConnectionWrapper) conn).getSourceObject();
-			Class<?> oracleConnectionClass = Class.forName("oracle.jdbc.OracleConnection");
-			Method m1 = oracleConnectionClass.getDeclaredMethod("setRemarksReporting", boolean.class);
-			m1.invoke(conn, true);
-			DatabaseMetaData metaData = conn.getMetaData();
-			rs = metaData.getColumns(null, null, tableName.toUpperCase(), null);
-			while (rs.next()) {
-				MetaColumnInfo meta = new MetaColumnInfo();
-				meta.setColumnName(rs.getString("COLUMN_NAME").toLowerCase()); // 列名
-				meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
-				meta.setDataType(rs.getInt("DATA_TYPE")); // 字段数据类型(对应java.sql.Types中的常量)
-				meta.setTypeName(rs.getString("TYPE_NAME").toLowerCase()); // 字段类型名称(例如：VACHAR2)
-				meta.setColumnSize(rs.getInt("COLUMN_SIZE")); // 列的大小
-				meta.setRemarks(rs.getString("REMARKS")); // 描述列的注释
-				meta.setIsNullable(rs.getString("IS_NULLABLE").equals("YES") ? "true" : "false"); // 确定列是否包括
-				// null
-				meta.setIsAutoIncrement(rs.getString("IS_AUTOINCREMENT").equals("YES") ? "true" : null); // 确定列是否包括
-				// null
-				if (pset.contains(meta.getColumnName())) {
-					meta.setIsPrimaryKey("true");
-				}
-				switch (meta.getDataType()) {
-				case Types.NUMERIC:
-					meta.setPropertyType("java.math.BigDecimal");
-					break;
-				case Types.VARCHAR:
-					meta.setPropertyType("String");
-					break;
-				case Types.CLOB:
-					meta.setPropertyType("String");
-					break;
-				case Types.DATE:
-					meta.setPropertyType("java.util.Date");
-					break;
-				case Types.TIME:
-					meta.setPropertyType("java.util.Date");
-					break;
-				case Types.TIMESTAMP:
-					meta.setPropertyType("java.util.Date");
-					break;
-				case Types.BIGINT:
-					meta.setPropertyType("long");
-					break;
-				case Types.INTEGER:
-					meta.setPropertyType("int");
-					break;
-				case Types.SMALLINT:
-					meta.setPropertyType("int");
-					break;
-				case Types.TINYINT:
-					meta.setPropertyType("int");
-					break;
-				case Types.FLOAT:
-					meta.setPropertyType("float");
-					break;
-				case Types.DOUBLE:
-					meta.setPropertyType("double");
-					break;
-				case Types.BIT:
-					meta.setPropertyType("int");
-					break;
+        Connection conn = null;
+        ResultSet rs = null;
+        List<MetaColumnInfo> list = new ArrayList<MetaColumnInfo>();
+        // 加载主键列表
+        HashSet<String> pset = new HashSet<String>();
+        for (MetaPrimaryKeyInfo pk : pklist) {
+            pset.add(pk.getColumnName());
+        }
+        try {
+            HashMap<String, String> remarkhs = new HashMap<String, String>();
+            // 查询注释
+            DAOFactory daoFactory = DAOFactory.getInstance();
+            DataSet dataSet = daoFactory.queryForDataSet(CONN_NAME, "select  t.table_name,t.column_name,t.comments from USER_COL_COMMENTS t where t.TABLE_NAME=upper('" + tableName + "')");
+            while (dataSet.next()) {
+                remarkhs.put(dataSet.getString("column_name"), dataSet.getString("comments"));
+            }
+            conn = getConnection();
+            conn = ((ConnectionWrapper) conn).getSourceObject();
+            DatabaseMetaData metaData = conn.getMetaData();
+            rs = metaData.getColumns(null, conn.getSchema(), tableName.toUpperCase(), null);
+            while (rs.next()) {
+                MetaColumnInfo meta = new MetaColumnInfo();
+                meta.setColumnName(rs.getString("COLUMN_NAME").toLowerCase()); // 列名
+                meta.setPropertyName(DmStringUtils.toClearCase(meta.getColumnName()));
+                meta.setDataType(rs.getInt("DATA_TYPE")); // 字段数据类型(对应java.sql.Types中的常量)
+                meta.setTypeName(rs.getString("TYPE_NAME").toLowerCase()); // 字段类型名称(例如：VACHAR2)
+                meta.setColumnSize(rs.getInt("COLUMN_SIZE")); // 列的大小
+                meta.setRemarks(remarkhs.get(rs.getString("COLUMN_NAME"))); // 描述列的注释
+                meta.setIsNullable(rs.getString("IS_NULLABLE").equals("YES") ? "true" : "false"); // 确定列是否包括
+                // null
+                meta.setIsAutoIncrement(rs.getString("IS_AUTOINCREMENT").equals("YES") ? "true" : null); // 确定列是否包括
+                // null
+                if (pset.contains(meta.getColumnName())) {
+                    meta.setIsPrimaryKey("true");
+                }
+                switch (meta.getDataType()) {
+                    case Types.NUMERIC:
+                        if (rs.getInt("COLUMN_SIZE") < 4) {
+                            meta.setPropertyType("int");
+                        } else if (rs.getInt("COLUMN_SIZE") < 10) {
+                            meta.setPropertyType("int");
+                        } else if (rs.getInt("COLUMN_SIZE") < 18) {
+                            meta.setPropertyType("long");
+                        } else {
+                            meta.setPropertyType("java.math.BigDecimal");
+                        }
+                        break;
+                    case Types.VARCHAR:
+                        meta.setPropertyType("String");
+                        break;
+                    case Types.CLOB:
+                        meta.setPropertyType("String");
+                        break;
+                    case Types.DATE:
+                        meta.setPropertyType("java.util.Date");
+                        break;
+                    case Types.TIME:
+                        meta.setPropertyType("java.util.Date");
+                        break;
+                    case Types.TIMESTAMP:
+                        meta.setPropertyType("java.util.Date");
+                        break;
+                    case Types.BIGINT:
+                        meta.setPropertyType("long");
+                        break;
+                    case Types.INTEGER:
+                        meta.setPropertyType("int");
+                        break;
+                    case Types.SMALLINT:
+                        meta.setPropertyType("int");
+                        break;
+                    case Types.TINYINT:
+                        meta.setPropertyType("int");
+                        break;
+                    case Types.FLOAT:
+                        meta.setPropertyType("float");
+                        break;
+                    case Types.DOUBLE:
+                        meta.setPropertyType("double");
+                        break;
+                    case Types.BIT:
+                        meta.setPropertyType("int");
+                        break;
 
-				default:
-					meta.setPropertyType("Object");
-				}
-				list.add(meta);
-			}
-			rs.close();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		} finally {
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					logger.error(e.getMessage(), e);
-				}
-			}
-		}
-		return list;
-	}
+                    default:
+                        meta.setPropertyType("Object");
+                }
+                list.add(meta);
+            }
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+        }
+        return list;
+    }
 
 	/**
 	 * 获得主键名.
