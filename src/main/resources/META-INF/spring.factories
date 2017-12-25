@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=uw.dao.conf.DAOSpringAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=uw.dao.conf.DaoSpringAutoConfiguration

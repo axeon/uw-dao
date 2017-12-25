@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author axeon
  */
 @ConfigurationProperties(prefix = "uw.dao")
-public class DAOConfig {
+public class DaoConfig {
 
 	/**
 	 * 连接池配置.

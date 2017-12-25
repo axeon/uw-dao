@@ -13,8 +13,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import uw.dao.conf.DAOConfig.ConnPoolConfig;
-import uw.dao.conf.DAOConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfig.TableShardingConfig;
 import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.service.StatsCleanDataTask;
 import uw.dao.service.StatsLogService;
@@ -28,19 +28,19 @@ import uw.dao.service.TableShardingTask;
  */
 @Configuration
 @Import({ StatsCleanDataTask.class, StatsLogWriteTask.class, TableShardingTask.class })
-@EnableConfigurationProperties({ DAOConfig.class })
-public class DAOSpringAutoConfiguration {
+@EnableConfigurationProperties({ DaoConfig.class })
+public class DaoSpringAutoConfiguration {
 
 	/**
 	 * 日志.
 	 */
-	private static final Logger log = LoggerFactory.getLogger(DAOSpringAutoConfiguration.class);
+	private static final Logger log = LoggerFactory.getLogger(DaoSpringAutoConfiguration.class);
 
 	/**
 	 * DAO配置表.
 	 */
 	@Autowired
-	private DAOConfig daoConfig;
+	private DaoConfig daoConfig;
 
 	/**
 	 * 配置初始化.
@@ -92,7 +92,7 @@ public class DAOSpringAutoConfiguration {
 					}
 				}
 				// 给值
-				DAOConfigManager.setConfig(daoConfig);
+				DaoConfigManager.setConfig(daoConfig);
 				// 启动连接池。
 				ConnectionManager.start();
 			}

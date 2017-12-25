@@ -19,7 +19,7 @@ import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
-import uw.dao.conf.DAOConfigManager;
+import uw.dao.conf.DaoConfigManager;
 import uw.dao.dialect.Dialect;
 import uw.dao.dialect.DialectManager;
 import uw.dao.util.DaoReflectUtils;
@@ -70,7 +70,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DAOConfigManager.getRouteMapping(tableName, "write");
+			connName = DaoConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		// 写入所有的列
@@ -158,7 +158,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DAOConfigManager.getRouteMapping(tableName, "write");
+			connName = DaoConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		List<FieldMetaInfo> pks = emi.getPklist();
@@ -331,7 +331,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DAOConfigManager.getRouteMapping(tableName, "write");
+			connName = DaoConfigManager.getRouteMapping(tableName, "write");
 		}
 		StringBuilder sb = new StringBuilder();
 		ArrayList<String> cols = new ArrayList<String>(entity.GET_UPDATED_COLUMN());
@@ -419,7 +419,7 @@ public class EntityCommandImpl {
 		}
 
 		if (connName == null || connName.equals("")) {
-			connName = DAOConfigManager.getRouteMapping(tableName, "write");
+			connName = DaoConfigManager.getRouteMapping(tableName, "write");
 		}
 
 		StringBuilder sb = new StringBuilder();
@@ -514,7 +514,7 @@ public class EntityCommandImpl {
 		try {
 			con = dao.getTransactionController().getConnection(connName);
 			if (resultNum > 0 && startIndex >= 0) {
-				Dialect dialect = DialectManager.getDialect(DAOConfigManager.getConnPoolConfig(connName).getDbType());
+				Dialect dialect = DialectManager.getDialect(DaoConfigManager.getConnPoolConfig(connName).getDbType());
 				po = dialect.getPagedSQL(selectsql, startIndex, resultNum);
 				selectsql = po[0].toString();
 			}

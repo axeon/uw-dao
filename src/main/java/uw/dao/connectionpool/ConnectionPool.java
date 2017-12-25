@@ -7,8 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uw.dao.conf.DAOConfigManager;
-import uw.dao.conf.DAOConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfigManager;
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
 
 /**
  * 默认的数据库连接池.
@@ -98,7 +98,7 @@ public class ConnectionPool {
 	 */
 	public ConnectionPool(String poolName) {
 		this.poolName = poolName;
-		ConnPoolConfig config = DAOConfigManager.getConnPoolConfig(this.poolName);
+		ConnPoolConfig config = DaoConfigManager.getConnPoolConfig(this.poolName);
 		// 驱动
 		dbDriver = config.getDriver();
 		// 服务器连接字符串

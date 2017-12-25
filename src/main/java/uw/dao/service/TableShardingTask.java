@@ -18,9 +18,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
-import uw.dao.conf.DAOConfig;
-import uw.dao.conf.DAOConfigManager;
-import uw.dao.conf.DAOConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig;
+import uw.dao.conf.DaoConfigManager;
+import uw.dao.conf.DaoConfig.TableShardingConfig;
 import uw.dao.util.TableShardingUtils;
 
 /**
@@ -51,7 +51,7 @@ public class TableShardingTask {
 	@Scheduled(initialDelay = 3000, fixedRate = 3600000)
 	void autoCreateTable() {
 		LocalDateTime now = LocalDateTime.now();
-		DAOConfig config = DAOConfigManager.getConfig();
+		DaoConfig config = DaoConfigManager.getConfig();
 		if (config == null || config.getTableSharding() == null) {
 			return;
 		}

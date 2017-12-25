@@ -6,22 +6,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import uw.dao.conf.DAOConfig.ConnPoolConfig;
-import uw.dao.conf.DAOConfig.ConnRoute;
-import uw.dao.conf.DAOConfig.ConnRouteConfig;
-import uw.dao.conf.DAOConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfig.ConnRoute;
+import uw.dao.conf.DaoConfig.ConnRouteConfig;
+import uw.dao.conf.DaoConfig.TableShardingConfig;
 
 /**
  * DAO配置管理器.
  * 
  * @author axeon
  */
-public class DAOConfigManager {
+public class DaoConfigManager {
 
 	/**
 	 * DAO配置表.
 	 */
-	private static DAOConfig config;
+	private static DaoConfig config;
 
 	/**
 	 * 链接路由Map.
@@ -31,7 +31,7 @@ public class DAOConfigManager {
 	/**
 	 * @return the config
 	 */
-	public static DAOConfig getConfig() {
+	public static DaoConfig getConfig() {
 		return config;
 	}
 
@@ -39,8 +39,8 @@ public class DAOConfigManager {
 	 * @param config
 	 *            the config to set
 	 */
-	public static void setConfig(DAOConfig config) {
-		DAOConfigManager.config = config;
+	public static void setConfig(DaoConfig config) {
+		DaoConfigManager.config = config;
 	}
 
 	/**
