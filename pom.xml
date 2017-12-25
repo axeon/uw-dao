@@ -8,12 +8,12 @@
 	<version>3.3.0</version>
 	<packaging>jar</packaging>
 
-	<name>uw-dm</name>
-	<description>uw-dm is a simple and easy to used dao lib in JAVA</description>
-	<url>https://github.com/axeon/uw-dm</url>
+	<name>uw-dao</name>
+	<description>uw-dao is a simple and easy to used dao lib in JAVA</description>
+	<url>https://github.com/axeon/uw-dao</url>
 	<issueManagement>
 		<system>Github Issue</system>
-		<url>https://github.com/axeon/uw-dm/issues</url>
+		<url>https://github.com/axeon/uw-dao/issues</url>
 	</issueManagement>
 
 	<licenses>
@@ -31,15 +31,15 @@
 	</developers>
 
 	<scm>
-		<connection>scm:git@github.com:axeon/uw-dm.git</connection>
-		<developerConnection>scm:git@github.com:axeon/uw-dm.git</developerConnection>
-		<url>git@github.com:axeon/uw-dm.git</url>
+		<connection>scm:git@github.com:axeon/uw-dao.git</connection>
+		<developerConnection>scm:git@github.com:axeon/uw-dao.git</developerConnection>
+		<url>git@github.com:axeon/uw-dao.git</url>
 	</scm>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
+		<version>1.5.9.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
