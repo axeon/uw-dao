@@ -1,12 +1,12 @@
 package uw.dao;
 
+import uw.dao.impl.DAOFactoryImpl;
+import uw.dao.vo.SqlExecuteStats;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
-import uw.dao.impl.DAOFactoryImpl;
-import uw.dao.vo.SqlExecuteStats;
 
 /**
  * 整个Dao模块的入口，所有数据库操作都从这个类开始.
@@ -49,7 +49,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract TransactionManager beginTransaction() throws TransactionException;
+	public abstract TransactionManager beginTransaction();
 
 	/**
 	 * 根据主键删除一个Entity实例，等效于delete.

@@ -1,5 +1,17 @@
 package uw.dao.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import uw.dao.DaoFactory;
+import uw.dao.DataSet;
+import uw.dao.TransactionException;
+import uw.dao.conf.DaoConfig;
+import uw.dao.conf.DaoConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfigManager;
+import uw.dao.util.TableShardingUtils;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -9,19 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-
-import uw.dao.DaoFactory;
-import uw.dao.DataSet;
-import uw.dao.TransactionException;
-import uw.dao.conf.DaoConfig;
-import uw.dao.conf.DaoConfigManager;
-import uw.dao.conf.DaoConfig.TableShardingConfig;
-import uw.dao.util.TableShardingUtils;
 
 /**
  * 按日期分表的工具.
@@ -38,12 +37,12 @@ public class TableShardingTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DaoFactory dao = DaoFactory.getInstance();
+	private final DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 链接内表列表.
 	 */
-	private HashMap<String, List<String>> tableListMap = new HashMap<>();
+	private final HashMap<String, List<String>> tableListMap = new HashMap<>();
 
 	/**
 	 * 自动建表工具。 每小时检查当天表和第二天的表。 设定一个3秒的延时，是担心同步问题.

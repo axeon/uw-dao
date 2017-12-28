@@ -1,17 +1,10 @@
 package uw.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class StackTraceTools {
 
@@ -20,7 +13,7 @@ public class StackTraceTools {
 	/**
 	 * key=异常名称 value=代码行数
 	 */
-	private ArrayList<String[]> map = new ArrayList<String[]>();
+	private final ArrayList<String[]> map = new ArrayList<String[]>();
 
 	/**
 	 * 读入文件内容

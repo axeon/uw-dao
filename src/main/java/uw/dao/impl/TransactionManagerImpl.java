@@ -1,16 +1,15 @@
 package uw.dao.impl;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uw.dao.TransactionException;
 import uw.dao.TransactionManager;
 import uw.dao.conf.DaoConfigManager;
 import uw.dao.connectionpool.ConnectionManager;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * TransactionManager实现类.
@@ -166,7 +165,7 @@ public class TransactionManagerImpl implements TransactionManager {
 	 *             事务异常
 	 * @return 事务级别
 	 */
-	public int getTransactionIsolation() throws TransactionException {
+	public int getTransactionIsolation() {
 		return this.isolation;
 	}
 
@@ -225,7 +224,7 @@ public class TransactionManagerImpl implements TransactionManager {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public void setTransactionIsolation(int level) throws TransactionException {
+	public void setTransactionIsolation(int level) {
 		this.isolation = level;
 	}
 

@@ -20,12 +20,12 @@ public class TableMetaInfo {
 	/**
 	 * 主键列表.
 	 */
-	private List<FieldMetaInfo> pklist = new ArrayList<FieldMetaInfo>();
+	private final List<FieldMetaInfo> pklist = new ArrayList<FieldMetaInfo>();
 
 	/**
 	 * 列名列表. key=column.
 	 */
-	private Map<String, FieldMetaInfo> columnMap = new LinkedHashMap<String, FieldMetaInfo>();
+	private final Map<String, FieldMetaInfo> columnMap = new LinkedHashMap<String, FieldMetaInfo>();
 
 	/**
 	 * @return the tableName

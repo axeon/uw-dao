@@ -1,10 +1,10 @@
 package uw.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 组合了互联网应用常见列表所需数据的集合接口。 实现了iterator,Iterable.
@@ -189,7 +189,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public int sizeAll() throws TransactionException {
+	public int sizeAll() {
 		return this.sizeAll;
 	}
 

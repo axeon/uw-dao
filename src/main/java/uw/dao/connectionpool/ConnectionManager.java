@@ -1,14 +1,14 @@
 package uw.dao.connectionpool;
 
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfigManager;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import uw.dao.conf.DaoConfigManager;
-import uw.dao.conf.DaoConfig.ConnPoolConfig;
 
 /**
  * 数据库连接管理器.
@@ -18,7 +18,7 @@ public class ConnectionManager {
 	/**
 	 * 连接池缓存表.
 	 */
-	private static Map<String, ConnectionPool> poolMap = new ConcurrentHashMap<String, ConnectionPool>();
+	private static final Map<String, ConnectionPool> poolMap = new ConcurrentHashMap<String, ConnectionPool>();
 
 	/**
 	 * 启动连接管理器.
@@ -55,8 +55,7 @@ public class ConnectionManager {
 	 * @return 连接池的集合
 	 */
 	static HashSet<ConnectionPool> getConnectionPoolSet() {
-		HashSet<ConnectionPool> set = new HashSet<ConnectionPool>();
-		set.addAll(poolMap.values());
+		HashSet<ConnectionPool> set = new HashSet<ConnectionPool>(poolMap.values());
 		return set;
 	}
 

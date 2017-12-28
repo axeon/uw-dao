@@ -1,17 +1,16 @@
 package uw.dao.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * 数据清理任务.
@@ -29,7 +28,7 @@ public class StatsCleanDataTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DaoFactory dao = DaoFactory.getInstance();
+	private final DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 获得当前的表Set.

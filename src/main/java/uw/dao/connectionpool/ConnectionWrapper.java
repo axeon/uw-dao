@@ -1,28 +1,14 @@
 package uw.dao.connectionpool;
 
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.*;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Connection实现，用于封装Connection.
@@ -35,14 +21,13 @@ public class ConnectionWrapper implements Connection {
 	private static final Logger logger = LoggerFactory.getLogger(ConnectionWrapper.class);
 
 	/**
-	 * 状态锁，用于防止争用.
-	 */
-	private ReentrantLock statusLocker = new ReentrantLock();
-
-	/**
 	 * 创建时间.
 	 */
-	long createTime = System.currentTimeMillis();
+	final long createTime = System.currentTimeMillis();
+	/**
+	 * 状态锁，用于防止争用.
+	 */
+	private final ReentrantLock statusLocker = new ReentrantLock();
 
 	/**
 	 * 开始使用时间.
@@ -58,16 +43,15 @@ public class ConnectionWrapper implements Connection {
 	 * 连接状态。 -1：不可用 0：可用 1：使用中 2：检测中.
 	 */
 	private int status = -1;
-
 	/**
 	 * 实际的数据库连接.
 	 */
-	private Connection connection;
+	private final Connection connection;
 
 	/**
 	 * 获得数据库连接池名.
 	 */
-	private String poolName;
+	private final String poolName;
 
 	/**
 	 * 异常.
@@ -77,7 +61,7 @@ public class ConnectionWrapper implements Connection {
 	/**
 	 * 是否追踪堆栈，默认为true.
 	 */
-	private boolean TRACE = true;
+	private final boolean TRACE = true;
 
 	/**
 	 * 构造函数.
@@ -245,7 +229,7 @@ public class ConnectionWrapper implements Connection {
 	 * @throws SQLException
 	 *             SQL异常
 	 */
-	public void close() throws SQLException {
+	public void close() throws SQLException{
 		if (connection != null) {
 			try {
 				if (!connection.getAutoCommit()) {
@@ -541,8 +525,8 @@ public class ConnectionWrapper implements Connection {
 	 * @throws SQLException
 	 *             SQL异常
 	 */
-	public boolean isClosed() throws SQLException {
-		return (connection == null) ? true : false;
+	public boolean isClosed() {
+		return connection == null;
 	}
 
 	/**

@@ -62,22 +62,20 @@ public interface TransactionManager {
 	public void rollback() throws TransactionException;
 
 	/**
-	 * 设置事务级别.
-	 * 
-	 * @param level
-	 *            级别
-	 * @throws TransactionException
-	 *             事务异常
-	 */
-	public void setTransactionIsolation(int level) throws TransactionException;
-
-	/**
 	 * 获取当前事务级别.
-	 * 
+	 *
 	 * @throws TransactionException
 	 *             事务异常
 	 * @return 事务级别
 	 */
-	public int getTransactionIsolation() throws TransactionException;
+	public int getTransactionIsolation();
+
+	/**
+	 * 设置事务级别.
+	 *
+	 * @param level 级别
+	 * @throws TransactionException 事务异常
+	 */
+	public void setTransactionIsolation(int level);
 
 }

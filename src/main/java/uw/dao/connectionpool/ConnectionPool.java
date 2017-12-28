@@ -1,14 +1,13 @@
 package uw.dao.connectionpool;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfigManager;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uw.dao.conf.DaoConfigManager;
-import uw.dao.conf.DaoConfig.ConnPoolConfig;
 
 /**
  * 默认的数据库连接池.
@@ -28,32 +27,32 @@ public class ConnectionPool {
 	/**
 	 * 连接池名.
 	 */
-	String poolName;
+	final String poolName;
 
 	/**
 	 * 数据库驱动.
 	 */
-	String dbDriver;
+	final String dbDriver;
 
 	/**
 	 * 数据库服务器.
 	 */
-	String dbServer;
+	final String dbServer;
 
 	/**
 	 * 连接用户名.
 	 */
-	String dbUsername;
+	final String dbUsername;
 
 	/**
 	 * 连接密码.
 	 */
-	String dbPassword;
+	final String dbPassword;
 
 	/**
 	 * 测试sql.
 	 */
-	String testSQL;
+	final String testSQL;
 
 	/**
 	 * 最小连接数.

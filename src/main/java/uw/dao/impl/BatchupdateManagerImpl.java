@@ -1,5 +1,10 @@
 package uw.dao.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uw.dao.BatchupdateManager;
+import uw.dao.TransactionException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -7,12 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uw.dao.BatchupdateManager;
-import uw.dao.TransactionException;
 
 /**
  * BatchupdateManager实现类.
@@ -109,7 +108,7 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public void startBatchUpdate() throws TransactionException {
+	public void startBatchUpdate() {
 		this.isBatch = true;
 		// 初始化map
 		map = new LinkedHashMap<String, PreparedStatement>();

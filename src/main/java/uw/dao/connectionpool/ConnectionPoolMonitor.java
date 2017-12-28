@@ -1,13 +1,13 @@
 package uw.dao.connectionpool;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * 连接池监控.
@@ -24,7 +24,7 @@ class ConnectionPoolMonitor {
 	/**
 	 * 扫描时间间隔.
 	 */
-	private static long TIME_INTERVAL = 20000;
+	private static final long TIME_INTERVAL = 20000;
 
 	/**
 	 * 后台检查线程.
@@ -34,7 +34,7 @@ class ConnectionPoolMonitor {
 	/**
 	 * 当前启动状态.
 	 */
-	private static AtomicBoolean status = new AtomicBoolean(false);
+	private static final AtomicBoolean status = new AtomicBoolean(false);
 
 	/**
 	 * 开始服务.
@@ -55,7 +55,7 @@ class ConnectionPoolMonitor {
 	static void stop() {
 		if (status.compareAndSet(true, false)) {
 			if (checkThread != null) {
-				checkThread.destroy();
+				checkThread.readyDestroy();
 				checkThread = null;
 			}
 		}
@@ -83,7 +83,7 @@ class ConnectionPoolMonitor {
 		/**
 		 * 销毁标记.
 		 */
-		public void destroy() {
+		public void readyDestroy() {
 			isRunning = false;
 		}
 

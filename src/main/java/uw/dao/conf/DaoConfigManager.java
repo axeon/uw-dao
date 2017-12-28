@@ -1,15 +1,15 @@
 package uw.dao.conf;
 
+import uw.dao.conf.DaoConfig.ConnPoolConfig;
+import uw.dao.conf.DaoConfig.ConnRoute;
+import uw.dao.conf.DaoConfig.ConnRouteConfig;
+import uw.dao.conf.DaoConfig.TableShardingConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-
-import uw.dao.conf.DaoConfig.ConnPoolConfig;
-import uw.dao.conf.DaoConfig.ConnRoute;
-import uw.dao.conf.DaoConfig.ConnRouteConfig;
-import uw.dao.conf.DaoConfig.TableShardingConfig;
 
 /**
  * DAO配置管理器.
@@ -26,7 +26,7 @@ public class DaoConfigManager {
 	/**
 	 * 链接路由Map.
 	 */
-	private static Map<String, String> routeMap = new ConcurrentHashMap<>();
+    private static final Map<String, String> routeMap = new ConcurrentHashMap<>();
 
 	/**
 	 * @return the config

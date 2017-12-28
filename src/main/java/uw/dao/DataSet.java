@@ -1,13 +1,13 @@
 package uw.dao;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 存储并转化ResultSet对象数据.
@@ -243,10 +243,9 @@ public class DataSet implements Serializable, Cloneable {
 	 * 获取该表/视图所有的数据大小.
 	 * 
 	 * @return 该表/视图所有的数据大小
-	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public int sizeAll() throws TransactionException {
+	public int sizeAll() {
 		return this.sizeAll;
 	}
 

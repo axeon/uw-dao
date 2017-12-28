@@ -1,21 +1,14 @@
 package uw.dao.impl;
 
+import uw.dao.*;
+import uw.dao.service.StatsLogService;
+import uw.dao.vo.SqlExecuteStats;
+
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import uw.dao.BatchupdateManager;
-import uw.dao.DaoFactory;
-import uw.dao.DataEntity;
-import uw.dao.DataList;
-import uw.dao.DataSet;
-import uw.dao.SequenceManager;
-import uw.dao.TransactionException;
-import uw.dao.TransactionManager;
-import uw.dao.service.StatsLogService;
-import uw.dao.vo.SqlExecuteStats;
 
 /**
  * DAOFactory实现类.
@@ -27,12 +20,12 @@ public class DAOFactoryImpl extends DaoFactory {
 	/**
 	 * 批量更新实例.
 	 */
-	private BatchupdateManagerImpl batchupdate;
+	private final BatchupdateManagerImpl batchupdate;
 
 	/**
 	 * 事务处理实例.
 	 */
-	private TransactionManagerImpl transaction;
+	private final TransactionManagerImpl transaction;
 
 	/**
 	 * 统计信息.
@@ -100,7 +93,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 * @return TransactionManager对象
 	 */
 	@Override
-	public TransactionManager beginTransaction() throws TransactionException {
+	public TransactionManager beginTransaction() {
 		this.transaction.startTransaction();
 		return this.transaction;
 	}
@@ -140,8 +133,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 */
 	@Override
 	public <T extends DataEntity> int delete(String connName, T entity, String tableName) throws TransactionException {
-		int effect = EntityCommandImpl.delete(this, connName, entity, tableName);
-		return effect;
+		return EntityCommandImpl.delete(this, connName, entity, tableName);
 	}
 
 	/**

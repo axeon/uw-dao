@@ -30,7 +30,7 @@ public class StatsLogWriteTask {
 	/**
 	 * DAOFactory对象.
 	 */
-	private DaoFactory dao = DaoFactory.getInstance();
+	private final DaoFactory dao = DaoFactory.getInstance();
 
 	/**
 	 * 3秒写一次数据.

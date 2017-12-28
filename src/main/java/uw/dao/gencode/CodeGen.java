@@ -1,21 +1,16 @@
 package uw.dao.gencode;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uw.dao.util.DaoStringUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import uw.dao.util.DaoStringUtils;
+import java.util.*;
 
 /**
  * 代码生成入口.
@@ -32,17 +27,17 @@ public class CodeGen {
 	/**
 	 * 文件编码.
 	 */
-	public static String SYSTEM_ENCODING = "UTF-8";
+	public static final String SYSTEM_ENCODING = "UTF-8";
 
 	/**
 	 * 源代码的路径.
 	 */
-	public static String SOURCECODE_PATH = "d:/";
+	public static final String SOURCECODE_PATH = "d:/";
 
 	/**
 	 * 包名
 	 */
-	public static String PACKAGE_NAME = "";
+	public static final String PACKAGE_NAME = "";
 	/**
 	 * 数据库方言 MYSQL or ORACLE
 	 */
@@ -51,15 +46,15 @@ public class CodeGen {
 	/**
 	 * 连接池名称，不设置为默认连接
 	 */
-	public static String CONN_NAME = "";
+	public static final String CONN_NAME = "";
 	/**
 	 * 指定要生成的表的信息，多个表名用","分割
 	 */
-	public static String TABLE_LIST = "";
+	public static final String TABLE_LIST = "";
 	/**
 	 * 数据库连接模式 -> ORACLE需要设置,默认取数据库连接名称
 	 */
-	public static String CONN_SCHEMA = "";
+	public static final String CONN_SCHEMA = "";
 
 	/**
 	 * TableMetaInterface对象
@@ -119,7 +114,7 @@ public class CodeGen {
 	 * @throws Exception
 	 *             异常
 	 */
-	private static void init() throws Exception {
+	private static void init() {
 		// 初始化FreeMarker配置
 		// 创建一个Configuration实例
 		cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
@@ -179,8 +174,7 @@ public class CodeGen {
 	@SuppressWarnings("rawtypes")
 	private static void buildTemplate(Template template, Map root, String savePath, String fileName) {
 		String realFileName = savePath + fileName;
-		String realSavePath = savePath;
-		File newsDir = new File(realSavePath);
+		File newsDir = new File(savePath);
 		if (!newsDir.exists()) {
 			newsDir.mkdirs();
 		}

@@ -1,5 +1,10 @@
 package uw.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uw.dao.conf.DaoConfigManager;
+import uw.dao.connectionpool.ConnectionManager;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,12 +12,6 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uw.dao.conf.DaoConfigManager;
-import uw.dao.connectionpool.ConnectionManager;
 
 /**
  * sequence管理器。 如果不是使用sequence管理器，在集群环境中将有一些麻烦。 系统会自动判定启用那种方式的id生成方式.
@@ -36,7 +35,7 @@ public class SequenceManager {
 	/**
 	 * SequenceManager集合.
 	 */
-	private static Map<String, SequenceManager> managers = new ConcurrentHashMap<String, SequenceManager>();
+	private static final Map<String, SequenceManager> managers = new ConcurrentHashMap<String, SequenceManager>();
 
 	/**
 	 * updateSQL语句.
@@ -121,7 +120,7 @@ public class SequenceManager {
 	/**
 	 * 当前id.
 	 */
-	private AtomicLong currentId = new AtomicLong(0);
+	private final AtomicLong currentId = new AtomicLong(0);
 
 	/**
 	 * 当前可以获取的最大id.
@@ -136,7 +135,7 @@ public class SequenceManager {
 	/**
 	 * table名称.
 	 */
-	private String sequenceName;
+	private final String sequenceName;
 
 	/**
 	 * 建立一个Sequence实例.

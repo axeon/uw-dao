@@ -27,11 +27,11 @@ public class StatsLogService {
     /**
      * DAOFactory对象.
      */
-    private static DaoFactory dao = DaoFactory.getInstance();
+    private static final DaoFactory dao = DaoFactory.getInstance();
     /**
      * 是否已经启动.
      */
-    private static AtomicBoolean isStarted = new AtomicBoolean(false);
+    private static final AtomicBoolean isStarted = new AtomicBoolean(false);
 
     /**
      * 数据集合.
@@ -41,7 +41,7 @@ public class StatsLogService {
     /**
      * pageLog的写入锁.
      */
-    private static ReentrantLock locker = new ReentrantLock();
+    private static final ReentrantLock locker = new ReentrantLock();
 
     /**
      * 开始任务.

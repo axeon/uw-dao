@@ -1,19 +1,7 @@
 package uw.dao.impl;
 
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uw.dao.DataEntity;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
@@ -25,6 +13,17 @@ import uw.dao.dialect.DialectManager;
 import uw.dao.util.DaoReflectUtils;
 import uw.dao.vo.FieldMetaInfo;
 import uw.dao.vo.TableMetaInfo;
+
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 实体类命令实现.
@@ -40,7 +39,7 @@ public class EntityCommandImpl {
 	/**
 	 * 实体信息缓存.
 	 */
-	private static HashMap<String, TableMetaInfo> entityMetaCache = new HashMap<String, TableMetaInfo>();
+	private static final HashMap<String, TableMetaInfo> entityMetaCache = new HashMap<String, TableMetaInfo>();
 
     /**
      * 实体类支持的最大继承层级
