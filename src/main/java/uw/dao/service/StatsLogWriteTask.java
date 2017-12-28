@@ -1,21 +1,20 @@
 package uw.dao.service;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
 import uw.dao.DaoFactory;
 import uw.dao.SequenceManager;
 import uw.dao.util.DaoValueUtils;
 import uw.dao.util.TableShardingUtils;
 import uw.dao.vo.SqlExecuteStats;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 性能日志写入任务.
@@ -57,7 +56,7 @@ public class StatsLogWriteTask {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String pdsql = "INSERT INTO " + tableName
-				+ "(id,conn_name,sql_info,sql_param,row_num,db_time,all_time,exception,exe_date) " + "values "
+				+ "(id,conn_name,sql_info,sql_param,row_num,db_time,all_time,exception,exe_date) values "
 				+ "(?,?,?,?,?,?,?,?,?) ";
 		int pos = 0;
 		try {
