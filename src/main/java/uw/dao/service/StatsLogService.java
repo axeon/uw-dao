@@ -1,15 +1,14 @@
 package uw.dao.service;
 
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.vo.SqlExecuteStats;
+
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 性能计数器,将性能数据输出到mysql中.
@@ -28,7 +27,7 @@ public class StatsLogService {
 	private static DaoFactory dao = DaoFactory.getInstance();
 
 	/**
-	 * 状态表名.
+     * 存储的表名.
 	 */
 	public static final String STATS_BASE_TABLE = "dao_sql_stats";
 
@@ -40,7 +39,7 @@ public class StatsLogService {
 	/**
 	 * 数据集合.
 	 */
-	private static ArrayList<SqlExecuteStats> datalist = new ArrayList<SqlExecuteStats>();
+    private static ArrayList<SqlExecuteStats> datalist = new ArrayList<>();
 
 	/**
 	 * pageLog的写入锁.
@@ -119,7 +118,7 @@ public class StatsLogService {
 	}
 
 	/**
-	 * 获得pageLog列表，并重新构造列表.
+     * 获得sql执行列表，并重新构造列表.
 	 * 
 	 * @return 列表
 	 */
@@ -128,7 +127,7 @@ public class StatsLogService {
 		locker.lock();
 		try {
 			list = datalist;
-			datalist = new ArrayList<SqlExecuteStats>();
+            datalist = new ArrayList<>();
 		} finally {
 			locker.unlock();
 		}
