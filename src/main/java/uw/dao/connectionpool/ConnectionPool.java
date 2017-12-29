@@ -7,6 +7,7 @@ import uw.dao.conf.DaoConfigManager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -180,11 +181,11 @@ public class ConnectionPool {
 	 * 
 	 * @return 一个连接
 	 */
-	public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
 		Connection conn = null;
 		if (available) {
 			boolean gotOne = false;
-			for (int outerloop = 0; outerloop < 200; outerloop++) {
+            for (int outerloop = 0; outerloop < 3; outerloop++) {
 				for (int loop = 0; loop < connList.size(); loop++) {
 					ConnectionWrapper cw = null;
 					try {
@@ -202,17 +203,13 @@ public class ConnectionPool {
 				}
 				if (gotOne) {
 					break;
-				} else if (outerloop > 1) {
+                } else if (outerloop >= 1) {
 					createConn("by can't get a idle connection!");
-				}
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-				}
-				// 超过30次找不到，报告连接耗尽信息
-				if (outerloop > 30) {
-					logger.warn("-----> ConnectionPool[" + poolName + "](" + connList.size()
-							+ ") Exhausted!  Will wait and try again in loop " + outerloop);
+                } else {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                    }
 				}
 			}
 		} else {
@@ -243,7 +240,7 @@ public class ConnectionPool {
 				}
 			} catch (Exception e) {
 				logger.error("--->ConnectionPool[" + poolName + "](" + connList.size()
-						+ ") Attempt failed to create new connection " + reason, e);
+                        + ") Attempt failed to create new connection " + reason + " " + e.getMessage());
 			}
 		}
 	}

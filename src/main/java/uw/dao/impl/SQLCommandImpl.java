@@ -95,8 +95,7 @@ public class SQLCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException(
-					"TransactionException in SQLCommandImpl.selectForSingleValue() @conn:" + connName, e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -207,8 +206,7 @@ public class SQLCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException(
-					"TransactionException in SQLCommandImpl.selectForSingleList() @conn:" + connName, e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -296,8 +294,7 @@ public class SQLCommandImpl {
 			ds = new DataSet(rs, startIndex, resultNum, allsize);
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException(
-					"TransactionException in SQLCommandImpl.selectForDataSet() @conn:" + connName, e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -365,8 +362,7 @@ public class SQLCommandImpl {
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException(
-					"TransactionException in SQLCommandImpl.java:executeSQLCommand() @conn:" + connName, e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {

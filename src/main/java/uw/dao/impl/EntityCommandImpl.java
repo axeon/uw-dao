@@ -111,7 +111,7 @@ public class EntityCommandImpl {
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:save()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -200,7 +200,7 @@ public class EntityCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in EntityCommandImpl.load()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -283,7 +283,7 @@ public class EntityCommandImpl {
 			}
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in EntityCommandImpl.listSingle()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -374,7 +374,7 @@ public class EntityCommandImpl {
 
 		} catch (Exception e) {
 			exception = e.toString();
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:update()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {
@@ -449,8 +449,7 @@ public class EntityCommandImpl {
 			dbTime = System.currentTimeMillis() - dbStart;
 		} catch (Exception e) {
 			exception = e.toString();
-
-			throw new TransactionException("TransactionException in DAOCommandImpl.java:delete()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (!dao.getBatchUpdateController().getBatchStatus() && con != null) {
 				try {
@@ -556,8 +555,7 @@ public class EntityCommandImpl {
 
 		} catch (Exception e) {
 			exception = e.toString();
-
-			throw new TransactionException("TransactionException in EntityCommandImpl.list()", e);
+			throw new TransactionException(connName + ": " + e.getMessage(), e);
 		} finally {
 			if (pstmt != null) {
 				try {
