@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
+import uw.dao.conf.DaoConfigManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +67,10 @@ public class StatsCleanDataTask {
 		Collections.sort(list);
 		// 保留100天数据，假设
 		int start = 100;
+        try {
+            start = DaoConfigManager.getConfig().getSqlStats().getDataKeepDays();
+        } catch (Throwable e) {
+        }
 		// 循环删除过期数据
 		for (int i = start; i < list.size(); i++) {
 			try {

@@ -50,7 +50,8 @@ public class SQLCommandImpl {
 	public static final <T> T selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectSql,
 												   Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		if (connName == null) {
 			connName = SQLUtils.getConnNameFromSQL(selectSql);
@@ -58,15 +59,16 @@ public class SQLCommandImpl {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		Object value = null;
-
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = con.prepareStatement(selectSql);
 			if (paramList != null && paramList.length > 0) {
 				for (int i = 0; i < paramList.length; i++) {
 					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -113,14 +115,14 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectSql, Arrays.toString(paramList), value == null ? 0 : 1, dbTime, allTime,
+        dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), value == null ? 0 : 1, connTime, dbTime, allTime,
 				exception);
 		return (T) value;
 	}
 
 	/**
 	 * 获得单列数据列表.
-	 * 
+     *
 	 * @param dao
 	 *            DAOFactoryImpl对象
 	 * @param connName
@@ -141,7 +143,8 @@ public class SQLCommandImpl {
 	public static final <T> List<T> selectForSingleList(DAOFactoryImpl dao, String connName, Class<T> cls,
 														String selectSql, Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		if (connName == null) {
 			connName = SQLUtils.getConnNameFromSQL(selectSql);
@@ -151,6 +154,7 @@ public class SQLCommandImpl {
 		ArrayList<Object> list = new ArrayList<Object>();
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = con.prepareStatement(selectSql);
 			int i = 0;
 			if (paramList != null && paramList.length > 0) {
@@ -158,7 +162,7 @@ public class SQLCommandImpl {
 					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
-
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -224,14 +228,14 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectSql, Arrays.toString(paramList), list.size(), dbTime, allTime,
+        dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), list.size(), connTime, dbTime, allTime,
 				exception);
 		return (ArrayList<T>) list;
 	}
 
 	/**
 	 * 获得以DataSet为结果的数据集合.
-	 * 
+     *
 	 * @param dao
 	 *            DAOFactoryImpl对象
 	 * @param connName
@@ -253,13 +257,13 @@ public class SQLCommandImpl {
 	public static final DataSet selectForDataSet(DAOFactoryImpl dao, String connName, String selectSql,
 												 Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		if (connName == null) {
 			connName = SQLUtils.getConnNameFromSQL(selectSql);
 		}
 		int allsize = 0;
-
 		if (autoCount) {
 			String countsql = "select count(1) from (" + selectSql + ") must_alias";
 			allsize = SQLCommandImpl.selectForSingleValue(dao, connName, int.class, countsql, paramList);
@@ -271,6 +275,7 @@ public class SQLCommandImpl {
 		Object[] po = null;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			if (resultNum > 0 && startIndex >= 0) {
 				Dialect dialect = DialectManager.getDialect(DaoConfigManager.getConnPoolConfig(connName).getDbType());
 				po = dialect.getPagedSQL(selectSql, startIndex, resultNum);
@@ -288,6 +293,7 @@ public class SQLCommandImpl {
 				pstmt.setInt(i + 1, (Integer) po[1]);
 				pstmt.setInt(i + 2, (Integer) po[2]);
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -312,14 +318,14 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectSql, Arrays.toString(paramList), ds.size(), dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), ds.size(), connTime, dbTime, allTime, exception);
 
 		return ds;
 	}
 
 	/**
 	 * 执行任意sql.
-	 * 
+     *
 	 * @param dao
 	 *            DAOFactoryImpl对象
 	 * @param connName
@@ -335,7 +341,8 @@ public class SQLCommandImpl {
 	public static final int executeSQL(DAOFactoryImpl dao, String connName, String executesql, Object[] paramList)
 			throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 
 		if (connName == null) {
@@ -347,12 +354,14 @@ public class SQLCommandImpl {
 		int effect = 0;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = dao.getBatchUpdateController().prepareStatement(con, executesql);
 			if (paramList != null && paramList.length > 0) {
 				for (int i = 0; i < paramList.length; i++) {
 					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			if (dao.getBatchUpdateController().getBatchStatus()) {
 				pstmt.addBatch();
@@ -380,8 +389,7 @@ public class SQLCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, executesql, Arrays.toString(paramList), effect, dbTime, allTime, exception);
-
+        dao.addSqlExecuteStats(connName, connId, executesql, Arrays.toString(paramList), effect, connTime, dbTime, allTime, exception);
 		return effect;
 	}
 

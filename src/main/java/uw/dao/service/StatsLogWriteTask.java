@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
-import uw.dao.SequenceManager;
 import uw.dao.util.DaoValueUtils;
 import uw.dao.util.TableShardingUtils;
 import uw.dao.vo.SqlExecuteStats;
@@ -56,8 +55,8 @@ public class StatsLogWriteTask {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		String pdsql = "INSERT INTO " + tableName
-				+ "(id,conn_name,sql_info,sql_param,row_num,db_time,all_time,exception,exe_date) values "
-				+ "(?,?,?,?,?,?,?,?,?) ";
+                + "(conn_name,conn_id,sql_info,sql_param,row_num,conn_time,db_time,all_time,exception,exe_date) values "
+                + "(?,?,?,?,?,?,?,?,?,?) ";
 		int pos = 0;
 		try {
 			conn = dao.getConnection(tableName, "write");
@@ -70,27 +69,28 @@ public class StatsLogWriteTask {
 						TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE, ss.getActionDate()))) {
 					break;
 				}
-				pstmt.setLong(1, SequenceManager.nextId(StatsLogService.STATS_BASE_TABLE));
 				if (ss.getConnName() != null && ss.getConnName().length() > 100) {
 					ss.setConnName(ss.getConnName().substring(0, 100));
 				}
-				pstmt.setString(2, ss.getConnName());
+                pstmt.setString(1, ss.getConnName());
+                pstmt.setInt(2, ss.getConnId());
 				if (ss.getSql() != null && ss.getSql().length() > 1000) {
-					ss.setSql(ss.getSql().substring(0, 100));
+                    ss.setSql(ss.getSql().substring(0, 1000));
 				}
 				pstmt.setString(3, ss.getSql());
 				if (ss.getParam() != null && ss.getParam().length() > 1000) {
-					ss.setParam(ss.getParam().substring(0, 100));
+                    ss.setParam(ss.getParam().substring(0, 1000));
 				}
 				pstmt.setString(4, ss.getParam());
 				pstmt.setInt(5, ss.getRowNum());
-				pstmt.setInt(6, (int) ss.getDbTime());
-				pstmt.setInt(7, (int) ss.getAllTime());
+                pstmt.setInt(6, (int) ss.getConnTime());
+                pstmt.setInt(7, (int) ss.getDbTime());
+                pstmt.setInt(8, (int) ss.getAllTime());
 				if (ss.getException() != null && ss.getException().length() > 500) {
 					ss.setException(ss.getException().substring(0, 100));
 				}
-				pstmt.setString(8, ss.getException());
-				pstmt.setTimestamp(9, DaoValueUtils.dateToTimestamp(ss.getActionDate()));
+                pstmt.setString(9, ss.getException());
+                pstmt.setTimestamp(10, DaoValueUtils.dateToTimestamp(ss.getActionDate()));
 				pstmt.addBatch();
 				if ((pos + 1) % 100 == 0 && pos > 0) {
 					// 每隔100次自动提交

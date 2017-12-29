@@ -74,20 +74,20 @@ public class ConnectionManager {
 			poolName = "";
 		}
 		Connection conn = null;
-		ConnectionPool connpool = getConnectionPool(poolName);
-		if (connpool == null) {
-			connpool = initConnectionPool(poolName);
-		}
-		if (connpool == null) {
+        ConnectionPool connPool = getConnectionPool(poolName);
+        if (connPool == null) {
+            connPool = initConnectionPool(poolName);
+        }
+        if (connPool == null) {
 			throw new SQLException("ConnectionManager.getConnection() failed to init connPool[" + poolName + "]");
 		}
 
-		conn = connpool.getConnection();
+        conn = connPool.getConnection();
 		if (conn == null) {
 			throw new SQLException(
 					"ConnectionManager.getConnection() failed to obtain a connection in connPool[" + poolName + "]");
 		}
-		// logger.error("***连接池{}耗费时间为{}ms",poolName,(System.currentTimeMillis()-start));
+        // logger.trace("***连接池{}耗费时间为{}ms",poolName,(System.currentTimeMillis()-start));
 		return conn;
 	}
 

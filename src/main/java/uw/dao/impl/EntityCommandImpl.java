@@ -58,7 +58,8 @@ public class EntityCommandImpl {
 	@SuppressWarnings("resource")
 	public static <T extends DataEntity> T save(DAOFactoryImpl dao, String connName, T entity, String tableName) throws TransactionException {
 			long start = System.currentTimeMillis();
-		long dbTime = -1;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(entity.getClass());
 		if (emi == null) {
@@ -97,8 +98,9 @@ public class EntityCommandImpl {
 		int effect = 0;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = con.prepareStatement(sb.toString(), pkcols);
-			int seq = 0;
+            int seq = 0;
 			for (String col : cols) {
 				FieldMetaInfo fmi = emi.getFieldMetaInfo(col);
 				if (fmi == null) {
@@ -106,6 +108,7 @@ public class EntityCommandImpl {
 				}
 				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -129,7 +132,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, sb.toString(), entity.GET_UPDATED_INFO(), effect, dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		return entity;
 	}
 	/**
@@ -145,8 +148,8 @@ public class EntityCommandImpl {
 	 */
 	public static <T> T load(DAOFactoryImpl dao, String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = -1;
-		int rowNum = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0, rowNum = 0;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(cls);
 		if (emi == null) {
@@ -173,9 +176,11 @@ public class EntityCommandImpl {
 		PreparedStatement pstmt = null;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = con.prepareStatement(sb.toString());
 			int i = 0;
 			DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, id);
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -218,7 +223,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, sb.toString(), id.toString(), rowNum, dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, sb.toString(), id.toString(), rowNum, connTime, dbTime, allTime, exception);
 		return entity;
 	}
 
@@ -235,8 +240,8 @@ public class EntityCommandImpl {
 	 */
 	public static <T> T listSingle(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = -1;
-		int rowNum = 0;
+        long connTime = 0, dbTime = 0;
+        int connId = 0, rowNum = 0;
 		String exception = null;
 		if (connName == null) {
 			connName = SQLUtils.getConnNameFromSQL(selectsql);
@@ -251,14 +256,15 @@ public class EntityCommandImpl {
 
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = con.prepareStatement(selectsql);
 			int i = 0;
-
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
 					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
 				}
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -301,7 +307,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), rowNum, dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), rowNum, connTime, dbTime, allTime, exception);
 		return entity;
 	}
 	/**
@@ -319,7 +325,8 @@ public class EntityCommandImpl {
 			return -1;
 		}
 		long start = System.currentTimeMillis();
-		long dbTime = -1;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(entity.getClass());
 		if (emi == null) {
@@ -354,8 +361,8 @@ public class EntityCommandImpl {
 		int effect = 0;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = dao.getBatchUpdateController().prepareStatement(con, sb.toString());
-
 			int seq = 0;
 			for (String col : cols) {
 				FieldMetaInfo fmi = emi.getFieldMetaInfo(col);
@@ -368,6 +375,7 @@ public class EntityCommandImpl {
 			for (FieldMetaInfo fmi : pks) {
 				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -392,7 +400,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, sb.toString(), entity.GET_UPDATED_INFO(), effect, dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		return effect;
 	}
 
@@ -407,7 +415,8 @@ public class EntityCommandImpl {
 	 */
 	public static int delete(DAOFactoryImpl dao, String connName, DataEntity entity, String tableName) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = -1;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(entity.getClass());
 		if (emi == null) {
@@ -438,12 +447,14 @@ public class EntityCommandImpl {
 		int effect = 0;
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			pstmt = dao.getBatchUpdateController().prepareStatement(con, sb.toString());
 			int seq = 0;
 			// 开始where主键。
 			for (FieldMetaInfo fmi : pks) {
 				DaoReflectUtils.DAOLiteSaveReflect(pstmt, entity, fmi, ++seq);
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -467,7 +478,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, sb.toString(), "", effect, dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, sb.toString(), "", effect, connTime, dbTime, allTime, exception);
 		return effect;
 	}
 
@@ -487,7 +498,8 @@ public class EntityCommandImpl {
 	 */
 	public static <T> DataList<T> list(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
 		long start = System.currentTimeMillis();
-		long dbTime = -1;
+        long connTime = 0, dbTime = 0;
+        int connId = 0;
 		String exception = null;
 		if (connName == null) {
 			connName = SQLUtils.getConnNameFromSQL(selectsql);
@@ -511,15 +523,14 @@ public class EntityCommandImpl {
 
 		try {
 			con = dao.getTransactionController().getConnection(connName);
+            connId = con.hashCode();
 			if (resultNum > 0 && startIndex >= 0) {
 				Dialect dialect = DialectManager.getDialect(DaoConfigManager.getConnPoolConfig(connName).getDbType());
 				po = dialect.getPagedSQL(selectsql, startIndex, resultNum);
 				selectsql = po[0].toString();
 			}
-
 			pstmt = con.prepareStatement(selectsql);
 			int i = 0;
-
 			if (paramList != null && paramList.length > 0) {
 				for (i = 0; i < paramList.length; i++) {
 					DaoReflectUtils.CommandUpdateReflect(pstmt, i + 1, paramList[i]);
@@ -530,6 +541,7 @@ public class EntityCommandImpl {
 				pstmt.setInt(i + 1, (Integer) po[1]);
 				pstmt.setInt(i + 2, (Integer) po[2]);
 			}
+            connTime = System.currentTimeMillis() - start;
 			long dbStart = System.currentTimeMillis();
 			ResultSet rs = pstmt.executeQuery();
 			dbTime = System.currentTimeMillis() - dbStart;
@@ -573,7 +585,7 @@ public class EntityCommandImpl {
 			}
 		}
 		long allTime = System.currentTimeMillis() - start;
-		dao.addSqlExecuteStats(connName, selectsql, Arrays.toString(paramList), list.size(), dbTime, allTime, exception);
+        dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), list.size(), connTime, dbTime, allTime, exception);
 		return new DataList<T>(list, startIndex, resultNum, allsize);
 	}
 

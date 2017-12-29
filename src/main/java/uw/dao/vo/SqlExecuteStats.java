@@ -1,9 +1,9 @@
 package uw.dao.vo;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 用于统计sql执行的性能数据.
@@ -14,6 +14,11 @@ public class SqlExecuteStats {
 	 * connName 连接名.
 	 */
 	private String connName;
+
+    /**
+     * ConnId.
+     */
+    private int connId;
 
 	/**
 	 * 执行的具体sql.
@@ -29,6 +34,11 @@ public class SqlExecuteStats {
 	 * 返回/影响的行数.
 	 */
 	private int rowNum;
+
+    /**
+     * Conn时间.
+     */
+    private long connTime;
 
 	/**
 	 * 数据库操作消耗的时间.
@@ -67,13 +77,15 @@ public class SqlExecuteStats {
 	 *            数据库层消耗的时间
 	 * @param exception
 	 *            异常
-	 */
-	public SqlExecuteStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime,
+     */
+    public SqlExecuteStats(String connName, int connId, String sql, String param, int rowNum, long connTime, long dbTime, long allTime,
 			String exception) {
 		this.connName = connName;
+        this.connId = connId;
 		this.sql = sql;
 		this.param = param;
 		this.rowNum = rowNum;
+        this.connTime = connTime;
 		this.dbTime = dbTime;
 		this.allTime = allTime;
 		this.exception = exception;
@@ -205,8 +217,23 @@ public class SqlExecuteStats {
 	 * @param actionDate
 	 *            the actionDate to set
 	 */
-	public void setActionDate(Date actionDate) {
-		this.actionDate = actionDate;
-	}
+    public void setActionDate(Date actionDate) {
+        this.actionDate = actionDate;
+    }
 
+    public int getConnId() {
+        return connId;
+    }
+
+    public void setConnId(int connId) {
+        this.connId = connId;
+    }
+
+    public long getConnTime() {
+        return connTime;
+    }
+
+    public void setConnTime(long connTime) {
+        this.connTime = connTime;
+    }
 }

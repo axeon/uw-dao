@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
+import uw.dao.conf.DaoConfigManager;
 import uw.dao.vo.SqlExecuteStats;
 
 import java.util.ArrayList;
@@ -44,11 +45,20 @@ public class StatsLogService {
     private static final ReentrantLock locker = new ReentrantLock();
 
     /**
+     * 可以记录的sqlCostMin最小时间。
+     */
+    private static int sqlCostMin = 30;
+
+    /**
      * 开始任务.
      */
     public static void start() {
         isStarted.compareAndSet(false, true);
         checkForCreatesStatsTable();
+        try {
+            sqlCostMin = DaoConfigManager.getConfig().getSqlStats().getSqlCostMin();
+        } catch (Throwable e) {
+        }
     }
 
     /**
@@ -73,12 +83,14 @@ public class StatsLogService {
      * @param ses 用于统计sql执行的性能数据
      */
     public static void logStats(SqlExecuteStats ses) {
-        if (isStarted.get()) {
-            locker.lock();
-            try {
-                datalist.add(ses);
-            } finally {
-                locker.unlock();
+        if (ses.getAllTime() >= sqlCostMin) {
+            if (isStarted.get()) {
+                locker.lock();
+                try {
+                    datalist.add(ses);
+                } finally {
+                    locker.unlock();
+                }
             }
         }
     }
@@ -94,14 +106,16 @@ public class StatsLogService {
      * @param allTime   数据库层消耗的时间
      * @param exception 异常类
      */
-    public static void logStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime,
+    public static void logStats(String connName, int connId, String sql, String param, int rowNum, long connTime, long dbTime, long allTime,
                                 String exception) {
-        if (isStarted.get()) {
-            locker.lock();
-            try {
-                datalist.add(new SqlExecuteStats(connName, sql, param, rowNum, dbTime, allTime, exception));
-            } finally {
-                locker.unlock();
+        if (allTime >= sqlCostMin) {
+            if (isStarted.get()) {
+                locker.lock();
+                try {
+                    datalist.add(new SqlExecuteStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception));
+                } finally {
+                    locker.unlock();
+                }
             }
         }
     }
@@ -128,11 +142,11 @@ public class StatsLogService {
      */
     private static void checkForCreatesStatsTable() {
         String sql = "create table if not exists " + STATS_BASE_TABLE + " (\n"
-                + "id bigint(20) NOT NULL AUTO_INCREMENT,\n" + "conn_name varchar(100) DEFAULT NULL,\n"
+                + "id bigint(20) NOT NULL AUTO_INCREMENT,\n" + "conn_name varchar(100) DEFAULT NULL,\n" + "conn_id int(11) DEFAULT NULL,\n"
                 + "sql_info varchar(1000) DEFAULT NULL,\n" + "sql_param varchar(1000) DEFAULT NULL,\n"
-                + "row_num int(11) DEFAULT NULL,\n" + "db_time int(11) DEFAULT NULL,\n"
+                + "row_num int(11) DEFAULT NULL,\n" + "conn_time int(11) DEFAULT NULL,\n" + "db_time int(11) DEFAULT NULL,\n"
                 + "all_time int(11) DEFAULT NULL,\n" + "exception varchar(500) DEFAULT NULL,\n"
-                + "exe_date datetime DEFAULT CURRENT_TIMESTAMP,\n" + "PRIMARY KEY (id)\n" + ") ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED";
+                + "exe_date datetime DEFAULT NULL,\n" + "PRIMARY KEY (id)\n" + ") ENGINE=INNODB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED";
         try {
             dao.executeCommand(dao.getConnectionName(STATS_BASE_TABLE, "all"), sql);
             logger.info("init table: {}", STATS_BASE_TABLE);

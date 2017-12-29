@@ -68,12 +68,12 @@ public class DAOFactoryImpl extends DaoFactory {
 	 * @param exception
 	 *            异常信息
 	 */
-	void addSqlExecuteStats(String connName, String sql, String param, int rowNum, long dbTime, long allTime,
-			String exception) {
+    void addSqlExecuteStats(String connName, int connId, String sql, String param, int rowNum, long connTime, long dbTime, long allTime,
+                            String exception) {
 		if (statsList != null) {
-			statsList.add(new SqlExecuteStats(connName, sql, param, rowNum, dbTime, allTime, exception));
-		}
-		StatsLogService.logStats(connName, sql, param, rowNum, dbTime, allTime, exception);
+            statsList.add(new SqlExecuteStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception));
+        }
+        StatsLogService.logStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception);
 	}
 
 	/**

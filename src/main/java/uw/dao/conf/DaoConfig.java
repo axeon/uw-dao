@@ -1,9 +1,9 @@
 package uw.dao.conf;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * dao配置表.
@@ -563,6 +563,11 @@ public class DaoConfig {
 		 */
 		private boolean enable = false;
 
+        /**
+         * sql执行最小毫秒数。
+         */
+        private int sqlCostMin = 30;
+
 		/**
 		 * 保存时间，默认是100天.
 		 */
@@ -596,8 +601,15 @@ public class DaoConfig {
 		 */
 		public void setDataKeepDays(int dataKeepDays) {
 			this.dataKeepDays = dataKeepDays;
-		}
+        }
 
-	}
+        public int getSqlCostMin() {
+            return sqlCostMin;
+        }
+
+        public void setSqlCostMin(int sqlCostMin) {
+            this.sqlCostMin = sqlCostMin;
+        }
+    }
 
 }
