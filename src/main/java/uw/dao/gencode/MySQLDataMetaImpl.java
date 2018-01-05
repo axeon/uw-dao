@@ -158,6 +158,9 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 				case Types.VARCHAR:
 					meta.setPropertyType("String");
 					break;
+				case Types.LONGVARCHAR:
+					meta.setPropertyType("String");
+					break;
 				case Types.CLOB:
 					meta.setPropertyType("String");
 					break;
