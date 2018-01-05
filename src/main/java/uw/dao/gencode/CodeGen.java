@@ -27,17 +27,17 @@ public class CodeGen {
 	/**
 	 * 文件编码.
 	 */
-	public static final String SYSTEM_ENCODING = "UTF-8";
+	public static String SYSTEM_ENCODING = "UTF-8";
 
 	/**
 	 * 源代码的路径.
 	 */
-	public static final String SOURCECODE_PATH = "d:/";
+	public static String SOURCECODE_PATH = "d:/";
 
 	/**
 	 * 包名
 	 */
-	public static final String PACKAGE_NAME = "";
+	public static String PACKAGE_NAME = "";
 	/**
 	 * 数据库方言 MYSQL or ORACLE
 	 */
@@ -46,15 +46,15 @@ public class CodeGen {
 	/**
 	 * 连接池名称，不设置为默认连接
 	 */
-	public static final String CONN_NAME = "";
+	public static String CONN_NAME = "";
 	/**
 	 * 指定要生成的表的信息，多个表名用","分割
 	 */
-	public static final String TABLE_LIST = "";
+	public static String TABLE_LIST = "";
 	/**
 	 * 数据库连接模式 -> ORACLE需要设置,默认取数据库连接名称
 	 */
-	public static final String CONN_SCHEMA = "";
+	public static String CONN_SCHEMA = "";
 
 	/**
 	 * TableMetaInterface对象
