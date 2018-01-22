@@ -83,10 +83,6 @@ public class ConnectionManager {
 		}
 
         conn = connPool.getConnection();
-		if (conn == null) {
-			throw new SQLException(
-					"ConnectionManager.getConnection() failed to obtain a connection in connPool[" + poolName + "]");
-		}
         // logger.trace("***连接池{}耗费时间为{}ms",poolName,(System.currentTimeMillis()-start));
 		return conn;
 	}
