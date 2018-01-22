@@ -185,7 +185,7 @@ public class ConnectionPool {
 		Connection conn = null;
 		if (available) {
 			boolean gotOne = false;
-            for (int outerloop = 0; outerloop < 3; outerloop++) {
+            for (int outerloop = 0; outerloop < 30; outerloop++) {
 				for (int loop = 0; loop < connList.size(); loop++) {
 					ConnectionWrapper cw = null;
 					try {
