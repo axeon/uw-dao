@@ -5,7 +5,7 @@
 
 	<groupId>com.umtone</groupId>
 	<artifactId>uw-dao</artifactId>
-	<version>3.3.1</version>
+	<version>3.5.0</version>
 	<packaging>jar</packaging>
 
 	<name>uw-dao</name>
@@ -39,7 +39,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.9.RELEASE</version>
+		<version>2.0.0.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -155,26 +155,26 @@
 						</executions>
 					</plugin>
 					<!-- Javadoc -->
-					<plugin>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-								<configuration>
-									<encoding>UTF-8</encoding>
-								</configuration>
-							</execution>
-						</executions>
-						<configuration>
-							<encoding>UTF-8</encoding>
-							<charset>UTF-8</charset>
-							<docencoding>UTF-8</docencoding>
-							<additionalparam>-Xdoclint:none</additionalparam>
-						</configuration>
-					</plugin>
+					<!--<plugin>-->
+					<!--<artifactId>maven-javadoc-plugin</artifactId>-->
+					<!--<executions>-->
+					<!--<execution>-->
+					<!--<id>attach-javadocs</id>-->
+					<!--<goals>-->
+					<!--<goal>jar</goal>-->
+					<!--</goals>-->
+					<!--<configuration>-->
+					<!--<encoding>UTF-8</encoding>-->
+					<!--</configuration>-->
+					<!--</execution>-->
+					<!--</executions>-->
+					<!--<configuration>-->
+					<!--<encoding>UTF-8</encoding>-->
+					<!--<charset>UTF-8</charset>-->
+					<!--<docencoding>UTF-8</docencoding>-->
+					<!--<additionalparam>-Xdoclint:none</additionalparam>-->
+					<!--</configuration>-->
+					<!--</plugin>-->
 					<!-- Gpg Signature -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
