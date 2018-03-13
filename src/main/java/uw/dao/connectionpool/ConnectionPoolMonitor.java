@@ -134,7 +134,6 @@ class ConnectionPoolMonitor {
 							}
 							if (cw.trySetTestStatus()) {
 								pool.connList.remove(cw);
-								cw.setUnuseStatus();
 								cw.trueClose(); // 真正的关闭掉连接
 							}
 							cw = null;
@@ -147,11 +146,9 @@ class ConnectionPoolMonitor {
 										+ ") Recycling connection " + String.valueOf(cw)
 										+ " by over connection busy timout!");
 							}
-							if (cw.trySetTestStatus()) {
-								pool.connList.remove(cw);
-								cw.setUnuseStatus();
-								cw.trueClose(); // 真正的关闭掉连接
-							}
+                            //强行关闭！
+                            pool.connList.remove(cw);
+                            cw.trueClose(); // 真正的关闭掉连接
 							cw = null;
 						} else if (idleTimeout > pool.connIdleTimeout) { // idle超时
 							if (logger.isTraceEnabled()) {
@@ -161,7 +158,6 @@ class ConnectionPoolMonitor {
 							}
 							if (cw.trySetTestStatus()) {
 								pool.connList.remove(cw);
-								cw.setUnuseStatus();
 								cw.trueClose(); // 真正的关闭掉连接
 							}
 							cw = null;
@@ -174,7 +170,6 @@ class ConnectionPoolMonitor {
 							}
 							if (cw.trySetTestStatus()) {
 								pool.connList.remove(cw);
-								cw.setUnuseStatus();
 								cw.trueClose(); // 真正的关闭掉连接
 							}
 							cw = null;
@@ -203,7 +198,6 @@ class ConnectionPoolMonitor {
 									logger.error(" ***** ConnectionPool[" + pool.poolName + "](" + pool.connList.size()
 											+ ") Recycling connection " + String.valueOf(cw) + e.getMessage());
 									pool.connList.remove(cw);
-									cw.setUnuseStatus();
 									cw.trueClose(); // 真正的关闭掉连接
 									cw = null;
 								} finally {
