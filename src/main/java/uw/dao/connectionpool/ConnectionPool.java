@@ -155,15 +155,15 @@ public class ConnectionPool {
     public synchronized void start() {
         this.available = true;
         if (logger.isTraceEnabled()) {
-            logger.trace("Starting ConnectionPool[" + poolName + "]:");
-            logger.trace("dbDriver = " + dbDriver);
-            logger.trace("dbServer = " + dbServer);
-            logger.trace("dbLogin = " + dbUsername);
-            logger.trace("minConnections = " + minConns);
-            logger.trace("maxConnections = " + maxConns);
-            logger.trace("connIdleTimeout = " + connIdleTimeout / 1000 + " seconds");
-            logger.trace("connBusyTimeout = " + connBusyTimeout / 1000 + " seconds");
-            logger.trace("connMaxAge = " + connMaxAge / 1000 + " seconds");
+            logger.trace("Starting ConnectionPool[()]:", poolName);
+            logger.trace("dbDriver = {}", dbDriver);
+            logger.trace("dbServer = {}", dbServer);
+            logger.trace("dbLogin = {}", dbUsername);
+            logger.trace("minConnections = {}", minConns);
+            logger.trace("maxConnections = {}", maxConns);
+            logger.trace("connIdleTimeout = {} seconds", connIdleTimeout / 1000);
+            logger.trace("connBusyTimeout = {} seconds", connBusyTimeout / 1000);
+            logger.trace("connMaxAge = {} seconds", connMaxAge / 1000);
         }
     }
 
@@ -227,16 +227,13 @@ public class ConnectionPool {
                 cw.setReadyStatus();
                 connList.add(cw);
                 if (logger.isTraceEnabled()) {
-                    logger.trace("ConnectionPool[" + poolName + "](" + connList.size() + ") opening connection : "
-                            + cw.toString() + " " + reason);
+                    logger.trace("ConnectionPool[{}]({}) opening connection: {} {}", poolName, connList.size(), cw.toString(), reason);
                 }
             } catch (Exception e) {
-                logger.error("--->ConnectionPool[" + poolName + "](" + connList.size()
-                        + ") Attempt failed to create new connection " + reason + " " + e.getMessage());
+                logger.error("-->ConnectionPool[{}]({}) Attempt failed to create new connection: {} {}", poolName, connList.size(), reason, e.getMessage());
             }
         } else {
-            logger.warn("--->ConnectionPool[" + poolName + "](" + connList.size()
-                    + ") have overload for create new connection " + reason + " ");
+            logger.warn("-->ConnectionPool[{}]({})  have overload for create new connection: {}", poolName, connList.size(), reason);
         }
     }
 
