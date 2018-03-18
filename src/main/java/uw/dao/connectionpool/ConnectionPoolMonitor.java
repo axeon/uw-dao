@@ -144,7 +144,7 @@ class ConnectionPoolMonitor {
 							if (logger.isTraceEnabled()) {
 								logger.trace(" ***** ConnectionPool[" + pool.poolName + "](" + pool.connList.size()
 										+ ") Recycling connection " + String.valueOf(cw)
-										+ " by over connection busy timout!");
+                                        + " by over connection busy timeout!");
 							}
                             //强行关闭！
                             pool.connList.remove(cw);
@@ -154,7 +154,7 @@ class ConnectionPoolMonitor {
 							if (logger.isTraceEnabled()) {
 								logger.trace(" ***** ConnectionPool[" + pool.poolName + "](" + pool.connList.size()
 										+ ") Recycling connection " + String.valueOf(cw)
-										+ " by over connection idle timout!");
+                                        + " by over connection idle timeout!");
 							}
 							if (cw.trySetTestStatus()) {
 								pool.connList.remove(cw);
