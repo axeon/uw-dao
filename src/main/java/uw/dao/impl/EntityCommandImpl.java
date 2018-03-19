@@ -130,9 +130,9 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		return entity;
 	}
 	/**
@@ -203,6 +203,7 @@ public class EntityCommandImpl {
 					}
 				}
 			}
+            rs.close();
 		} catch (Exception e) {
 			exception = e.toString();
 			throw new TransactionException(connName + ": " + e.getMessage(), e);
@@ -221,9 +222,9 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
-		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, sb.toString(), id.toString(), rowNum, connTime, dbTime, allTime, exception);
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, sb.toString(), id.toString(), rowNum, connTime, dbTime, allTime, exception);
+        }
 		return entity;
 	}
 
@@ -287,6 +288,7 @@ public class EntityCommandImpl {
 					}
 				}
 			}
+            rs.close();
 		} catch (Exception e) {
 			exception = e.toString();
 			throw new TransactionException(connName + ": " + e.getMessage(), e);
@@ -305,9 +307,10 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
-		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), rowNum, connTime, dbTime, allTime, exception);
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), rowNum, connTime, dbTime, allTime, exception);
+        }
+
 		return entity;
 	}
 	/**
@@ -379,7 +382,6 @@ public class EntityCommandImpl {
 			long dbStart = System.currentTimeMillis();
 			effect = pstmt.executeUpdate();
 			dbTime = System.currentTimeMillis() - dbStart;
-
 		} catch (Exception e) {
 			exception = e.toString();
 			throw new TransactionException(connName + ": " + e.getMessage(), e);
@@ -398,9 +400,9 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, sb.toString(), entity.GET_UPDATED_INFO(), effect, connTime, dbTime, allTime, exception);
 		return effect;
 	}
 
@@ -476,9 +478,9 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, sb.toString(), "", effect, connTime, dbTime, allTime, exception);
 		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, sb.toString(), "", effect, connTime, dbTime, allTime, exception);
 		return effect;
 	}
 
@@ -564,7 +566,7 @@ public class EntityCommandImpl {
 				}
 				list.add(entity);
 			}
-
+            rs.close();
 		} catch (Exception e) {
 			exception = e.toString();
 			throw new TransactionException(connName + ": " + e.getMessage(), e);
@@ -583,9 +585,9 @@ public class EntityCommandImpl {
 					logger.error(e.getMessage(), e);
 				}
 			}
+            long allTime = System.currentTimeMillis() - start;
+            dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), list.size(), connTime, dbTime, allTime, exception);
 		}
-		long allTime = System.currentTimeMillis() - start;
-        dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), list.size(), connTime, dbTime, allTime, exception);
 		return new DataList<T>(list, startIndex, resultNum, allsize);
 	}
 
