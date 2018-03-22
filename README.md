@@ -17,7 +17,7 @@ uw-dao包是一个封装数据库操作的类库，比hibernate效率高，比my
 <dependency>
 	<groupId>com.umtone</groupId>
 	<artifactId>uw-dao</artifactId>
-	<version>3.3.0</version>
+	<version>3.3.5</version>
 </dependency>
 ```
 
