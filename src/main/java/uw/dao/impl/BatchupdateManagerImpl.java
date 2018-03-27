@@ -117,23 +117,24 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 	}
 
 	/**
-	 * 设置批量更新的数量.
-	 * 
-	 * @param batchSize
-	 *            数量
-	 */
-	public void setBatchSize(int batchSize) {
-		this.batchSize = batchSize;
-	}
-
-	/**
 	 * 获得批量更新的数量.
-	 * 
+     *
 	 * @return boolean
 	 */
-	public int getBatchSize() {
+    @Override
+    public int getBatchSize() {
 		return this.batchSize;
 	}
+
+    /**
+     * 设置批量更新的数量.
+     *
+     * @param batchSize 数量
+     */
+    @Override
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
+    }
 
 	/**
 	 * 获得是否在批量模式下.
@@ -185,7 +186,8 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public List<List<Integer>> submit() throws TransactionException {
+	@Override
+    public List<List<Integer>> submit() throws TransactionException {
 		PreparedStatement pstmt = null;
 		Object key = null;
 		Iterator<String> it = map.keySet().iterator();
@@ -233,7 +235,8 @@ public class BatchupdateManagerImpl implements BatchupdateManager {
 	 * 
 	 * @return sql列表
 	 */
-	public List<String> getBatchList() {
+	@Override
+    public List<String> getBatchList() {
 		ArrayList<String> sqllist = new ArrayList<String>(sizeMap.size());
 		Iterator<String> it = sizeMap.keySet().iterator();
 		while (it.hasNext()) {

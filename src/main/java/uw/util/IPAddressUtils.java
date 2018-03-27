@@ -1,14 +1,13 @@
 package uw.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ip工具类。用于获取本机内外网ip.
@@ -37,10 +36,12 @@ public class IPAddressUtils {
 				Enumeration<?> ase = ni.getInetAddresses();
 				while (ase.hasMoreElements()) {
 					InetAddress as = (InetAddress) ase.nextElement();
-					if (!(as instanceof Inet4Address))
+                    if (!(as instanceof Inet4Address)) {
 						continue;
-					if (as.getHostAddress().equals("127.0.0.1") || as.getHostAddress().startsWith("169.254"))
-						continue;
+                    }
+                    if (as.getHostAddress().equals("127.0.0.1") || as.getHostAddress().startsWith("169.254")) {
+                        continue;
+                    }
 					if (i == 0) {
 						internalHostName = internetHostName = as.getHostName();
 						internalHostAddress = internetHostAddress = as.getHostAddress();
@@ -131,8 +132,9 @@ public class IPAddressUtils {
 	public static long ipToLong(String strIp) {
 		String[] ips = strIp.split("\\.");
 		long[] ip = new long[4];
-		if (ips.length != 4)
-			return -1;
+        if (ips.length != 4) {
+            return -1;
+        }
 		try {
 			ip[0] = Long.parseLong(ips[0]);
 			ip[1] = Long.parseLong(ips[1]);

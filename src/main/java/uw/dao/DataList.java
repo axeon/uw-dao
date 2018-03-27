@@ -8,7 +8,8 @@ import java.util.List;
 
 /**
  * 组合了互联网应用常见列表所需数据的集合接口。 实现了iterator,Iterable.
- * 
+ *
+ * @author axeon
  * @param <T>
  *            映射的类型
  */
@@ -129,6 +130,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	 * 
 	 * @return 是否有下一条记录
 	 */
+	@Override
 	public boolean hasNext() {
 		return (currentIndex + 1 < this.size);
 	}
@@ -138,6 +140,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	 * 
 	 * @return 下一条记录
 	 */
+	@Override
 	public T next() {
 		if (currentIndex < this.size) {
 			currentIndex++;
@@ -169,6 +172,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	/**
 	 * 为了兼容List接口，不实现，不起作用。 抛出异常.
 	 */
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}
@@ -257,6 +261,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	 * 
 	 * @return Iterator列表
 	 */
+	@Override
 	public Iterator<T> iterator() {
 		return this;
 	}

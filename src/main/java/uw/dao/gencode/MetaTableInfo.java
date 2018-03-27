@@ -32,7 +32,8 @@ public class MetaTableInfo {
 	 * 
 	 * @return String
 	 */
-	public String toString() {
+    @Override
+    public String toString() {
 		return "MetaTableInfo:" + tableName + "," + tableType + "," + remarks;
 	}
 

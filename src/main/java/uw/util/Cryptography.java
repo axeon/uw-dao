@@ -1,18 +1,17 @@
 package uw.util;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 /**
  * 基础加密算法类。当前支持des3,md5。
@@ -196,8 +195,9 @@ public class Cryptography {
 		}
 		int sourceCount = sourceByte.length;
 		int keyCount = keyByte.length;
-		for (int i = 0; i < sourceCount; i++)
-			sourceByte[i] ^= keyByte[i % keyCount];
+        for (int i = 0; i < sourceCount; i++) {
+            sourceByte[i] ^= keyByte[i % keyCount];
+        }
 		return BASE64Encrypt(sourceByte);
 	}
 
@@ -233,8 +233,9 @@ public class Cryptography {
 		}
 		int sourceCount = sourceByte.length;
 		int keyCount = keyByte.length;
-		for (int i = 0; i < sourceCount; i++)
-			sourceByte[i] ^= keyByte[i % keyCount];
+        for (int i = 0; i < sourceCount; i++) {
+            sourceByte[i] ^= keyByte[i % keyCount];
+        }
 		String source = null;
 		try {
 			return new String(sourceByte, encoding);
@@ -277,8 +278,9 @@ public class Cryptography {
 		// 中值重排
 		char[] encChar2 = new char[count];
 		int j = 0;
-		if (ismod)
-			mid--;
+        if (ismod) {
+            mid--;
+        }
 		encChar2[j++] = encChar1[mid];
 		for (int i = 1; i <= mid; i++) {
 			encChar2[j++] = encChar1[mid + i];
@@ -313,8 +315,9 @@ public class Cryptography {
 		char[] sourceChar = input.toCharArray();
 		char[] encChar1 = new char[count];
 		int j = 0;
-		if (ismod)
-			count--;
+        if (ismod) {
+            count--;
+        }
 		for (int i = count - 1; i >= 0; i = i - 2) {
 			checksum += encChar1[j++] = sourceChar[i];
 		}
@@ -340,10 +343,11 @@ public class Cryptography {
 			i += 8;
 		}
 		// 校验sum
-		if (sum == checksum)
+        if (sum == checksum) {
 			return new String(encChar2);
-		else
-			return null;
+        } else {
+            return null;
+        }
 	}
 
 	/**
@@ -357,8 +361,9 @@ public class Cryptography {
 		String stmp = null;
 		for (int n = 0; n < b.length; n++) {
 			stmp = Integer.toHexString(b[n] & 0XFF);
-			if (stmp.length() == 1)
-				sb.append('0');
+            if (stmp.length() == 1) {
+                sb.append('0');
+            }
 			sb.append(stmp);
 		}
 		return sb.toString().toUpperCase();

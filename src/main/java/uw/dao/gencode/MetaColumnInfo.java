@@ -107,7 +107,8 @@ public class MetaColumnInfo {
 	 * 
 	 * @return String
 	 */
-	public String toString() {
+    @Override
+    public String toString() {
 		return "MetaColumnInfo:" + columnName + "," + dataType + "," + typeName + "," + columnSize + "," + remarks + ","
 				+ isNullable + "," + isAutoIncrement;
 	}

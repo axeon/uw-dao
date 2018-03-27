@@ -1,20 +1,15 @@
 package uw.dao.gencode;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uw.dao.connectionpool.ConnectionManager;
+import uw.dao.util.DaoStringUtils;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import uw.dao.connectionpool.ConnectionManager;
-import uw.dao.util.DaoStringUtils;
 
 /**
  * 数据库信息的工具类.
@@ -59,7 +54,8 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 	 * @throws SQLException
 	 *             SQL异常
 	 */
-	public Connection getConnection() throws SQLException {
+    @Override
+    public Connection getConnection() throws SQLException {
 		if (CONN_NAME == null || CONN_NAME.equals("")) {
 			return ConnectionManager.getConnection();
 		} else {
@@ -74,7 +70,8 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 	 *            表集合
 	 * @return 表信息的列表
 	 */
-	public List<MetaTableInfo> getTablesAndViews(Set<String> tables) {
+    @Override
+    public List<MetaTableInfo> getTablesAndViews(Set<String> tables) {
 		Connection conn = null;
 		ResultSet rs = null;
 		List<MetaTableInfo> list = new ArrayList<MetaTableInfo>();
@@ -123,7 +120,8 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 	 * @throws Exception
 	 *             异常
 	 */
-	public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
+    @Override
+    public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
 		Connection conn = null;
 		ResultSet rs = null;
 		List<MetaColumnInfo> list = new ArrayList<MetaColumnInfo>();
@@ -224,7 +222,8 @@ public class MySQLDataMetaImpl implements TableMetaInterface {
 	 * @throws Exception
 	 *             异常
 	 */
-	public List<MetaPrimaryKeyInfo> getPrimaryKey(String tableName) {
+    @Override
+    public List<MetaPrimaryKeyInfo> getPrimaryKey(String tableName) {
 		Connection conn = null;
 		ResultSet rs = null;
 		List<MetaPrimaryKeyInfo> list = new ArrayList<MetaPrimaryKeyInfo>();

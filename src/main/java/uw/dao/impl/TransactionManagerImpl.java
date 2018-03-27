@@ -66,7 +66,8 @@ public class TransactionManagerImpl implements TransactionManager {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public void commit() throws TransactionException {
+    @Override
+    public void commit() throws TransactionException {
 		Connection conn = null;
 		boolean exception = false;
 		if (connmap == null) {
@@ -165,25 +166,39 @@ public class TransactionManagerImpl implements TransactionManager {
 	 *             事务异常
 	 * @return 事务级别
 	 */
-	public int getTransactionIsolation() {
+    @Override
+    public int getTransactionIsolation() {
 		return this.isolation;
 	}
 
-	/**
-	 * 获得当前是否是自动提交状态.
-	 * 
-	 * @return boolean
-	 */
-	public boolean isAutoCommit() {
-		return autoCommit;
-	}
+    /**
+     * 设置事务级别.
+     *
+     * @param level 级别
+     * @throws TransactionException 事务异常
+     */
+    @Override
+    public void setTransactionIsolation(int level) {
+        this.isolation = level;
+    }
+
+    /**
+     * 获得当前是否是自动提交状态.
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean isAutoCommit() {
+        return autoCommit;
+    }
 
 	/**
 	 * 回滚该事务,对使用的Connection统一回滚.
-	 * 
+	 *
 	 * @throws TransactionException
 	 *             事务异常
 	 */
+	@Override
 	public void rollback() throws TransactionException {
 		Connection conn = null;
 		boolean exception = false;
@@ -214,18 +229,6 @@ public class TransactionManagerImpl implements TransactionManager {
 		}
 		this.autoCommit = true;
 		connmap = null;
-	}
-
-	/**
-	 * 设置事务级别.
-	 * 
-	 * @param level
-	 *            级别
-	 * @throws TransactionException
-	 *             事务异常
-	 */
-	public void setTransactionIsolation(int level) {
-		this.isolation = level;
 	}
 
 	/**

@@ -18,6 +18,7 @@ public class OracleDialect extends Dialect {
 	 *            结果集大小
 	 * @return
 	 */
+	@Override
 	public Object[] getPagedSQL(String sql, int startPos, int resultNum) {
 		return new Object[] {
 				"select * from (select sub.*, rownum rnum from ( " + sql + " ) sub where rownum <= ?) where rnum > ?",

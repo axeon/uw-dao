@@ -1,25 +1,16 @@
 package uw.dao.gencode;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
 import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.connectionpool.ConnectionWrapper;
 import uw.dao.util.DaoStringUtils;
+
+import java.sql.*;
+import java.util.*;
 
 /**
  * Oracle表生成信息处理.
@@ -77,7 +68,8 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	 * 
 	 * @return Connection对象
 	 */
-	public Connection getConnection() throws SQLException {
+    @Override
+    public Connection getConnection() throws SQLException {
 		if (CONN_NAME == null || CONN_NAME.equals("")) {
 			return ConnectionManager.getConnection();
 		} else {
@@ -92,7 +84,8 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	 *            表集合
 	 * @return 表信息的列表
 	 */
-	public List<MetaTableInfo> getTablesAndViews(Set<String> tables) {
+    @Override
+    public List<MetaTableInfo> getTablesAndViews(Set<String> tables) {
 		List<MetaTableInfo> list = new ArrayList<MetaTableInfo>();
 		for (String tableName : tables) {
 			try {
@@ -138,7 +131,8 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	 * @return 表字段信息的列表
 	 * @throws Exception
 	 */
-	public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
+    @Override
+    public List<MetaColumnInfo> getColumnList(String tableName, List<MetaPrimaryKeyInfo> pklist) {
         Connection conn = null;
         ResultSet rs = null;
         List<MetaColumnInfo> list = new ArrayList<MetaColumnInfo>();
@@ -252,7 +246,8 @@ public class OracleDataMetaImpl implements TableMetaInterface {
 	 * @throws Exception
 	 *             异常
 	 */
-	public List<MetaPrimaryKeyInfo> getPrimaryKey(String tableName) {
+    @Override
+    public List<MetaPrimaryKeyInfo> getPrimaryKey(String tableName) {
 		List<MetaPrimaryKeyInfo> list = new ArrayList<MetaPrimaryKeyInfo>();
 		try {
 			String sql = "SELECT\n" + "	\"SYS\".\"ALL_CONS_COLUMNS\".\"OWNER\",\n"

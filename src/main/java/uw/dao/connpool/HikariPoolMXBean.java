@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2013 Brett Wooldridge
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package uw.dao.connpool;
 
 /**
@@ -22,17 +6,44 @@ package uw.dao.connpool;
  * @author Brett Wooldridge
  */
 public interface HikariPoolMXBean {
+
+    /**
+     * 当前空闲连接数。
+     *
+     * @return
+     */
     int getIdleConnections();
 
+    /**
+     * 当前使用中连接数。
+     * @return
+     */
     int getActiveConnections();
 
+    /**
+     * 总连接数。
+     * @return
+     */
     int getTotalConnections();
 
+    /**
+     * 等待线程数。
+     * @return
+     */
     int getThreadsAwaitingConnection();
 
+    /**
+     * softEvict连接数。
+     */
     void softEvictConnections();
 
+    /**
+     * 暂停连接池。
+     */
     void suspendPool();
 
+    /**
+     * 继续连接池.
+     */
     void resumePool();
 }

@@ -18,6 +18,7 @@ public class MySQLDialect extends Dialect {
 	 *            结果集大小
 	 * @return
 	 */
+	@Override
 	public Object[] getPagedSQL(String sql, int startPos, int resultNum) {
 		return new Object[] { sql + " limit ?,?", startPos, resultNum };
 	}

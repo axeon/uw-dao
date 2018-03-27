@@ -337,9 +337,9 @@ public class HikariConfig implements HikariConfigMXBean {
      * @param catalog the catalog name, or null
      */
     public void setCatalog(String catalog) {
-        if (sealed)
+        if (sealed) {
             throw new IllegalStateException("The configuration of the pool is sealed once started.  Use HikariConfigMXBean for runtime changes.");
-
+        }
         this.catalog = catalog;
     }
 

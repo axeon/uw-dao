@@ -38,7 +38,8 @@ public class MetaPrimaryKeyInfo {
 	 * 
 	 * @return String
 	 */
-	public String toString() {
+    @Override
+    public String toString() {
 		return "MetaPrimaryKeyInfo:" + tableName + "," + columnName + "," + keySeq + "," + pkName;
 	}
 

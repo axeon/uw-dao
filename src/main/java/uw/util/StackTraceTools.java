@@ -31,8 +31,9 @@ public class StackTraceTools {
 			BufferedReader ins = new BufferedReader(read);
 			String dataLine = "";
 			while (null != (dataLine = ins.readLine())) {
-				if (dataLine.length() < 1)
-					continue;
+                if (dataLine.length() < 1) {
+                    continue;
+                }
 				if (dataLine.charAt(0) != '\t') {
 					if (dataLine.indexOf("Exception") == -1 && dataLine.indexOf("Error") == -1) {
 						continue;

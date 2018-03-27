@@ -97,7 +97,8 @@ public class SqlExecuteStats {
 	 * 
 	 * @return String
 	 */
-	public String toString() {
+    @Override
+    public String toString() {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
 	}
 

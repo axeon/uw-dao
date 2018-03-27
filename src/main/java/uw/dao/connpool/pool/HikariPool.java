@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2013,2014 Brett Wooldridge
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package uw.dao.connpool.pool;
 
 import com.codahale.metrics.MetricRegistry;
@@ -76,7 +60,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     private ScheduledFuture<?> houseKeeperTask;
 
     /**
-     * Construct a HikariPool with the specified configuration.
+     * 构造一个连接池服务。
      *
      * @param config a HikariConfig instance
      */
@@ -85,9 +69,9 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
 
         this.connectionBag = new ConcurrentBag<>(this);
         this.suspendResumeLock = config.isAllowPoolSuspension() ? new SuspendResumeLock() : SuspendResumeLock.FAUX_LOCK;
-
+        //house keeping服务。
         this.houseKeepingExecutorService = initializeHouseKeepingExecutorService();
-
+        //检查数据库是否可连接
         checkFailFast();
 
         if (config.getMetricsTrackerFactory() != null) {
@@ -102,13 +86,15 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
 
         ThreadFactory threadFactory = config.getThreadFactory();
 
+        //增加连接池的队列
         LinkedBlockingQueue<Runnable> addConnectionQueue = new LinkedBlockingQueue<>(config.getMaximumPoolSize());
         this.addConnectionQueue = unmodifiableCollection(addConnectionQueue);
         this.addConnectionExecutor = createThreadPoolExecutor(addConnectionQueue, poolName + " connection adder", threadFactory, new ThreadPoolExecutor.DiscardPolicy());
+        //关闭连接池的服务。
         this.closeConnectionExecutor = createThreadPoolExecutor(config.getMaximumPoolSize(), poolName + " connection closer", threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
-
+        //连接池泄漏服务
         this.leakTaskFactory = new ProxyLeakTaskFactory(config.getLeakDetectionThreshold(), houseKeepingExecutorService);
-
+        //后台维护服务
         this.houseKeeperTask = houseKeepingExecutorService.scheduleWithFixedDelay(new HouseKeeper(), 100L, HOUSEKEEPING_PERIOD_MS, MILLISECONDS);
 
         if (Boolean.getBoolean("com.zaxxer.hikari.blockUntilFilled") && config.getInitializationFailTimeout() > 1) {
@@ -120,7 +106,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Get a connection from the pool, or timeout after connectionTimeout milliseconds.
+     * 获得一个连接。
      *
      * @return a java.sql.Connection instance
      * @throws SQLException thrown if a timeout occurs trying to obtain a connection
@@ -130,7 +116,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Get a connection from the pool, or timeout after the specified number of milliseconds.
+     * 获得一个连接，可指定超时时间。
      *
      * @param hardTimeout the maximum time to wait for a connection from the pool
      * @return a java.sql.Connection instance
@@ -392,7 +378,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Permanently close the real (underlying) connection (eat any exception).
+     * 永久关闭一个连接。
      *
      * @param poolEntry     poolEntry having the connection to close
      * @param closureReason reason to close
@@ -420,6 +406,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     // ***********************************************************************
 
     /**
+     * 创建一个PoolEntry。
      * Creating new poolEntry.  If maxLifetime is configured, create a future End-of-life task with 2.5% variance from
      * the maxLifetime time to ensure there is no massive die-off of Connections in the pool.
      */
@@ -451,6 +438,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
+     * 填充连接池。
      * Fill pool up from current idle connections (as they are perceived at the point of execution) to minimumIdle connections.
      */
     private synchronized void fillPool() {
@@ -462,7 +450,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Attempt to abort or close active connections.
+     * 尝试终止或关闭活动连接。
      *
      * @param assassinExecutor the ExecutorService to pass to Connection.abort()
      */
@@ -480,7 +468,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * If initializationFailFast is configured, check that we have DB connectivity.
+     * 快速检查数据库可连接性。
      *
      * @throws PoolInitializationException if fails to create or validate connection
      * @see HikariConfig#setInitializationFailTimeout(long)
@@ -553,9 +541,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Create/initialize the Housekeeping service {@link ScheduledExecutorService}.  If the user specified an Executor
-     * to be used in the {@link HikariConfig}, then we use that.  If no Executor was specified (typical), then create
-     * an Executor and configure it.
+     * 创建/初始化houseKeeping服务。
      *
      * @return either the user specified {@link ScheduledExecutorService}, or the one we created
      */
@@ -647,7 +633,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * Creating and adding poolEntries (connections) to the pool.
+     * 异步创建连接线程。
      */
     private final class PoolEntryCreator implements Callable<Boolean> {
         private final String loggingPrefix;
@@ -691,7 +677,7 @@ public final class HikariPool extends PoolBase implements HikariPoolMXBean, Conc
     }
 
     /**
-     * The house keeping task to retire and maintain minimum idle connections.
+     * House Keeping后台线程，用于维护最小连接数。
      */
     private final class HouseKeeper implements Runnable {
         private volatile long previous = plusMillis(currentTime(), -HOUSEKEEPING_PERIOD_MS);
