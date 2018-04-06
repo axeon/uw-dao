@@ -34,12 +34,12 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	private ${column.propertyType} ${column.propertyName};
 </#list>
 
-	/*
+	/**
 	 * 轻量级状态下更新列表list.
 	 */
 	public transient Set<String> _UPDATED_COLUMN = null;
-		
-	/*
+
+    /**
 	 * 更新的信息.
 	 */
 	private transient StringBuilder _UPDATED_INFO = null;
@@ -48,6 +48,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 获得更改的字段列表.
 	 */
+    @Override
 	public Set<String> GET_UPDATED_COLUMN() {
 		return _UPDATED_COLUMN;
 	}
@@ -55,6 +56,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 得到_UPDATED_INFO.
 	 */
+        @Override
 	public String GET_UPDATED_INFO() {
 		if (this._UPDATED_INFO == null) {
 			return null;
@@ -110,6 +112,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 重载toString方法.
 	 */
+            @Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 <#list columnList as column>
