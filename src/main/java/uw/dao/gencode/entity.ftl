@@ -35,8 +35,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 轻量级状态下更新列表list.
 	 */
-	public transient Set
-<String> UPDATED_COLUMN = null;
+	public transient Set<String> UPDATED_COLUMN = null;
 
     /**
 	 * 更新的信息.
@@ -52,21 +51,21 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	}
 
 	/**
-        * 得到_INFO.
+     * 得到_INFO.
 	 */
-        @Override
+    @Override
 	public String GET_UPDATED_INFO() {
         if (this.UPDATED_INFO == null) {
 			return null;
 		} else {
-        return this.UPDATED_INFO.toString();
+            return this.UPDATED_INFO.toString();
 		}
 	}
 
-	/**
-        * 清理_INFO和UPDATED_COLUMN信息.
-	 */
-        public void CLEARUPDATED_INFO() {
+    /**
+     * 清理_INFO和UPDATED_COLUMN信息.
+     */
+    public void CLEARUPDATED_INFO() {
         UPDATED_COLUMN = null;
         UPDATED_INFO = null;
 	}
@@ -97,14 +96,13 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	 * 设置<#if column.remarks??>${column.remarks}</#if>。
 	 */
 	public void set${column.propertyName?cap_first}(${column.propertyType} ${column.propertyName}){
-		
 		if ((!String.valueOf(this.${column.propertyName}).equals(String.valueOf(${column.propertyName})))) {
 			if (this.UPDATED_COLUMN == null) {
 				_INIT_UPDATE_INFO();
 			}
 			this.UPDATED_COLUMN.add("${column.columnName}");
 			this.UPDATED_INFO.append("${column.columnName}:\"" + this.${column.propertyName}+ "\"=>\""
-    + ${column.propertyName} + "\"\r\n");
+                + ${column.propertyName} + "\"\r\n");
 			this.${column.propertyName} = ${column.propertyName};
 		}
 	}
