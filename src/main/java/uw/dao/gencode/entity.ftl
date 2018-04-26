@@ -21,9 +21,7 @@ import uw.dao.annotation.TableMeta;
 @TableMeta(tableName="${tableMeta.tableName}",tableType="${tableMeta.tableType}")
 @ApiModel(value = "${tableMeta.tableName}的实体类", description = "${tableMeta.tableName}的实体类")
 public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializable{
-	
-	private static final long serialVersionUID = 1L;
-	
+
 <#list columnList as column>
 
 	/**
@@ -37,48 +35,50 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 轻量级状态下更新列表list.
 	 */
-	public transient Set<String> _UPDATED_COLUMN = null;
+	public transient Set
+<String> UPDATED_COLUMN = null;
 
     /**
 	 * 更新的信息.
 	 */
-	private transient StringBuilder _UPDATED_INFO = null;
+    private transient StringBuilder UPDATED_INFO = null;
 
-		
 	/**
 	 * 获得更改的字段列表.
 	 */
     @Override
 	public Set<String> GET_UPDATED_COLUMN() {
-		return _UPDATED_COLUMN;
+        return UPDATED_COLUMN;
 	}
 
 	/**
-	 * 得到_UPDATED_INFO.
+        * 得到_INFO.
 	 */
         @Override
 	public String GET_UPDATED_INFO() {
-		if (this._UPDATED_INFO == null) {
+        if (this.UPDATED_INFO == null) {
 			return null;
 		} else {
-			return this._UPDATED_INFO.toString();
+        return this.UPDATED_INFO.toString();
 		}
 	}
 
 	/**
-	 * 清理_UPDATED_INFO和_UPDATED_COLUMN信息.
+        * 清理_INFO和UPDATED_COLUMN信息.
 	 */
-	public void CLEAR_UPDATED_INFO() {
-		_UPDATED_COLUMN = null;
-		_UPDATED_INFO = null;
+        public void CLEARUPDATED_INFO() {
+        UPDATED_COLUMN = null;
+        UPDATED_INFO = null;
 	}
 	
 	/**
 	 * 初始化set相关的信息.
 	 */
 	private void _INIT_UPDATE_INFO() {
-		this._UPDATED_COLUMN = new HashSet<String>();
-		this._UPDATED_INFO = new StringBuilder("表${tableMeta.tableName}主键\"" + <#list pkList as pk>this.${pk.propertyName}+ </#list>"\"更新为:\r\n");
+        this.UPDATED_COLUMN = new HashSet
+        <String>();
+            this.UPDATED_INFO = new StringBuilder("表${tableMeta.tableName}主键\"" + <#list pkList as pk>
+            this.${pk.propertyName}+ </#list>"\"更新为:\r\n");
 	}	
 
 <#list columnList as column>
@@ -99,11 +99,12 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	public void set${column.propertyName?cap_first}(${column.propertyType} ${column.propertyName}){
 		
 		if ((!String.valueOf(this.${column.propertyName}).equals(String.valueOf(${column.propertyName})))) {
-			if (this._UPDATED_COLUMN == null) {
+			if (this.UPDATED_COLUMN == null) {
 				_INIT_UPDATE_INFO();
 			}
-			this._UPDATED_COLUMN.add("${column.columnName}");
-			this._UPDATED_INFO.append("${column.columnName}:\"" + this.${column.propertyName}+ "\"=>\"" + ${column.propertyName} + "\"\r\n");
+			this.UPDATED_COLUMN.add("${column.columnName}");
+			this.UPDATED_INFO.append("${column.columnName}:\"" + this.${column.propertyName}+ "\"=>\""
+    + ${column.propertyName} + "\"\r\n");
 			this.${column.propertyName} = ${column.propertyName};
 		}
 	}
