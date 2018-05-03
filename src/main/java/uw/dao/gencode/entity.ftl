@@ -111,7 +111,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 重载toString方法.
 	 */
-            @Override
+    @Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 <#list columnList as column>
