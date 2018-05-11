@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * DAOFactory实现类.
@@ -670,7 +671,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T load(Class<T> cls, Serializable id) throws TransactionException {
+	public <T> Optional<T> load(Class<T> cls, Serializable id) throws TransactionException {
 		return EntityCommandImpl.load(this, null, cls, null, id);
 	}
 
@@ -690,7 +691,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T load(Class<T> cls, String tableName, Serializable id) throws TransactionException {
+	public <T> Optional<T> load(Class<T> cls, String tableName, Serializable id) throws TransactionException {
 		return EntityCommandImpl.load(this, null, cls, tableName, id);
 	}
 
@@ -710,7 +711,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T load(String connName, Class<T> cls, Serializable id) throws TransactionException {
+	public <T> Optional<T> load(String connName, Class<T> cls, Serializable id) throws TransactionException {
 		return EntityCommandImpl.load(this, connName, cls, null, id);
 	}
 
@@ -732,7 +733,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T load(String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
+	public <T> Optional<T> load(String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
 		return EntityCommandImpl.load(this, connName, cls, tableName, id);
 	}
 
@@ -1072,7 +1073,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleObject(Class<T> cls, String selectsql) throws TransactionException {
+	public <T> Optional<T> queryForSingleObject(Class<T> cls, String selectsql) throws TransactionException {
 		return EntityCommandImpl.listSingle(this, null, cls, selectsql, null);
 	}
 
@@ -1092,7 +1093,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleObject(String connName, Class<T> cls, String selectsql) throws TransactionException {
+	public <T> Optional<T> queryForSingleObject(String connName, Class<T> cls, String selectsql) throws TransactionException {
 		return EntityCommandImpl.listSingle(this, connName, cls, selectsql, null);
 	}
 
@@ -1112,7 +1113,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleObject(Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
+	public <T> Optional<T> queryForSingleObject(Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
 		return EntityCommandImpl.listSingle(this, null, cls, selectsql, paramList);
 	}
 
@@ -1134,7 +1135,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleObject(String connName, Class<T> cls, String selectsql, Object[] paramList)
+	public <T> Optional<T> queryForSingleObject(String connName, Class<T> cls, String selectsql, Object[] paramList)
 			throws TransactionException {
 		return EntityCommandImpl.listSingle(this, connName, cls, selectsql, paramList);
 	}
@@ -1155,7 +1156,6 @@ public class DAOFactoryImpl extends DaoFactory {
 	@Override
 	public <T> T queryForSingleValue(Class<T> cls, String sql) throws TransactionException {
 		return SQLCommandImpl.selectForSingleValue(this, null, cls, sql, null);
-
 	}
 
 	/**

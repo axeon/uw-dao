@@ -20,10 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * 实体类命令实现.
@@ -146,7 +143,7 @@ public class EntityCommandImpl {
 	 * @return 实体类
 	 * @throws TransactionException 事务异常
 	 */
-	public static <T> T load(DAOFactoryImpl dao, String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
+	public static <T> Optional<T> load(DAOFactoryImpl dao, String connName, Class<T> cls, String tableName, Serializable id) throws TransactionException {
 		long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;
         int connId = 0, rowNum = 0;
@@ -225,7 +222,7 @@ public class EntityCommandImpl {
             long allTime = System.currentTimeMillis() - start;
             dao.addSqlExecuteStats(connName, connId, sb.toString(), id.toString(), rowNum, connTime, dbTime, allTime, exception);
         }
-		return entity;
+		return Optional.ofNullable(entity);
 	}
 
 	/**
@@ -239,7 +236,7 @@ public class EntityCommandImpl {
 	 * @return 实体类
 	 * @throws TransactionException 事务异常
 	 */
-	public static <T> T listSingle(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
+	public static <T> Optional<T> listSingle(DAOFactoryImpl dao, String connName, Class<T> cls, String selectsql, Object[] paramList) throws TransactionException {
 		long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;
         int connId = 0, rowNum = 0;
@@ -310,8 +307,7 @@ public class EntityCommandImpl {
             long allTime = System.currentTimeMillis() - start;
             dao.addSqlExecuteStats(connName, connId, selectsql, Arrays.toString(paramList), rowNum, connTime, dbTime, allTime, exception);
         }
-
-		return entity;
+		return Optional.ofNullable(entity);
 	}
 	/**
 	 * 保存一个实体.

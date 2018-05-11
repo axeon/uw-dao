@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 整个Dao模块的入口，所有数据库操作都从这个类开始.
@@ -508,7 +509,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T load(Class<T> cls, Serializable id) throws TransactionException;
+	public abstract <T> Optional<T> load(Class<T> cls, Serializable id) throws TransactionException;
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
@@ -525,7 +526,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T load(Class<T> cls, String tableName, Serializable id) throws TransactionException;
+	public abstract <T> Optional<T> load(Class<T> cls, String tableName, Serializable id) throws TransactionException;
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
@@ -542,7 +543,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T load(String connName, Class<T> cls, Serializable id) throws TransactionException;
+	public abstract <T> Optional<T> load(String connName, Class<T> cls, Serializable id) throws TransactionException;
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
@@ -561,7 +562,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T load(String connName, Class<T> cls, String tableName, Serializable id)
+	public abstract <T> Optional<T> load(String connName, Class<T> cls, String tableName, Serializable id)
 			throws TransactionException;
 
 	/**
@@ -853,7 +854,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleObject(Class<T> cls, String selectsql) throws TransactionException;
+	public abstract <T> Optional<T> queryForSingleObject(Class<T> cls, String selectsql) throws TransactionException;
 
 	/**
 	 * 查询单个对象（单行数据）。 使用sql中探测到的表名来决定连接名.
@@ -870,7 +871,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleObject(Class<T> cls, String selectsql, Object[] paramList)
+	public abstract <T> Optional<T> queryForSingleObject(Class<T> cls, String selectsql, Object[] paramList)
 			throws TransactionException;
 
 	/**
@@ -888,7 +889,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleObject(String connName, Class<T> cls, String selectsql)
+	public abstract <T> Optional<T> queryForSingleObject(String connName, Class<T> cls, String selectsql)
 			throws TransactionException;
 
 	/**
@@ -908,7 +909,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleObject(String connName, Class<T> cls, String selectsql, Object[] paramList)
+	public abstract <T> Optional<T> queryForSingleObject(String connName, Class<T> cls, String selectsql, Object[] paramList)
 			throws TransactionException;
 
 	/**
