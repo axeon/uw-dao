@@ -514,7 +514,10 @@ public class EntityCommandImpl {
 
 		if (autoCount) {
 			String countsql = "select count(1) from (" + selectsql + ") must_alias";
-			allsize = SQLCommandImpl.selectForSingleValue(dao, connName, int.class, countsql, paramList);
+            Optional<Integer> countOptional = SQLCommandImpl.selectForSingleValue(dao, connName, Integer.class, countsql, paramList);
+            if(countOptional.isPresent()){
+                allsize = countOptional.get();
+            }
 		}
 
 		List<T> list = new ArrayList<T>();

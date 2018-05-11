@@ -925,7 +925,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleValue(Class<T> cls, String sql) throws TransactionException;
+	public abstract <T> Optional<T> queryForSingleValue(Class<T> cls, String sql) throws TransactionException;
 
 	/**
 	 * 查询单个基本数值（单个字段）.
@@ -942,7 +942,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleValue(Class<T> cls, String sql, Object[] paramList) throws TransactionException;
+	public abstract <T> Optional<T> queryForSingleValue(Class<T> cls, String sql, Object[] paramList) throws TransactionException;
 
 	/**
 	 * 查询单个基本数值（单个字段）.
@@ -959,7 +959,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleValue(String connName, Class<T> cls, String sql) throws TransactionException;
+	public abstract <T> Optional<T> queryForSingleValue(String connName, Class<T> cls, String sql) throws TransactionException;
 
 	/**
 	 * 查询单个基本数值（单个字段）.
@@ -978,7 +978,7 @@ public abstract class DaoFactory {
 	 * @throws TransactionException
 	 *             事务异常
 	 */
-	public abstract <T> T queryForSingleValue(String connName, Class<T> cls, String sql, Object[] paramList)
+	public abstract <T> Optional<T> queryForSingleValue(String connName, Class<T> cls, String sql, Object[] paramList)
 			throws TransactionException;
 
 	/**

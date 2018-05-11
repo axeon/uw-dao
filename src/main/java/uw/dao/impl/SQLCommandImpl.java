@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 为了更为高效的执行数据库命令，是该类产生的根本原因。 具体使用请自行参照源代码.
@@ -40,7 +41,7 @@ public class SQLCommandImpl {
      * @throws TransactionException 事务异常
      */
     @SuppressWarnings("unchecked")
-    public static final <T> T selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectSql,
+    public static final <T> Optional<T> selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectSql,
                                                    Object[] paramList) throws TransactionException {
         long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;
@@ -111,8 +112,7 @@ public class SQLCommandImpl {
             dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), value == null ? 0 : 1, connTime, dbTime, allTime,
                     exception);
         }
-
-        return (T) value;
+        return Optional.ofNullable((T) value);
     }
 
     /**
@@ -247,7 +247,10 @@ public class SQLCommandImpl {
         int allsize = 0;
         if (autoCount) {
             String countsql = "select count(1) from (" + selectSql + ") must_alias";
-            allsize = SQLCommandImpl.selectForSingleValue(dao, connName, int.class, countsql, paramList);
+            Optional<Integer> countOptional = SQLCommandImpl.selectForSingleValue(dao, connName, Integer.class, countsql, paramList);
+            if(countOptional.isPresent()){
+                allsize = countOptional.get();
+            }
         }
 
         DataSet ds = null;

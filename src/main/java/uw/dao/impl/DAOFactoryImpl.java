@@ -1154,7 +1154,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleValue(Class<T> cls, String sql) throws TransactionException {
+	public <T> Optional<T> queryForSingleValue(Class<T> cls, String sql) throws TransactionException {
 		return SQLCommandImpl.selectForSingleValue(this, null, cls, sql, null);
 	}
 
@@ -1174,7 +1174,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleValue(String connName, Class<T> cls, String sql) throws TransactionException {
+	public <T> Optional<T> queryForSingleValue(String connName, Class<T> cls, String sql) throws TransactionException {
 		return SQLCommandImpl.selectForSingleValue(this, connName, cls, sql, null);
 	}
 
@@ -1194,7 +1194,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleValue(Class<T> cls, String sql, Object[] paramList) throws TransactionException {
+	public <T> Optional<T> queryForSingleValue(Class<T> cls, String sql, Object[] paramList) throws TransactionException {
 		return SQLCommandImpl.selectForSingleValue(this, null, cls, sql, paramList);
 	}
 
@@ -1216,7 +1216,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> T queryForSingleValue(String connName, Class<T> cls, String sql, Object[] paramList)
+	public <T> Optional<T> queryForSingleValue(String connName, Class<T> cls, String sql, Object[] paramList)
 			throws TransactionException {
 		return SQLCommandImpl.selectForSingleValue(this, connName, cls, sql, paramList);
 	}
