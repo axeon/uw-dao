@@ -294,5 +294,5 @@ sequence由poolSys下的sys_sequence表维护，对于插入频繁的表，请�
 ```
 
 # DataList VS DataSet
-DataList用于DataEntity，优先使用。
-DataSet用于兼容代码，性能略低于DataList。
+*  DataList优于DataEntity，优先使用;
+*  DataSet用于兼容代码，性能略低于DataList
