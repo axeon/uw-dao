@@ -96,7 +96,7 @@ DAOFactory dao = DAOFactory.getInstance();
 
 
 ```java
-public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 		//需要生成代码的包名
 		CodeGen.PACKAGE_NAME="zentao.pms.entity";
 		//需要生成代码的位置
@@ -119,7 +119,7 @@ public static void main(String[] args) throws Exception {
 
 
 ```java
-/**
+    /**
 	 * 保存一个Entity实例，等效于insert。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param entity 要更新的对象
@@ -135,7 +135,7 @@ public static void main(String[] args) throws Exception {
 ## 修改一条记录
 
 ```java
-/**
+    /**
 	 * 根据主键更新一个Entity实例，等效于update。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param entity 要更新的对象
@@ -150,7 +150,7 @@ public static void main(String[] args) throws Exception {
 ## 删除一条记录
 
 ```java
-/**
+    /**
 	 * 根据主键删除一个Entity实例，等效于delete。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param entity 要更新的对象
@@ -165,7 +165,7 @@ public static void main(String[] args) throws Exception {
 ## 载入一条记录
 
 ```java
-/**
+    /**
 	 * 根据指定的主键ID载入一个Entity实例。
 	 * @param cls 要映射的对象类型
 	 * @param tableName 指定表名
@@ -179,8 +179,8 @@ public static void main(String[] args) throws Exception {
 
 ## 查询
 
-```
-/**
+```java
+    /**
 	 * 根据指定的映射类型，返回一个DataList列表。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls 要映射的对象类型
@@ -199,7 +199,7 @@ public static void main(String[] args) throws Exception {
 ## 执行返回单个对象的查询
 
 ```java
-/**
+    /**
 	 * 查询单个对象（单行数据）。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls 要映射的对象类型
@@ -216,7 +216,7 @@ public static void main(String[] args) throws Exception {
 ## 执行返回DataSet（多行多列）的查询
 
 ```java
-/**
+    /**
 	 * 返回一个DataSet数据列表。
 	 * 相比较DataList列表，这不是一个强类型列表，但是更加灵活。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
@@ -268,7 +268,7 @@ public static void main(String[] args) throws Exception {
 ## 执行任意sql语句
 
 ```java
-/**
+    /**
 	 * 执行一条SQL语句。
 	 * @param connName 连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql 查询的SQL
@@ -284,7 +284,7 @@ public static void main(String[] args) throws Exception {
 sequence由poolSys下的sys_sequence表维护，对于插入频繁的表，请注意提升increment的数值到100，可以提高sequence性能。
 
 ```java
-/**
+    /**
 	 * 根据表名来获得seq序列。
 	 * 此序列通过一个系统数据库来维护，可以保证在分布式下的可用性。
 	 * @param tablename
