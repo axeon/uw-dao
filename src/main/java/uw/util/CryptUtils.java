@@ -13,8 +13,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-import static uw.util.ByteHexUtils.byte2hex;
-
 /**
  * 基础加密算法类。当前支持des3,md5。
  * 
@@ -116,11 +114,28 @@ public class CryptUtils {
 
 	/**
 	 * MD5加密。
+	 *
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static final String MD5Encrypt(byte[] data) {
+		String edata = null;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			digest.update(data);
+			edata = byte2hex(digest.digest()).toLowerCase();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+		return edata;
+	}
+
+	/**
+	 * MD5加密。
 	 * 
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static final String MD5Encrypt(String data) {
-		String edata = data;
+		String edata = null;
 		try {
 			MessageDigest digest = MessageDigest.getInstance("MD5");
 			digest.update(data.getBytes("UTF-8"));
@@ -380,6 +395,43 @@ public class CryptUtils {
 		b64 = b64.replace('.', '/');
 		b64 = b64.replace('*', '=');
 		return b64;
+	}
+
+
+	/**
+	 * 十进制转十六进制
+	 *
+	 * @param b
+	 * @return
+	 */
+	public static String byte2hex(byte[] b) {
+		char[] hex = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+		char[] newChar = new char[b.length * 2];
+		for (int i = 0; i < b.length; i++) {
+			newChar[2 * i] = hex[(b[i] & 0xf0) >> 4];
+			newChar[2 * i + 1] = hex[b[i] & 0xf];
+		}
+		return new String(newChar);
+	}
+
+	/**
+	 * 十六进制字符串转十进制
+	 *
+	 * @param hexString
+	 * @return
+	 */
+	public static byte[] hex2byte(String hexString) {
+		if (hexString.length() % 2 != 0) {
+			throw new IllegalArgumentException("error");
+		}
+		char[] chars = hexString.toCharArray();
+		byte[] b = new byte[chars.length / 2];
+		for (int i = 0; i < b.length; i++) {
+			int high = Character.digit(chars[2 * i], 16) << 4;
+			int low = Character.digit(chars[2 * i + 1], 16);
+			b[i] = (byte) (high | low);
+		}
+		return b;
 	}
 
 }
