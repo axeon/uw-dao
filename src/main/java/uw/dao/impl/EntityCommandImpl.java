@@ -349,10 +349,10 @@ public class EntityCommandImpl {
 		sb.append(" where ");
 		for (int i = 0; i < pks.size(); i++) {
 			FieldMetaInfo fmi = pks.get(i);
-			sb.append(fmi.getColumnName()).append("=? ");
 			if (i > 0) {
 				sb.append("and ");
 			}
+            sb.append(fmi.getColumnName()).append("=? ");
 		}
 
 		Connection con = null;
@@ -434,10 +434,10 @@ public class EntityCommandImpl {
 		sb.append(" where ");
 		for (int i = 0; i < pks.size(); i++) {
 			FieldMetaInfo fmi = pks.get(i);
+            if (i > 0) {
+                sb.append("and ");
+            }
 			sb.append(fmi.getColumnName()).append("=? ");
-			if (i > 0) {
-				sb.append("and ");
-			}
 		}
 
 		Connection con = null;
