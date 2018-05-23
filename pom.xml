@@ -5,7 +5,7 @@
 
     <groupId>com.umtone</groupId>
     <artifactId>uw-dao</artifactId>
-    <version>3.6.1</version>
+    <version>3.6.2</version>
     <packaging>jar</packaging>
 
     <name>uw-dao</name>
