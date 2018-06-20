@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.Throughput)//基准测试类型
+@BenchmarkMode({Mode.Throughput,Mode.AverageTime})//基准测试类型
 @OutputTimeUnit(TimeUnit.SECONDS)//基准测试结果的时间类型
 @Warmup(iterations = 3)//预热的迭代次数
 @Threads(100)//测试线程数量

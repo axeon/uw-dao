@@ -180,8 +180,10 @@ public final class ConnectionManager {
             hikariConfig.setUsername(config.getUsername());
             // 登陆密码
             hikariConfig.setPassword(config.getPassword());
-            // 测试sql
-            hikariConfig.setConnectionTestQuery(config.getTestSql());
+            // 测试sql hikari不配置testSql,会直接使用Connection.isValid()检活
+            if (!hikariConfig.getDriverClassName().contains("mysql")) {
+                hikariConfig.setConnectionTestQuery(config.getTestSql());
+            }
             // 最小空闲连接数
             hikariConfig.setMinimumIdle(minConns);
             // 最大连接数

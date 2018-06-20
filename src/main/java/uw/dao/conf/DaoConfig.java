@@ -193,11 +193,6 @@ public class DaoConfig {
 	public static class ConnPoolConfig {
 
 		/**
-		 * 数据库类型.
-		 */
-		private String dbType;
-
-		/**
 		 * 数据库驱动.
 		 */
 		private String driver;
@@ -246,21 +241,6 @@ public class DaoConfig {
 		 * 连接最大寿命秒数.
 		 */
 		private int connMaxAge;
-
-		/**
-		 * @return the dbType
-		 */
-		public String getDbType() {
-			return dbType;
-		}
-
-		/**
-		 * @param dbType
-		 *            the dbType to set
-		 */
-		public void setDbType(String dbType) {
-			this.dbType = dbType;
-		}
 
 		/**
 		 * @return the driver

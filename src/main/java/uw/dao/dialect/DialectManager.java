@@ -12,12 +12,12 @@ public class DialectManager {
     /**
      * Mysql数据库方言
      */
-    private static final MySQLDialect MYSQL_DIALECT = new MySQLDialect();
+    private static final Dialect MYSQL_DIALECT = new MySQLDialect();
 
     /**
      * Oracle数据库方言
      */
-    private static final OracleDialect ORACLE_DIALECT = new OracleDialect();
+    private static final Dialect ORACLE_DIALECT = new OracleDialect();
 
 	/**
 	 * 得到Dialect对象.
