@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
 import uw.dao.conf.DaoConfigManager;
+import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.dialect.Dialect;
 import uw.dao.dialect.DialectManager;
 import uw.dao.util.DaoReflectUtils;
@@ -261,7 +262,7 @@ public class SQLCommandImpl {
             con = dao.getTransactionController().getConnection(connName);
             connId = con.hashCode();
             if (resultNum > 0 && startIndex >= 0) {
-                Dialect dialect = DialectManager.getDialect(DaoConfigManager.getConnPoolConfig(connName).getDbType());
+                Dialect dialect = ConnectionManager.getDialect(connName);
                 po = dialect.getPagedSQL(selectSql, startIndex, resultNum);
                 selectSql = po[0].toString();
             }

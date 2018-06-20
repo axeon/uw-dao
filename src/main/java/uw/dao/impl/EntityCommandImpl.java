@@ -8,8 +8,8 @@ import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
 import uw.dao.conf.DaoConfigManager;
+import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.dialect.Dialect;
-import uw.dao.dialect.DialectManager;
 import uw.dao.util.DaoReflectUtils;
 import uw.dao.vo.FieldMetaInfo;
 import uw.dao.vo.TableMetaInfo;
@@ -525,8 +525,9 @@ public class EntityCommandImpl {
 		try {
 			con = dao.getTransactionController().getConnection(connName);
             connId = con.hashCode();
-			if (resultNum > 0 && startIndex >= 0) {
-				Dialect dialect = DialectManager.getDialect(DaoConfigManager.getConnPoolConfig(connName).getDbType());
+            boolean needPagination = resultNum > 0 && startIndex >= 0;
+			if (needPagination) {
+				Dialect dialect = ConnectionManager.getDialect(connName);
 				po = dialect.getPagedSQL(selectsql, startIndex, resultNum);
 				selectsql = po[0].toString();
 			}
@@ -538,7 +539,7 @@ public class EntityCommandImpl {
 				}
 			}
 
-			if (resultNum > 0 && startIndex >= 0) {
+			if (needPagination) {
 				pstmt.setInt(i + 1, (Integer) po[1]);
 				pstmt.setInt(i + 2, (Integer) po[2]);
 			}
@@ -610,17 +611,15 @@ public class EntityCommandImpl {
 	 * @return TableMetaInfo对象
 	 */
 	static TableMetaInfo loadEntityMetaInfo(Class<?> entityCls) {
-
-		TableMetaInfo emi = entityMetaCache.get(entityCls.getName());
-		if (emi == null) {
-			emi = new TableMetaInfo();
-			if (entityCls.isAnnotationPresent(TableMeta.class)) {
-				TableMeta tm = entityCls.getAnnotation(TableMeta.class);
-				emi.setTableName(tm.tableName());
-			}
-			Class<?> clazz = entityCls;
-			for(int i = 0; clazz != Object.class && i < MAX_ENTITY_CLASS_EXTEND_LEVEL;
-                clazz = clazz.getSuperclass(),i++) {
+        return entityMetaCache.computeIfAbsent(entityCls.getName(), (key) -> {
+            TableMetaInfo emi = new TableMetaInfo();
+            if (entityCls.isAnnotationPresent(TableMeta.class)) {
+                TableMeta tm = entityCls.getAnnotation(TableMeta.class);
+                emi.setTableName(tm.tableName());
+            }
+            Class<?> clazz = entityCls;
+            for (int i = 0; clazz != Object.class && i < MAX_ENTITY_CLASS_EXTEND_LEVEL;
+                 clazz = clazz.getSuperclass(), i++) {
                 Field[] fields = clazz.getDeclaredFields();
                 for (Field field : fields) {
                     field.setAccessible(true);
@@ -639,10 +638,7 @@ public class EntityCommandImpl {
                     }
                 }
             }
-            entityMetaCache.put(entityCls.getName(), emi);
-		}
-
-		return emi;
-	}
-
+            return emi;
+        });
+    }
 }
