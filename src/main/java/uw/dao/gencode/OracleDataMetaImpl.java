@@ -6,7 +6,6 @@ import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
 import uw.dao.connectionpool.ConnectionManager;
-import uw.dao.connectionpool.ConnectionWrapper;
 import uw.dao.util.DaoStringUtils;
 
 import java.sql.*;
@@ -150,7 +149,6 @@ public class OracleDataMetaImpl implements TableMetaInterface {
                 remarkhs.put(dataSet.getString("column_name"), dataSet.getString("comments"));
             }
             conn = getConnection();
-            conn = ((ConnectionWrapper) conn).getSourceObject();
             DatabaseMetaData metaData = conn.getMetaData();
             rs = metaData.getColumns(null, conn.getSchema(), tableName.toUpperCase(), null);
             while (rs.next()) {

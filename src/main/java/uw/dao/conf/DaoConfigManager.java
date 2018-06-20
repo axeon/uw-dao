@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @author axeon
  */
-public class DaoConfigManager {
+public final class DaoConfigManager {
 
 	/**
 	 * DAO配置表.
@@ -82,18 +82,11 @@ public class DaoConfigManager {
 	 * @return 连接池配置
 	 */
 	public static ConnPoolConfig getConnPoolConfig(String name) {
-		ConnPoolConfig pool = null;
-		if (config.getConnPool() != null && config.getConnPool().getList() != null) {
-			pool = config.getConnPool().getList().get(name);
-		}
-		if (pool != null) {
-			return pool;
-		} else if (config.getConnPool() != null && (name == null || "".equals(name))) {
-			return config.getConnPool().getRoot();
-		} else {
-			return null;
-		}
-	}
+        if (name == null || "".equals(name)) {
+            return config.getConnPool().getRoot();
+        }
+        return config.getConnPool().getList().get(name);
+    }
 
 	/**
 	 * 获得路由映射信息.
