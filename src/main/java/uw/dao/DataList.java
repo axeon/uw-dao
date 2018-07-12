@@ -104,6 +104,20 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 		}
 	}
 
+    /**
+     * 计算页面参数信息。
+     */
+    public void calcPages(int sizeAll) {
+        this.sizeAll = sizeAll;
+        if (this.sizeAll > 0 && this.resultNum > 0) {
+            // 计算当前页
+            this.page = (int) Math.ceil((double) startIndex / (double) resultNum);
+            // 计算总页数
+            this.pageCount = (int) Math.ceil((double) sizeAll / (double) resultNum);
+        }
+    }
+
+
 	/**
 	 * 定位到某条位置.
 	 * 
@@ -214,6 +228,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	public int page() {
 		return this.page;
 	}
+
 
 	/**
 	 * 在整个数据集中的开始索引位置.

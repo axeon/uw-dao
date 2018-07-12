@@ -182,6 +182,19 @@ public class DataSet implements Serializable, Cloneable {
 		return cols;
 	}
 
+    /**
+     * 计算页面参数信息。
+     */
+    public void calcPages(int sizeAll) {
+        this.sizeAll = sizeAll;
+        if (this.sizeAll > 0 && this.resultNum > 0) {
+            // 计算当前页
+            this.page = (int) Math.ceil((double) startIndex / (double) resultNum);
+            // 计算总页数
+            this.pageCount = (int) Math.ceil((double) sizeAll / (double) resultNum);
+        }
+    }
+
 	/**
 	 * 到下一条记录，检查是否还有下一行数据.
 	 * 
