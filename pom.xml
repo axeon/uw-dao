@@ -179,7 +179,7 @@
                             <doclint>none</doclint>
                         </configuration>
                     </plugin>
-                    <!-- Gpg Signature -->
+                    <!--
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -194,6 +194,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>
