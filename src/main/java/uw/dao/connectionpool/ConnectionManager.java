@@ -17,7 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 数据库连接管理器.
- * @author axoen,liliang
+ *
+ * @author axoen, liliang
  * @since 2018/6/19
  */
 public final class ConnectionManager {
@@ -29,52 +30,50 @@ public final class ConnectionManager {
      */
     private static final Map<String, Dialect> SOURCE_DIALECT_MAP = new HashMap<String, Dialect>();
 
-	/**
-	 * 数据源缓存表
-	 */
-	private static final Map<String, HikariDataSource> DATA_SOURCE_MAP = new ConcurrentHashMap<String, HikariDataSource>();
+    /**
+     * 数据源缓存表
+     */
+    private static final Map<String, HikariDataSource> DATA_SOURCE_MAP = new ConcurrentHashMap<String, HikariDataSource>();
 
-	/**
-	 * 启动连接管理器.
-	 */
-	public static void start() {
+    /**
+     * 启动连接管理器.
+     */
+    public static void start() {
         List<String> connList = DaoConfigManager.getConnPoolNameList();
         for (String conn : connList) {
-            HikariDataSource dataSource = getDataSource(conn);
-            if (dataSource == null) {
-                logger.error("Initial ConnectionPool[{}] failed ", conn);
+            try {
+                HikariDataSource dataSource = getDataSource(conn);
+            } catch (Exception e) {
+                logger.error("Initial ConnectionPool[{}] failed !!!", conn);
             }
         }
     }
 
-	/**
-	 * 关闭连接管理器.
-	 */
-	public static void stop() {
-		destroyAllConnectionPool();
-	}
+    /**
+     * 关闭连接管理器.
+     */
+    public static void stop() {
+        destroyAllConnectionPool();
+    }
 
-	/**
-	 * 获得一个connection，在poolList中排名第一的为默认连接.
-	 * 
-	 * @return Connection
-	 * @throws SQLException
-	 *             SQL异常
-	 */
-	public static Connection getConnection() throws SQLException {
-		return getConnection("");
-	}
+    /**
+     * 获得一个connection，在poolList中排名第一的为默认连接.
+     *
+     * @return Connection
+     * @throws SQLException SQL异常
+     */
+    public static Connection getConnection() throws SQLException {
+        return getConnection("");
+    }
 
-	/**
-	 * 获得一个新连接.
-	 * 
-	 * @param poolName
-	 *            连接池名称
-	 * @return 指定的新连接
-	 * @throws SQLException
-	 *             SQL异常
-	 */
-	public static Connection getConnection(String poolName) throws SQLException {
+    /**
+     * 获得一个新连接.
+     *
+     * @param poolName 连接池名称
+     * @return 指定的新连接
+     * @throws SQLException SQL异常
+     */
+    public static Connection getConnection(String poolName) throws SQLException {
         HikariDataSource hikariDataSource = getDataSource(poolName);
         if (hikariDataSource == null) {
             throw new SQLException("ConnectionManager.getConnection() failed to init connPool[" + poolName + "]");
@@ -102,13 +101,12 @@ public final class ConnectionManager {
         return SOURCE_DIALECT_MAP.get(poolName);
     }
 
-	/**
-	 * 销毁一个连接池.
-	 * 
-	 * @param poolName
-	 *            连接池名字
-	 */
-	private static synchronized void destroyConnectionPool(String poolName) {
+    /**
+     * 销毁一个连接池.
+     *
+     * @param poolName 连接池名字
+     */
+    private static synchronized void destroyConnectionPool(String poolName) {
         HikariDataSource cp = DATA_SOURCE_MAP.get(poolName);
         if (cp != null) {
             DATA_SOURCE_MAP.remove(poolName);
@@ -116,20 +114,19 @@ public final class ConnectionManager {
         }
     }
 
-	/**
-	 * 销毁全部连接池.
-	 */
-	private static synchronized void destroyAllConnectionPool() {
-		for (String poolName : DATA_SOURCE_MAP.keySet()) {
-			destroyConnectionPool(poolName);
-		}
-	}
+    /**
+     * 销毁全部连接池.
+     */
+    private static synchronized void destroyAllConnectionPool() {
+        for (String poolName : DATA_SOURCE_MAP.keySet()) {
+            destroyConnectionPool(poolName);
+        }
+    }
 
     /**
      * 获得连接池.
      *
-     * @param poolName
-     *            连接池名字
+     * @param poolName 连接池名字
      * @return Connection
      */
     private static HikariDataSource getDataSource(String poolName) {
