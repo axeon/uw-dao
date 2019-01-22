@@ -2,6 +2,7 @@ package uw.dao.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
@@ -39,6 +40,9 @@ public class TableShardingTask {
      */
     private final DaoFactory dao = DaoFactory.getInstance();
 
+    @Autowired
+    private DaoConfig daoConfig;
+
     /**
      * 链接内表列表.
      */
@@ -49,12 +53,12 @@ public class TableShardingTask {
      */
     @Scheduled(initialDelay = 3000, fixedRate = 3600000)
     void autoCreateTable() {
-        LocalDateTime now = LocalDateTime.now();
-        DaoConfig config = DaoConfigManager.getConfig();
-        if (config == null || config.getTableSharding() == null) {
+        if (daoConfig == null || daoConfig.getTableSharding() == null) {
             return;
         }
-        Map<String, TableShardingConfig> map = config.getTableSharding();
+        LocalDateTime now = LocalDateTime.now();
+
+        Map<String, TableShardingConfig> map = daoConfig.getTableSharding();
         for (Map.Entry<String, TableShardingConfig> kv : map.entrySet()) {
             String tableName = kv.getKey();
             TableShardingConfig tc = kv.getValue();

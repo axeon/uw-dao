@@ -2,9 +2,11 @@ package uw.dao.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
+import uw.dao.conf.DaoConfig;
 import uw.dao.util.DaoValueUtils;
 import uw.dao.util.TableShardingUtils;
 import uw.dao.vo.SqlExecuteStats;
@@ -17,7 +19,7 @@ import java.util.List;
 
 /**
  * 性能日志写入任务.
- * 
+ *
  * @author axeon
  */
 @EnableScheduling
@@ -31,11 +33,18 @@ public class StatsLogWriteTask {
 	 */
 	private final DaoFactory dao = DaoFactory.getInstance();
 
+	@Autowired
+	private DaoConfig daoConfig;
+
 	/**
-	 * 3秒写一次数据.
+	 * 10秒写一次数据.
 	 */
 	@Scheduled(initialDelay = 5000, fixedRate = 10000)
 	public void writeData() {
+		if (daoConfig == null && daoConfig.getSqlStats() == null || !daoConfig.getSqlStats().isEnable()) {
+			return;
+		}
+
 		ArrayList<SqlExecuteStats> list = StatsLogService.getStatsList();
 		if (list.size() == 0) {
 			return;
@@ -45,11 +54,12 @@ public class StatsLogWriteTask {
 
 	/**
 	 * 执行数据库插入.
-	 * 
+	 *
 	 * @param list
 	 *            SqlExecuteStats集合
 	 */
 	private void writeStatsList(List<SqlExecuteStats> list) {
+
 		String tableName = TableShardingUtils.getTableNameByDate(StatsLogService.STATS_BASE_TABLE,
 				list.get(0).getActionDate());
 		Connection conn = null;
