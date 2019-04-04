@@ -21,29 +21,33 @@ import java.util.Map.Entry;
  * @author axeon
  */
 @Configuration
-@EnableConfigurationProperties({ DaoConfig.class })
+@EnableConfigurationProperties({DaoConfig.class})
 public class DaoSpringAutoConfiguration {
 
-	/**
-	 * 日志.
-	 */
-	private static final Logger log = LoggerFactory.getLogger(DaoSpringAutoConfiguration.class);
+    /**
+     * 日志.
+     */
+    private static final Logger log = LoggerFactory.getLogger(DaoSpringAutoConfiguration.class);
 
-	/**
-	 * DAO配置表.
-	 */
-	@Autowired
-	private DaoConfig daoConfig;
+    /**
+     * DAO配置表.
+     */
+    @Autowired
+    private DaoConfig daoConfig;
 
-	/**
-	 * 配置初始化.
-	 */
-	@PostConstruct
-	public void init() {
+    /**
+     * 配置初始化.
+     */
+    @PostConstruct
+    public void init() {
 
-		log.info("uw.dao start auto configuration...");
+        log.info("uw-dao start auto configuration...");
 
-		if (daoConfig != null && daoConfig.getConnPool() != null) {
+        if (daoConfig == null) {
+            log.error("uw-dao start fail by config missing!!! ");
+            return;
+        }
+        if (daoConfig.getConnPool() != null) {
             ConnPoolConfig rootPoolConfig = daoConfig.getConnPool().getRoot();
             if (rootPoolConfig != null) {
                 Map<String, ConnPoolConfig> poolMap = daoConfig.getConnPool().getList();
@@ -76,33 +80,31 @@ public class DaoSpringAutoConfiguration {
                 }
                 // 给值
                 DaoConfigManager.setConfig(daoConfig);
-                // 启动连接池。
-                ConnectionManager.start();
             }
+            // 启动连接池。
+            ConnectionManager.start();
+            if (daoConfig.getSqlStats() != null) {
+                if (daoConfig.getSqlStats().isEnable()) {
+                    // 加入统计日志表到sharding配置中。
+                    TableShardingConfig config = new TableShardingConfig();
+                    config.setShardingType("date");
+                    config.setShardingRule("day");
+                    config.setAutoGen(true);
+                    daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
+                }
+            }
+            MainService.start();
         }
-		if (daoConfig != null && daoConfig.getSqlStats() != null) {
-			if (daoConfig.getSqlStats().isEnable()) {
-				// 加入统计日志表到sharding配置中。
-				TableShardingConfig config = new TableShardingConfig();
-				config.setShardingType("date");
-				config.setShardingRule("day");
-				config.setAutoGen(true);
-				daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
-				MainService.start();
-			}
-		}
+    }
 
-	}
-
-	/**
-	 * 关闭连接管理器,销毁全部连接池.
-	 */
-	@PreDestroy
-	public void destroy() {
-		log.info("uw.dao destroy configuration...");
-		MainService.stop();
-		ConnectionManager.stop();
-
-	}
+    /**
+     * 关闭连接管理器,销毁全部连接池.
+     */
+    @PreDestroy
+    public void destroy() {
+        log.info("uw.dao destroy configuration...");
+        MainService.stop();
+        ConnectionManager.stop();
+    }
 
 }
