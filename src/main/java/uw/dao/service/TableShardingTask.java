@@ -2,9 +2,7 @@ package uw.dao.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
@@ -29,7 +27,7 @@ import java.util.Map;
  * @author axeon
  */
 @EnableScheduling
-public class TableShardingTask {
+public class TableShardingTask implements Runnable {
 
     /**
      * 日志.
@@ -40,8 +38,10 @@ public class TableShardingTask {
      */
     private final DaoFactory dao = DaoFactory.getInstance();
 
-    @Autowired
-    private DaoConfig daoConfig;
+    /**
+     * dao配置文件。
+     */
+    private static final DaoConfig daoConfig = DaoConfigManager.getConfig();
 
     /**
      * 链接内表列表.
@@ -51,14 +51,10 @@ public class TableShardingTask {
     /**
      * 自动建表工具。 每小时检查当天表和第二天的表。 设定一个3秒的延时，是担心同步问题.
      */
-    @Scheduled(initialDelay = 3000, fixedRate = 3600000)
-    void autoCreateTable() {
-        if (daoConfig == null || daoConfig.getTableSharding() == null) {
-            return;
-        }
+    @Override
+    public void run() {
         LocalDateTime now = LocalDateTime.now();
-
-        Map<String, TableShardingConfig> map = daoConfig.getTableSharding();
+        Map<String, TableShardingConfig> map = daoConfig.getTableShard();
         for (Map.Entry<String, TableShardingConfig> kv : map.entrySet()) {
             String tableName = kv.getKey();
             TableShardingConfig tc = kv.getValue();

@@ -1,7 +1,7 @@
 package uw.dao.impl;
 
 import uw.dao.*;
-import uw.dao.service.StatsLogService;
+import uw.dao.service.MainService;
 import uw.dao.vo.SqlExecuteStats;
 
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 /**
  * DAOFactory实现类.
- * 
+ *
  * @author axeon
  */
 public class DAOFactoryImpl extends DaoFactory {
@@ -43,7 +43,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 使用固定连接名获得一个DAOFactory实现.
-	 * 
+	 *
 	 * @param connname
 	 */
 	public DAOFactoryImpl(String connname) {
@@ -53,7 +53,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 添加性能统计数据.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名称
 	 * @param sql
@@ -74,12 +74,12 @@ public class DAOFactoryImpl extends DaoFactory {
 		if (statsList != null) {
             statsList.add(new SqlExecuteStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception));
         }
-        StatsLogService.logStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception);
+        MainService.logStats(connName, connId, sql, param, rowNum, connTime, dbTime, allTime, exception);
 	}
 
 	/**
 	 * 开始批量更新.
-	 * 
+	 *
 	 * @return BatchupdateManager对象
 	 */
 	@Override
@@ -90,7 +90,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 开始处理事务.
-	 * 
+	 *
 	 * @return TransactionManager对象
 	 */
 	@Override
@@ -101,7 +101,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键删除一个Entity实例，等效于delete.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param entity
@@ -119,7 +119,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键删除一个Entity实例，等效于delete.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param entity
@@ -139,7 +139,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键删除一个Entity实例，等效于delete.
-	 * 
+	 *
 	 * @param entity
 	 *            要更新的对象
 	 * @param <T>
@@ -155,7 +155,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键删除一个Entity实例，等效于delete.
-	 * 
+	 *
 	 * @param entity
 	 *            要更新的对象
 	 * @param tableName
@@ -189,7 +189,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 执行一条SQL语句.
-	 * 
+	 *
 	 * @param sql
 	 *            查询的SQL
 	 * @return 影响的行数
@@ -204,7 +204,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 执行一条SQL语句.
-	 * 
+	 *
 	 * @param sql
 	 *            查询的SQL
 	 * @param paramList
@@ -221,7 +221,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 执行一条SQL语句.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param sql
@@ -238,7 +238,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 执行一条SQL语句.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param sql
@@ -257,7 +257,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 获得控制器.
-	 * 
+	 *
 	 * @return BatchupdateManagerImpl对象
 	 */
 	BatchupdateManagerImpl getBatchUpdateController() {
@@ -266,7 +266,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 获得一个java.sql.Connection连接。 请注意，这是一个原生的Connection对象，需确保手工关闭.
-	 * 
+	 *
 	 * @param configName
 	 *            配置名
 	 * @return Connection对象
@@ -280,7 +280,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据表名和访问类型获得一个java.sql.Connection。 请注意，这是一个原生的Connection对象，需确保手工关闭.
-	 * 
+	 *
 	 * @param table
 	 *            表名
 	 * @param access
@@ -296,7 +296,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据表名和访问类型获得一个数据库连接配置名.
-	 * 
+	 *
 	 * @param table
 	 *            表名
 	 * @param access
@@ -310,7 +310,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 获得当前DAOFactory实例下sql执行次数.
-	 * 
+	 *
 	 * @return sql执行次数
 	 */
 	@Override
@@ -320,7 +320,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据Entity来获得seq序列。 此序列通过一个系统数据库来维护，可以保证在分布式下的可用性.
-	 * 
+	 *
 	 * @param cls
 	 *            实体类类型
 	 * @return seq序列
@@ -337,7 +337,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据表名来获得seq序列。 此序列通过一个系统数据库来维护，可以保证在分布式下的可用性.
-	 * 
+	 *
 	 * @param tableName
 	 *            表名
 	 * @return seq序列
@@ -351,7 +351,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 获得当前DAOFactory实例下的sql执行统计列表.
-	 * 
+	 *
 	 * @return 统计列表
 	 */
 	@Override
@@ -361,7 +361,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 获得事务控制器.
-	 * 
+	 *
 	 * @return TransactionManagerImpl对象
 	 */
 	TransactionManagerImpl getTransactionController() {
@@ -370,7 +370,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -388,7 +388,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -411,7 +411,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -436,7 +436,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -456,7 +456,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -481,7 +481,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param selectsql
@@ -508,7 +508,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -528,7 +528,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -553,7 +553,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -580,7 +580,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -603,7 +603,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -630,7 +630,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的映射类型，返回一个DataList列表.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -659,7 +659,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param <T>
@@ -677,7 +677,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param <T>
@@ -697,7 +697,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -717,7 +717,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据指定的主键ID载入一个Entity实例.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -739,7 +739,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @return DataSet数据列表
@@ -753,7 +753,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @param startIndex
@@ -771,7 +771,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @param startIndex
@@ -792,7 +792,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @param paramList
@@ -808,7 +808,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @param paramList
@@ -829,7 +829,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param selectsql
 	 *            查询的SQL
 	 * @param paramList
@@ -852,7 +852,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，当设置为null时候，根据sql语句或表名确定
 	 * @param selectsql
@@ -868,7 +868,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
@@ -890,7 +890,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
@@ -913,7 +913,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
@@ -931,7 +931,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
@@ -955,7 +955,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 返回一个DataSet数据列表。 相比较DataList列表，这不是一个强类型列表，但是更加灵活.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param selectsql
@@ -980,7 +980,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值列表（多行单个字段）.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的基础类型，如int.class,long.class,String.class,Date.class
 	 * @param <T>
@@ -998,7 +998,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值列表（多行单个字段）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1018,7 +1018,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值列表（多行单个字段）.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的基础类型，如int.class,long.class,String.class,Date.class
 	 * @param <T>
@@ -1038,7 +1038,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值列表（多行单个字段）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1061,7 +1061,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个对象（单行数据）。 使用sql中探测到的表名来决定连接名.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param <T>
@@ -1079,7 +1079,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个对象（单行数据）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1099,7 +1099,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个对象（单行数据）。 使用sql中探测到的表名来决定连接名.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的对象类型
 	 * @param <T>
@@ -1119,7 +1119,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个对象（单行数据）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1142,7 +1142,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值（单个字段）.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的基础类型，如int.class,long.class,String.class,Date.class
 	 * @param <T>
@@ -1160,7 +1160,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值（单个字段）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1180,7 +1180,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值（单个字段）.
-	 * 
+	 *
 	 * @param cls
 	 *            要映射的基础类型，如int.class,long.class,String.class,Date.class
 	 * @param <T>
@@ -1200,7 +1200,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 查询单个基本数值（单个字段）.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param cls
@@ -1223,7 +1223,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 保存一个Entity实例，等效于insert.
-	 * 
+	 *
 	 * @param connName
 	 *            连接名，如设置为null，则根据sql语句或表名动态路由确定
 	 * @param <T>
@@ -1241,7 +1241,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 保存一个Entity实例，等效于insert.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param connName
@@ -1261,7 +1261,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 保存一个Entity实例，等效于insert.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param entity
@@ -1277,7 +1277,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 保存一个Entity实例，等效于insert.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param entity
@@ -1295,7 +1295,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键更新一个Entity实例，等效于update.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param connName
@@ -1313,7 +1313,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键更新一个Entity实例，等效于update.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param connName
@@ -1333,7 +1333,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键更新一个Entity实例，等效于update.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param entity
@@ -1349,7 +1349,7 @@ public class DAOFactoryImpl extends DaoFactory {
 
 	/**
 	 * 根据主键更新一个Entity实例，等效于update.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 * @param entity

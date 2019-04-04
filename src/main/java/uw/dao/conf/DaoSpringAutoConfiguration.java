@@ -1,33 +1,26 @@
 package uw.dao.conf;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-
 import uw.dao.conf.DaoConfig.ConnPoolConfig;
 import uw.dao.conf.DaoConfig.TableShardingConfig;
 import uw.dao.connectionpool.ConnectionManager;
-import uw.dao.service.StatsCleanDataTask;
-import uw.dao.service.StatsLogService;
-import uw.dao.service.StatsLogWriteTask;
-import uw.dao.service.TableShardingTask;
+import uw.dao.service.MainService;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * spring启动配置文件.
- * 
+ *
  * @author axeon
  */
 @Configuration
-@Import({ StatsCleanDataTask.class, StatsLogWriteTask.class, TableShardingTask.class })
 @EnableConfigurationProperties({ DaoConfig.class })
 public class DaoSpringAutoConfiguration {
 
@@ -94,8 +87,8 @@ public class DaoSpringAutoConfiguration {
 				config.setShardingType("date");
 				config.setShardingRule("day");
 				config.setAutoGen(true);
-				daoConfig.getTableSharding().put(StatsLogService.STATS_BASE_TABLE, config);
-				StatsLogService.start();
+				daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
+				MainService.start();
 			}
 		}
 
@@ -107,7 +100,9 @@ public class DaoSpringAutoConfiguration {
 	@PreDestroy
 	public void destroy() {
 		log.info("uw.dao destroy configuration...");
+		MainService.stop();
 		ConnectionManager.stop();
+
 	}
 
 }

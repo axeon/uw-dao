@@ -2,12 +2,9 @@ package uw.dao.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
-import uw.dao.conf.DaoConfig;
 import uw.dao.conf.DaoConfigManager;
 
 import java.util.ArrayList;
@@ -21,7 +18,7 @@ import java.util.List;
  * @author axeon
  */
 @EnableScheduling
-public class StatsCleanDataTask {
+public class StatsCleanDataTask implements Runnable {
 
     /**
      * 日志.
@@ -33,10 +30,6 @@ public class StatsCleanDataTask {
      */
     private final DaoFactory dao = DaoFactory.getInstance();
 
-    @Autowired
-    private DaoConfig daoConfig;
-
-
     /**
      * 获得当前的表Set.
      *
@@ -46,11 +39,11 @@ public class StatsCleanDataTask {
         HashSet<String> set = new HashSet<String>();
         List<String> list = null;
         try {
-            list = dao.queryForSingleList(dao.getConnectionName(StatsLogService.STATS_BASE_TABLE, "all"), String.class,
+            list = dao.queryForSingleList(dao.getConnectionName(MainService.STATS_BASE_TABLE, "all"), String.class,
                     "show tables");
             if (list != null) {
                 for (String s : list) {
-                    if (s.startsWith(StatsLogService.STATS_BASE_TABLE + "_")) {
+                    if (s.startsWith(MainService.STATS_BASE_TABLE + "_")) {
                         set.add(s);
                     }
                 }
@@ -64,11 +57,8 @@ public class StatsCleanDataTask {
     /**
      * 每天凌晨3点半清理一下数据表.
      */
-    @Scheduled(cron = "0 30 3 * * ?")
-    public void runTask() {
-        if (daoConfig == null && daoConfig.getSqlStats() == null || !daoConfig.getSqlStats().isEnable()) {
-            return;
-        }
+    @Override
+    public void run() {
         logger.info("StatsInfo Clean Task is run start!");
 
         HashSet<String> tset = getCurrentTableSet();

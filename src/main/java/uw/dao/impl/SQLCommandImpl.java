@@ -4,20 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
-import uw.dao.conf.DaoConfigManager;
 import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.dialect.Dialect;
-import uw.dao.dialect.DialectManager;
 import uw.dao.util.DaoReflectUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 为了更为高效的执行数据库命令，是该类产生的根本原因。 具体使用请自行参照源代码.
@@ -43,7 +37,7 @@ public class SQLCommandImpl {
      */
     @SuppressWarnings("unchecked")
     public static final <T> Optional<T> selectForSingleValue(DAOFactoryImpl dao, String connName, Class<T> cls, String selectSql,
-                                                   Object[] paramList) throws TransactionException {
+                                                             Object[] paramList) throws TransactionException {
         long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;
         int connId = 0;
@@ -249,7 +243,7 @@ public class SQLCommandImpl {
         if (autoCount) {
             String countsql = "select count(1) from (" + selectSql + ") must_alias";
             Optional<Integer> countOptional = SQLCommandImpl.selectForSingleValue(dao, connName, Integer.class, countsql, paramList);
-            if(countOptional.isPresent()){
+            if (countOptional.isPresent()) {
                 allsize = countOptional.get();
             }
         }

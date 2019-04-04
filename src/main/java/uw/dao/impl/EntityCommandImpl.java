@@ -55,7 +55,7 @@ public class EntityCommandImpl {
 	@SuppressWarnings("resource")
 	public static <T extends DataEntity> T save(DAOFactoryImpl dao, String connName, T entity, String tableName) throws TransactionException {
 			long start = System.currentTimeMillis();
-        long connTime = 0, dbTime = 0;
+		long connTime = 0, dbTime = 0;
         int connId = 0;
 		String exception = null;
 		TableMetaInfo emi = loadEntityMetaInfo(entity.getClass());
