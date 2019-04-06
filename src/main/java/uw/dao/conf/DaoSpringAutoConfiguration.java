@@ -102,7 +102,7 @@ public class DaoSpringAutoConfiguration {
      */
     @PreDestroy
     public void destroy() {
-        log.info("uw.dao destroy configuration...");
+        log.info("uw-dao destroy configuration...");
         MainService.stop();
         ConnectionManager.stop();
     }
