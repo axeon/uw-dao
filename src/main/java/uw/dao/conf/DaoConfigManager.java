@@ -49,6 +49,9 @@ public final class DaoConfigManager {
      */
     public static List<String> getConnPoolNameList() {
         ArrayList<String> list = new ArrayList<>();
+        if (config == null || config.getConnPool() == null) {
+            return list;
+        }
         if (config.getConnPool().getRoot() != null) {
             list.add("");
         }

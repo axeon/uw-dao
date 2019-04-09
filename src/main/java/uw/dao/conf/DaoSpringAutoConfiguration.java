@@ -80,20 +80,20 @@ public class DaoSpringAutoConfiguration {
                 }
                 // 给值
                 DaoConfigManager.setConfig(daoConfig);
-            }
-            // 启动连接池。
-            ConnectionManager.start();
-            if (daoConfig.getSqlStats() != null) {
-                if (daoConfig.getSqlStats().isEnable()) {
-                    // 加入统计日志表到sharding配置中。
-                    TableShardingConfig config = new TableShardingConfig();
-                    config.setShardingType("date");
-                    config.setShardingRule("day");
-                    config.setAutoGen(true);
-                    daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
+                // 启动连接池。
+                ConnectionManager.start();
+                if (daoConfig.getSqlStats() != null) {
+                    if (daoConfig.getSqlStats().isEnable()) {
+                        // 加入统计日志表到sharding配置中。
+                        TableShardingConfig config = new TableShardingConfig();
+                        config.setShardingType("date");
+                        config.setShardingRule("day");
+                        config.setAutoGen(true);
+                        daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
+                    }
                 }
+                MainService.start();
             }
-            MainService.start();
         }
     }
 
