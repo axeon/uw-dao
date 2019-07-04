@@ -3,12 +3,8 @@ package uw.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uw.dao.conf.DaoConfigManager;
-import uw.dao.connectionpool.ConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -25,22 +21,34 @@ public class SequenceManager {
      */
     private static final Logger logger = LoggerFactory.getLogger(SequenceManager.class);
     /**
-     * insertSQL语句.
+     * 初始化seq.
      */
-    private static final String INSERT_ID = "insert into sys_sequence (table_name,sequence_id,table_desc,increment_num,create_date,last_update) values(?,?,?,?,?,?)";
+    private static final String INIT_SEQ = "insert into sys_seq (seq_name,seq_id,seq_desc,increment_num,create_date,last_update) values(?,?,?,?,?,?)";
     /**
-     * selectSQL语句.
+     * 载入当前seq.
      */
-    private static final String LOAD_ID = "select sequence_id,increment_num from sys_sequence where table_name=? ";
+    private static final String LOAD_SEQ = "select seq_id,increment_num from sys_seq where seq_name=? ";
+
+    /**
+     * 确认更新seq.
+     */
+    private static final String UPDATE_SEQ = "update sys_seq set seq_id=?,last_update=? where seq_name=? and seq_id=?";
+
+    /**
+     * 重置seq.
+     */
+    private static final String RESET_SEQ = "update sys_seq set seq_id=?,increment_num=?,last_update=? where seq_name=?";
+
     /**
      * SequenceManager集合.
      */
     private static final Map<String, SequenceManager> seqManager = new ConcurrentHashMap<String, SequenceManager>();
 
     /**
-     * updateSQL语句.
+     * dao实例。
      */
-    private static final String UPDATE_ID = "update sys_sequence set sequence_id=?,last_update=? where table_name=? and sequence_id=?";
+    private static final DaoFactory dao = DaoFactory.getInstance();
+
     /**
      * 重试次数。
      */
@@ -58,62 +66,65 @@ public class SequenceManager {
     /**
      * 当前可以获取的最大id.
      */
-    private long maxId;
+    private long maxId = 0;
+
     /**
      * 增量数，高并发应用应该保持较高的增量数字。
      */
-    private int incrementNum;
+    private int incrementNum = 1;
 
     /**
      * 建立一个Sequence实例.
      *
-     * @param sequenceName table名称
+     * @param seqName seq名称。
      */
-    public SequenceManager(String sequenceName) {
-        this.sequenceName = sequenceName;
-        this.incrementNum = 1;
+    public SequenceManager(String seqName) {
+        this.sequenceName = seqName;
     }
 
     /**
      * 返回指定的表的sequenceId数值.
      *
-     * @param sequenceName 表名
+     * @param seqName 表名
      * @return 下一个值
      */
-    public static long nextId(String sequenceName) {
-        return nextSysSequence(sequenceName, 1);
+    public static long nextId(String seqName) {
+        SequenceManager manager = seqManager.computeIfAbsent(seqName, x -> new SequenceManager(seqName));
+        return manager.nextId(1);
     }
+
 
     /**
      * 申请一个Id号码范围.
      *
-     * @param sequenceName 表名
-     * @param range        申请多少个号码
+     * @param seqName 表名
+     * @param range   申请多少个号码
      * @return 起始号码
      */
-    public static long allocateIdRange(String sequenceName, int range) {
-        return nextSysSequence(sequenceName, range);
+    public static long allocateIdRange(String seqName, int range) {
+        SequenceManager manager = seqManager.computeIfAbsent(seqName, x -> new SequenceManager(seqName));
+        return manager.nextId(range);
     }
 
     /**
-     * 返回指定的表的sequenceId数值.
+     * 重置sequence信息。
      *
-     * @param sequenceName 表名
-     * @param value        递增累加值
-     * @return 下一个值
+     * @param sequenceName sequence名字
+     * @param initSeq      初始值。
+     * @param incrementNum 递增数。
+     * @return
      */
-    private static long nextSysSequence(final String sequenceName, int value) {
+    public static boolean resetSeq(String sequenceName, long initSeq, int incrementNum) {
         SequenceManager manager = seqManager.computeIfAbsent(sequenceName, x -> new SequenceManager(sequenceName));
-        return manager.nextUniqueID(value);
+        return manager.resetSeq(initSeq, incrementNum);
     }
-
 
     /**
      * 返回下一个可以取到的id值,功能上类似于数据库的自动递增字段.
      *
      * @param value 递增累加值
      */
-    private synchronized long nextUniqueID(int value) {
+    private  long nextId(int value) {
         if (currentId.get() + value > maxId) {
             getNextBlock(value);
         }
@@ -130,11 +141,10 @@ public class SequenceManager {
             if (getNextBlockImpl(value)) {
                 break;
             }
-            logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...",
-                    this.sequenceName, i);
+            logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...", this.sequenceName, i);
             // 如果不成功，再次调用改方法。
             try {
-                Thread.sleep(600);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 logger.error(e.getMessage(), e);
             }
@@ -153,45 +163,43 @@ public class SequenceManager {
      * @param value 递增累加值
      * @return boolean
      */
-    private boolean getNextBlockImpl(int value) {
+    private synchronized boolean getNextBlockImpl(int value) {
         // 从数据库中获取当前值。
         loadSeq();
         // 自动递增id到我们规定的递增累加值。
         long newID = currentId.get() + incrementNum + value;
         boolean success = false;
-        Connection con = null;
-        PreparedStatement pstmt = null;
         try {
-            con = ConnectionManager.getConnection(DaoConfigManager.getRouteMapping("sys_sequence", "all"));
-            // UPDATE_ID语句增加sequenceId的条件判断是让更新更能有效的进行。
-            pstmt = con.prepareStatement(UPDATE_ID);
-            pstmt.setLong(1, newID);
-            pstmt.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-            pstmt.setString(3, sequenceName);
-            pstmt.setLong(4, currentId.get());
-            // 检查数据库更新是否成功。如果成功，则重新给currentId和maxId赋值。
-            success = pstmt.executeUpdate() == 1;
+            int effect = dao.executeCommand(DaoConfigManager.getRouteMapping("sys_sequence", "all"), UPDATE_SEQ, new Object[]{newID, new Date(), sequenceName, currentId.get()});
+            success = (effect == 1);
             if (success) {
                 this.maxId = newID;
             }
-        } catch (Exception sqle) {
-            logger.error("GetNextBlock Error!", sqle);
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
+        } catch (TransactionException e) {
+            logger.error("GetNextBlock Error!", e);
         }
+        return success;
+    }
+
+    /**
+     * 重置sequence信息。
+     *
+     * @param initSeq      初始值。
+     * @param incrementNum 递增数。
+     * @return
+     */
+    private boolean resetSeq(long initSeq, int incrementNum) {
+        boolean success = false;
+        try {
+            int effect = dao.executeCommand(DaoConfigManager.getRouteMapping("sys_sequence", "all"), RESET_SEQ, new Object[]{initSeq, incrementNum, new Date(), sequenceName});
+            success = (effect == 1);
+            if (success) {
+                this.maxId = 0;
+            }
+        } catch (TransactionException e) {
+            logger.error("GetNextBlock Error!", e);
+        }
+
         return success;
     }
 
@@ -199,40 +207,16 @@ public class SequenceManager {
      * 载入序列.
      */
     private void loadSeq() {
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        boolean isLoaded = false;
         try {
-            con = ConnectionManager.getConnection(DaoConfigManager.getRouteMapping("sys_sequence", "all"));
-            // 从数据库中获取当前值。
-            pstmt = con.prepareStatement(LOAD_ID);
-            pstmt.setString(1, sequenceName);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                isLoaded = true;
-                currentId.set(rs.getLong(1));
-                incrementNum = rs.getInt(2);
+            DataSet ds = dao.queryForDataSet(DaoConfigManager.getRouteMapping("sys_sequence", "all"), LOAD_SEQ, new Object[]{sequenceName});
+            if (ds.next()) {
+                currentId.set(ds.getLong(1));
+                incrementNum = ds.getInt(2);
+            } else {
+                initSeq();
             }
-        } catch (Exception sqle) {
-            logger.error("loadSeq Error!", sqle);
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-        }
-        if (!isLoaded) {
-            initSeq();
+        } catch (TransactionException e) {
+            logger.error("loadSeq Error!", e);
         }
     }
 
@@ -240,36 +224,10 @@ public class SequenceManager {
      * 初始化序列.
      */
     private void initSeq() {
-        Connection con = null;
-        PreparedStatement pstmt = null;
         try {
-            con = ConnectionManager.getConnection(DaoConfigManager.getRouteMapping("sys_sequence", "all"));
-            // 从数据库中获取当前值。
-            pstmt = con.prepareStatement(INSERT_ID);
-            pstmt.setString(1, sequenceName);
-            pstmt.setLong(2, currentId.get());
-            pstmt.setString(3, sequenceName);
-            pstmt.setInt(4, incrementNum);
-            pstmt.setTimestamp(5, new java.sql.Timestamp(System.currentTimeMillis()));
-            pstmt.setTimestamp(6, new java.sql.Timestamp(System.currentTimeMillis()));
-            pstmt.executeUpdate();
-        } catch (Exception sqle) {
-            logger.error("initSeq exception!", sqle);
-        } finally {
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            if (con != null) {
-                try {
-                    con.close();
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
+            dao.executeCommand(DaoConfigManager.getRouteMapping("sys_sequence", "all"), INIT_SEQ, new Object[]{sequenceName, currentId.get(), sequenceName, incrementNum, new Date(), new Date()});
+        } catch (TransactionException e) {
+            logger.error("initSeq exception!", e);
         }
     }
 
