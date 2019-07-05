@@ -124,11 +124,11 @@ public class SequenceManager {
      *
      * @param value 递增累加值
      */
-    private  long nextId(int value) {
+    private long nextId(int value) {
         if (currentId.get() + value > maxId) {
             getNextBlock(value);
         }
-        return currentId.addAndGet(value);
+        return currentId.getAndAdd(value);
     }
 
     /**
@@ -141,7 +141,7 @@ public class SequenceManager {
             if (getNextBlockImpl(value)) {
                 break;
             }
-            logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...", this.sequenceName, i);
+            logger.warn("WARNING: SequenceManager failed to obtain Sequence[{}] next ID block . Trying {}...", this.sequenceName, i + 1);
             // 如果不成功，再次调用改方法。
             try {
                 Thread.sleep(500);
@@ -167,7 +167,7 @@ public class SequenceManager {
         // 从数据库中获取当前值。
         loadSeq();
         // 自动递增id到我们规定的递增累加值。
-        long newID = currentId.get() + incrementNum + value;
+        long newID = currentId.get() + Math.max(incrementNum, value);
         boolean success = false;
         try {
             int effect = dao.executeCommand(DaoConfigManager.getRouteMapping("sys_sequence", "all"), UPDATE_SEQ, new Object[]{newID, new Date(), sequenceName, currentId.get()});
@@ -199,7 +199,6 @@ public class SequenceManager {
         } catch (TransactionException e) {
             logger.error("GetNextBlock Error!", e);
         }
-
         return success;
     }
 

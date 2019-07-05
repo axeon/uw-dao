@@ -134,7 +134,7 @@ public class SQLCommandImpl {
         }
         Connection con = null;
         PreparedStatement pstmt = null;
-        ArrayList<Object> list = new ArrayList<Object>();
+        ArrayList<Object> list = new ArrayList<Object>(128);
         try {
             con = dao.getTransactionController().getConnection(connName);
             connId = con.hashCode();
@@ -234,7 +234,7 @@ public class SQLCommandImpl {
                                                  Object[] paramList, int startIndex, int resultNum, boolean autoCount) throws TransactionException {
         long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;
-        int connId = 0;
+        int connId = 0, dsSize = 0;
         String exception = null;
         if (connName == null) {
             connName = SQLUtils.getConnNameFromSQL(selectSql);
@@ -278,6 +278,7 @@ public class SQLCommandImpl {
             dbTime = System.currentTimeMillis() - dbStart;
             ds = new DataSet(rs, startIndex, resultNum, allsize);
             rs.close();
+            dsSize = ds.size();
         } catch (Exception e) {
             exception = e.toString();
             throw new TransactionException(connName + ": " + e.getMessage(), e);
@@ -297,7 +298,7 @@ public class SQLCommandImpl {
                 }
             }
             long allTime = System.currentTimeMillis() - start;
-            dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), ds.size(), connTime, dbTime, allTime, exception);
+            dao.addSqlExecuteStats(connName, connId, selectSql, Arrays.toString(paramList), dsSize, connTime, dbTime, allTime, exception);
         }
         return ds;
     }
