@@ -1,37 +1,32 @@
 package uw.dao;
 
-import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 import uw.dao.conf.DaoConfig;
 import uw.dao.conf.DaoConfigManager;
 
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class SeqTest {
 
     public static void main(String[] args) throws RunnerException {
         setup();
-//        if (SequenceManager.nextId("TestRandom")==1){
-//            SequenceManager.resetSeq("TestRandom",1234567,100);
+//        if (SequenceFactory.nextId(seqName)==1){
+//            SequenceFactory.resetSeq(seqName,1234567,100);
 //        }
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-        System.out.println(SequenceManager.nextId("TestRandom"));
-//        System.out.println(SequenceManager.allocateIdRange("TestRandom", 100));
+        String seqName = "TestRandom3";
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.allocateIdRange(seqName, 100));
     }
 
 

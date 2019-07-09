@@ -336,17 +336,15 @@ public class DAOFactoryImpl extends DaoFactory {
 	}
 
 	/**
-	 * 根据表名来获得seq序列。 此序列通过一个系统数据库来维护，可以保证在分布式下的可用性.
+	 * 根据名称来获得seq序列。 此序列通过一个系统数据库来维护，可以保证在分布式下的可用性.
 	 *
-	 * @param tableName
+	 * @param seqName
 	 *            表名
 	 * @return seq序列
 	 */
 	@Override
-	public long getSequenceId(String tableName) {
-		long sequence = -1;
-		sequence = SequenceManager.nextId(tableName);
-		return sequence;
+	public long getSequenceId(String seqName) {
+		return SequenceFactory.nextId(seqName);
 	}
 
 	/**

@@ -9,26 +9,28 @@ import uw.dao.conf.DaoConfig;
 import uw.dao.conf.DaoConfigManager;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode({Mode.Throughput})//基准测试类型
 @OutputTimeUnit(TimeUnit.SECONDS)//基准测试结果的时间类型
 @Warmup(iterations = 3)//预热的迭代次数
-@Threads(1)//测试线程数量
+@Threads(2)//测试线程数量
 @State(Scope.Benchmark)//该状态为每个线程独享
 //度量:iterations进行测试的轮次，time每轮进行的时长，timeUnit时长单位,batchSize批次数量
-@Measurement(iterations = 10000, time = -1, timeUnit = TimeUnit.SECONDS, batchSize = -1)
-public class SeqBenchmark {
+@Measurement(iterations = 10, time = -1, timeUnit = TimeUnit.SECONDS, batchSize = -1)
+public class SqlBenchmark {
 
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
-                .include(SeqBenchmark.class.getSimpleName())
+                .include(SqlBenchmark.class.getSimpleName())
                 .forks(0)
                 .build();
         new Runner(opt).run();
     }
 
+    static DaoFactory dao = DaoFactory.getInstance();
 
     @Setup
     public static void setup() {
@@ -50,10 +52,21 @@ public class SeqBenchmark {
         DaoConfigManager.setConfig(daoConfig);
     }
 
+    private static final String LOAD_SEQ = "select seq_id,increment_num from sys_seq where seq_name=? ";
+
+    private static final String UPDATE_SEQ = "update sys_seq set seq_id=?,last_update=? where seq_name=? and seq_id=?";
+
     @Benchmark
     @CompilerControl(CompilerControl.Mode.INLINE)
-    public static void getSeq() throws SQLException {
-        SequenceFactory.nextId("test");
+    public static synchronized  void getSeq() throws SQLException, TransactionException {
+
+        DataSet ds = dao.queryForDataSet(DaoConfigManager.getRouteMapping("sys_seq", "all"), LOAD_SEQ, new Object[]{"test"});
+        if (ds.next()) {
+            ds.getLong(1);
+            ds.getInt(2);
+        }
+        int effect = dao.executeCommand(DaoConfigManager.getRouteMapping("sys_seq", "all"), UPDATE_SEQ, new Object[]{100, new Date(), "test", 100});
+
     }
 
 }
