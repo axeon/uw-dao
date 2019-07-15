@@ -15,16 +15,16 @@ public class SeqTest {
 //        }
         String seqName = "TestRandom3";
         System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
-        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
+//        System.out.println(SequenceFactory.nextId(seqName));
 //        System.out.println(SequenceFactory.nextId(seqName));
 //        System.out.println(SequenceFactory.allocateIdRange(seqName, 100));
     }

@@ -41,12 +41,12 @@ public final class ConnectionManager {
      * 启动连接管理器.
      */
     public static void start() {
-        List<String> connList = DaoConfigManager.getConnPoolNameList();
-        for (String conn : connList) {
+        List<String> poolList = DaoConfigManager.getConnPoolNameList();
+        for (String poolName : poolList) {
             try {
-                HikariDataSource dataSource = getDataSource(conn);
+                HikariDataSource dataSource = getDataSource(poolName);
             } catch (Exception e) {
-                logger.error("Initial ConnectionPool[{}] failed !!!", conn);
+                logger.error("Initial ConnectionPool[{}] failed !!!", poolName);
             }
         }
     }
@@ -76,11 +76,16 @@ public final class ConnectionManager {
      * @throws SQLException SQL异常
      */
     public static Connection getConnection(String poolName) throws SQLException {
-        HikariDataSource hikariDataSource = getDataSource(poolName);
-        if (hikariDataSource == null) {
+        HikariDataSource dataSource = null;
+        try {
+            dataSource = getDataSource(poolName);
+        } catch (Exception e) {
+            throw new SQLException("ConnectionManager.getConnection() failed to init connPool[" + poolName + "]",e);
+        }
+        if (dataSource == null) {
             throw new SQLException("ConnectionManager.getConnection() failed to init connPool[" + poolName + "]");
         }
-        return hikariDataSource.getConnection();
+        return dataSource.getConnection();
     }
 
     /**
@@ -97,9 +102,8 @@ public final class ConnectionManager {
      * 获得一个连接的方言，在poolList中排名第一的为默认连接.
      *
      * @return
-     * @throws SQLException
      */
-    public static Dialect getDialect(String poolName) throws SQLException {
+    public static Dialect getDialect(String poolName) {
         return SOURCE_DIALECT_MAP.get(poolName);
     }
 
