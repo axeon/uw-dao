@@ -3,6 +3,7 @@ package ${package};
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -34,7 +35,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 轻量级状态下更新列表list.
 	 */
-	public transient HashSet<String> UPDATED_COLUMN = null;
+	public transient Set<String> UPDATED_COLUMN = null;
 
     /**
 	 * 更新的信息.
@@ -45,7 +46,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	 * 获得更改的字段列表.
 	 */
     @Override
-	public HashSet<String> GET_UPDATED_COLUMN() {
+	public Set<String> GET_UPDATED_COLUMN() {
         return UPDATED_COLUMN;
 	}
 

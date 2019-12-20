@@ -15,7 +15,7 @@ public interface DataEntity {
 	 *
 	 * @return 字段列表
 	 */
-	public HashSet<String> GET_UPDATED_COLUMN();
+	public Set<String> GET_UPDATED_COLUMN();
 
 	/**
 	 * 得到变更信息.
