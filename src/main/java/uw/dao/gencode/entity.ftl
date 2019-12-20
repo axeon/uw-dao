@@ -3,7 +3,6 @@ package ${package};
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
