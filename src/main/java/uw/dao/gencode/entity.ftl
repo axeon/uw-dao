@@ -14,7 +14,7 @@ import uw.dao.annotation.TableMeta;
 /**
  * ${tableMeta.entityName}实体类
  * <#if tableMeta.remarks??>${tableMeta.remarks}</#if>
- * 
+ *
  * @author ${author}
  * @version $Revision: 1.00 $ $Date: ${date?string("yyyy-MM-dd HH:mm:ss")}
  */
@@ -35,7 +35,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	/**
 	 * 轻量级状态下更新列表list.
 	 */
-	public transient Set<String> UPDATED_COLUMN = null;
+	public transient HashSet<String> UPDATED_COLUMN = null;
 
     /**
 	 * 更新的信息.
@@ -46,7 +46,7 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
 	 * 获得更改的字段列表.
 	 */
     @Override
-	public Set<String> GET_UPDATED_COLUMN() {
+	public HashSet<String> GET_UPDATED_COLUMN() {
         return UPDATED_COLUMN;
 	}
 
@@ -69,16 +69,15 @@ public class ${tableMeta.entityName?cap_first} implements DataEntity,Serializabl
         UPDATED_COLUMN = null;
         UPDATED_INFO = null;
 	}
-	
+
 	/**
 	 * 初始化set相关的信息.
 	 */
 	private void _INIT_UPDATE_INFO() {
-        this.UPDATED_COLUMN = new HashSet
-        <String>();
-            this.UPDATED_INFO = new StringBuilder("表${tableMeta.tableName}主键\"" + <#list pkList as pk>
-            this.${pk.propertyName}+ </#list>"\"更新为:\r\n");
-	}	
+		this.UPDATED_COLUMN = new HashSet<String>();
+		this.UPDATED_INFO = new StringBuilder("表${tableMeta.tableName}主键\"" + <#list pkList as pk>
+		this.${pk.propertyName}+ </#list>"\"更新为:\r\n");
+	}
 
 <#list columnList as column>
 
