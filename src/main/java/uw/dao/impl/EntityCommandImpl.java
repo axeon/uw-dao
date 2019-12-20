@@ -520,7 +520,7 @@ public class EntityCommandImpl {
             }
 		}
 
-		List<T> list = new ArrayList<T>();
+		ArrayList<T> list = new ArrayList<T>();
 
 		try {
 			con = dao.getTransactionController().getConnection(connName);

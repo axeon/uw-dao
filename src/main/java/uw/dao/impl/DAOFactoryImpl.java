@@ -31,7 +31,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	/**
 	 * 统计信息.
 	 */
-	private List<SqlExecuteStats> statsList = null;
+	private ArrayList<SqlExecuteStats> statsList = null;
 
 	/**
 	 * 获得一个DAOFactory的实现.
@@ -353,7 +353,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 * @return 统计列表
 	 */
 	@Override
-	public List<SqlExecuteStats> getSqlExecuteStatsList() {
+	public ArrayList<SqlExecuteStats> getSqlExecuteStatsList() {
 		return statsList;
 	}
 
@@ -990,7 +990,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> List<T> queryForSingleList(Class<T> cls, String sql) throws TransactionException {
+	public <T> ArrayList<T> queryForSingleList(Class<T> cls, String sql) throws TransactionException {
 		return SQLCommandImpl.selectForSingleList(this, null, cls, sql, null);
 	}
 
@@ -1010,7 +1010,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> List<T> queryForSingleList(String connName, Class<T> cls, String sql) throws TransactionException {
+	public <T> ArrayList<T> queryForSingleList(String connName, Class<T> cls, String sql) throws TransactionException {
 		return SQLCommandImpl.selectForSingleList(this, connName, cls, sql, null);
 	}
 
@@ -1030,7 +1030,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> List<T> queryForSingleList(Class<T> cls, String sql, Object[] paramList) throws TransactionException {
+	public <T> ArrayList<T> queryForSingleList(Class<T> cls, String sql, Object[] paramList) throws TransactionException {
 		return SQLCommandImpl.selectForSingleList(this, null, cls, sql, paramList);
 	}
 
@@ -1052,7 +1052,7 @@ public class DAOFactoryImpl extends DaoFactory {
 	 *             事务异常
 	 */
 	@Override
-	public <T> List<T> queryForSingleList(String connName, Class<T> cls, String sql, Object[] paramList)
+	public <T> ArrayList<T> queryForSingleList(String connName, Class<T> cls, String sql, Object[] paramList)
 			throws TransactionException {
 		return SQLCommandImpl.selectForSingleList(this, connName, cls, sql, paramList);
 	}

@@ -123,7 +123,7 @@ public class SQLCommandImpl {
      * @throws TransactionException 事务异常
      */
     @SuppressWarnings("unchecked")
-    public static final <T> List<T> selectForSingleList(DAOFactoryImpl dao, String connName, Class<T> cls,
+    public static final <T> ArrayList<T> selectForSingleList(DAOFactoryImpl dao, String connName, Class<T> cls,
                                                         String selectSql, Object[] paramList) throws TransactionException {
         long start = System.currentTimeMillis();
         long connTime = 0, dbTime = 0;

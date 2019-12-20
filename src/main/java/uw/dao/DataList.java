@@ -3,6 +3,7 @@ package uw.dao;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,12 +64,12 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 返回的value object数组.
-	 * 
+	 *
 	 * @param <T>
 	 *            映射的类型
 	 */
 	@JsonProperty
-	private List<T> results = null;
+	private ArrayList<T> results = null;
 
 	/**
 	 * 构造函数.
@@ -79,7 +80,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * DataList构造器.
-	 * 
+	 *
 	 * @param results
 	 *            结果集
 	 * @param startIndex
@@ -89,7 +90,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 	 * @param allSize
 	 *            所有的数量
 	 */
-	public DataList(List<T> results, int startIndex, int resultNum, int allSize) {
+	public DataList(ArrayList<T> results, int startIndex, int resultNum, int allSize) {
 		this.startIndex = startIndex;
 		this.results = results;
 		this.resultNum = resultNum;
@@ -120,7 +121,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 定位到某条位置.
-	 * 
+	 *
 	 * @param index
 	 *            位置
 	 */
@@ -130,7 +131,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获得指定处的对象.
-	 * 
+	 *
 	 * @param index
 	 *            位置
 	 * @return value object数组指定的对象
@@ -141,7 +142,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 是否有下一条记录.
-	 * 
+	 *
 	 * @return 是否有下一条记录
 	 */
 	@Override
@@ -151,7 +152,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获取下一条记录.
-	 * 
+	 *
 	 * @return 下一条记录
 	 */
 	@Override
@@ -164,7 +165,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 是否有上一条记录.
-	 * 
+	 *
 	 * @return 是否有上一条记录
 	 */
 	public boolean hasPrevious() {
@@ -173,7 +174,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获取上一条记录.
-	 * 
+	 *
 	 * @return 上一条记录
 	 */
 	public T previous() {
@@ -193,7 +194,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获取当前List大小.
-	 * 
+	 *
 	 * @return 当前List大小
 	 */
 	public int size() {
@@ -202,7 +203,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获取该表/视图所有的数据大小.
-	 * 
+	 *
 	 * @return 该表/视图所有的数据大小
 	 * @throws TransactionException
 	 *             事务异常
@@ -213,7 +214,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 按照总记录数和每页条数计算出页数.
-	 * 
+	 *
 	 * @return 页数
 	 */
 	public int pageCount() {
@@ -222,7 +223,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 当前页.
-	 * 
+	 *
 	 * @return 页数
 	 */
 	public int page() {
@@ -232,7 +233,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 在整个数据集中的开始索引位置.
-	 * 
+	 *
 	 * @return 开始位置
 	 */
 	public int startIndex() {
@@ -241,7 +242,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 返回结果集大小.
-	 * 
+	 *
 	 * @return int
 	 */
 	public int resultNum() {
@@ -250,20 +251,20 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 返回该结果集.
-	 * 
+	 *
 	 * @return 结果集
 	 */
-	public List<T> results() {
+	public ArrayList<T> results() {
 		return this.results;
 	}
 
 	/**
 	 * 重新设定结果集合.
-	 * 
+	 *
 	 * @param objects
 	 *            objects集合
 	 */
-	public void reset(List<T> objects) {
+	public void reset(ArrayList<T> objects) {
 		this.results = objects;
 		this.currentIndex = -1;
 		if (this.size != objects.size()) {
@@ -273,7 +274,7 @@ public class DataList<T> implements Iterator<T>, Iterable<T>, Serializable {
 
 	/**
 	 * 获得iterator列表.
-	 * 
+	 *
 	 * @return Iterator列表
 	 */
 	@Override
