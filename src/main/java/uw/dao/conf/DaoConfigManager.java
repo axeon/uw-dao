@@ -3,7 +3,7 @@ package uw.dao.conf;
 import uw.dao.conf.DaoConfig.ConnPoolConfig;
 import uw.dao.conf.DaoConfig.ConnRoute;
 import uw.dao.conf.DaoConfig.ConnRouteConfig;
-import uw.dao.conf.DaoConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.TableShardConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public final class DaoConfigManager {
      * @param tableName 表名
      * @return 表分片配置
      */
-    public static TableShardingConfig getTableShardingConfig(String tableName) {
+    public static TableShardConfig getTableShardingConfig(String tableName) {
         return config.getTableShard().get(tableName);
     }
 

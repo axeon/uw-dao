@@ -26,7 +26,7 @@ public class DaoConfig {
     /**
      * 表分片配置.
      */
-    private Map<String, TableShardingConfig> tableShard = new HashMap<String, TableShardingConfig>();
+    private Map<String, TableShardConfig> tableShard = new HashMap<String, TableShardConfig>();
 
     /**
      * sql统计配置.
@@ -64,14 +64,14 @@ public class DaoConfig {
     /**
      * @return the tableShard
      */
-    public Map<String, TableShardingConfig> getTableShard() {
+    public Map<String, TableShardConfig> getTableShard() {
         return tableShard;
     }
 
     /**
      * @param tableShard the tableShard to set
      */
-    public void setTableShard(Map<String, TableShardingConfig> tableShard) {
+    public void setTableShard(Map<String, TableShardConfig> tableShard) {
         this.tableShard = tableShard;
     }
 
@@ -447,16 +447,16 @@ public class DaoConfig {
      *
      * @author axeon
      */
-    public static class TableShardingConfig {
+    public static class TableShardConfig {
         /**
          * 分片类型。 当前仅支持date类型.
          */
-        private String shardingType;
+        private String shardType;
 
         /**
          * 分片规则。当前仅支持day,month,year类型.
          */
-        private String shardingRule;
+        private String shardRule;
 
         /**
          * 是否自动建表.
@@ -466,29 +466,29 @@ public class DaoConfig {
         /**
          * @return the shardingType
          */
-        public String getShardingType() {
-            return shardingType;
+        public String getShardType() {
+            return shardType;
         }
 
         /**
-         * @param shardingType the shardingType to set
+         * @param shardType the shardingType to set
          */
-        public void setShardingType(String shardingType) {
-            this.shardingType = shardingType;
+        public void setShardType(String shardType) {
+            this.shardType = shardType;
         }
 
         /**
          * @return the shardingRule
          */
-        public String getShardingRule() {
-            return shardingRule;
+        public String getShardRule() {
+            return shardRule;
         }
 
         /**
-         * @param shardingRule the shardingRule to set
+         * @param shardRule the shardingRule to set
          */
-        public void setShardingRule(String shardingRule) {
-            this.shardingRule = shardingRule;
+        public void setShardRule(String shardRule) {
+            this.shardRule = shardRule;
         }
 
         /**

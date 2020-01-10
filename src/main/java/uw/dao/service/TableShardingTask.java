@@ -7,7 +7,7 @@ import uw.dao.DaoFactory;
 import uw.dao.DataSet;
 import uw.dao.TransactionException;
 import uw.dao.conf.DaoConfig;
-import uw.dao.conf.DaoConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.TableShardConfig;
 import uw.dao.conf.DaoConfigManager;
 import uw.dao.util.TableShardingUtils;
 
@@ -26,7 +26,6 @@ import java.util.Map;
  *
  * @author axeon
  */
-@EnableScheduling
 public class TableShardingTask implements Runnable {
 
     /**
@@ -54,15 +53,15 @@ public class TableShardingTask implements Runnable {
     @Override
     public void run() {
         LocalDateTime now = LocalDateTime.now();
-        Map<String, TableShardingConfig> map = daoConfig.getTableShard();
-        for (Map.Entry<String, TableShardingConfig> kv : map.entrySet()) {
+        Map<String, TableShardConfig> map = daoConfig.getTableShard();
+        for (Map.Entry<String, TableShardConfig> kv : map.entrySet()) {
             String tableName = kv.getKey();
-            TableShardingConfig tc = kv.getValue();
+            TableShardConfig tc = kv.getValue();
             if (tc.isAutoGen()) {
-                if ("date".equalsIgnoreCase(tc.getShardingType())) {
+                if ("date".equalsIgnoreCase(tc.getShardType())) {
                     // 计算当前表和下一个表
                     String current = "", next = "";
-                    switch (tc.getShardingRule()) {
+                    switch (tc.getShardRule()) {
                         case "day":
                             current = now.format(TableShardingUtils.FORMATTER_DAY);
                             next = now.plusDays(1).format(TableShardingUtils.FORMATTER_DAY);

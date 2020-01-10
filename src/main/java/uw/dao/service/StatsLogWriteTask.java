@@ -19,7 +19,6 @@ import java.util.List;
  *
  * @author axeon
  */
-@EnableScheduling
 public class StatsLogWriteTask implements Runnable {
     /**
      * 日志.

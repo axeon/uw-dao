@@ -17,7 +17,6 @@ import java.util.List;
  *
  * @author axeon
  */
-@EnableScheduling
 public class StatsCleanDataTask implements Runnable {
 
     /**

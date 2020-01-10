@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import uw.dao.conf.DaoConfig.ConnPoolConfig;
-import uw.dao.conf.DaoConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.TableShardConfig;
 import uw.dao.connectionpool.ConnectionManager;
 import uw.dao.service.MainService;
 
@@ -85,9 +85,9 @@ public class DaoSpringAutoConfiguration {
                 if (daoConfig.getSqlStats() != null) {
                     if (daoConfig.getSqlStats().isEnable()) {
                         // 加入统计日志表到sharding配置中。
-                        TableShardingConfig config = new TableShardingConfig();
-                        config.setShardingType("date");
-                        config.setShardingRule("day");
+                        TableShardConfig config = new TableShardConfig();
+                        config.setShardType("date");
+                        config.setShardRule("day");
                         config.setAutoGen(true);
                         daoConfig.getTableShard().put(MainService.STATS_BASE_TABLE, config);
                     }

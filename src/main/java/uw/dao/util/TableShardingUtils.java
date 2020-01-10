@@ -1,6 +1,6 @@
 package uw.dao.util;
 
-import uw.dao.conf.DaoConfig.TableShardingConfig;
+import uw.dao.conf.DaoConfig.TableShardConfig;
 import uw.dao.conf.DaoConfigManager;
 
 import java.time.LocalDate;
@@ -41,9 +41,9 @@ public class TableShardingUtils {
      * @return 表名
      */
     public static String getTableNameByDate(String tableName, LocalDate date) {
-        TableShardingConfig config = DaoConfigManager.getTableShardingConfig(tableName);
-        if (config != null && "date".equalsIgnoreCase(config.getShardingType())) {
-            switch (config.getShardingRule()) {
+        TableShardConfig config = DaoConfigManager.getTableShardingConfig(tableName);
+        if (config != null && "date".equalsIgnoreCase(config.getShardType())) {
+            switch (config.getShardRule()) {
                 case "day":
                     return tableName + "_" + date.format(FORMATTER_DAY);
                 case "month":
